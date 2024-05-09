@@ -13,8 +13,8 @@ namespace ServerAPI
 			var a = new AdminRepository();
 			var b = new SignUpRepository();
 
-            var admin = a.GetAdminByUsername("Seb8530");
-            var signUp = b.GetSignUpByEmail("Elise@gmail.com");
+          //  var admin = a.GetAdminByUsername("Seb8530");
+          //  var signUp = b.GetSignUpByEmail("Elise@gmail.com");
 
 
 

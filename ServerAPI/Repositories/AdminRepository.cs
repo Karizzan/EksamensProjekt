@@ -30,6 +30,7 @@ namespace ServerAPI.Repositories
 
 		public string GetAdminByUserName(string username)
         {
+            return "Admin";
         }
 	}
 }
