@@ -7,6 +7,21 @@ namespace ServerAPI
 	{
 		public static void Main(string[] args)
 		{
+
+
+
+			var a = new AdminRepository();
+			var b = new SignUpRepository();
+
+            var admin = a.GetAdminByUsername("Seb8530");
+            var signUp = b.GetSignUpByEmail("Elise@gmail.com");
+
+
+
+
+
+
+
 			var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
