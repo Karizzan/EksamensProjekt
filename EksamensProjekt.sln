@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EksamensProjekt", "EksamensProjekt\EksamensProjekt.csproj", "{CC2A05BB-78A6-4AF6-92EF-2B48831C45E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "EksamensProjekt\WebApp.csproj", "{CC2A05BB-78A6-4AF6-92EF-2B48831C45E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{F92E6245-8C3C-430C-85E4-412EBC98EC66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{F92E6245-8C3C-430C-85E4-412EBC98EC66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAPI", "ServerAPI\ServerAPI.csproj", "{228089B1-D973-411A-ADD7-1879906C5197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerAPI", "ServerAPI\ServerAPI.csproj", "{228089B1-D973-411A-ADD7-1879906C5197}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
