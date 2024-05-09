@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Core.Models
 {
     public class Admin
     {
-        string? Username { get; set; }
-        string? Password { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId Id { get; set; }
+        public int AdminID { get; set; }
+        public string AdminName { get; set; }
+        public string? Username { get; set; }
+        public string? Password { get; set; }
     }
 }

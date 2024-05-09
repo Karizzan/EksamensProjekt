@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class Parent
+    public class Event
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
-        public int ParentID { get; set; }
-        public string ParentName { get; set; }
-        public int KræwNumber { get; set; }
-        public string ParentMail { get; set; }
-        public List<Child> Children { get; set; }
+        public int EventID { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string WeekNumber { get; set; } 
+        public string Location { get; set; }
+
     }
 }

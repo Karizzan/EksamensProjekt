@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +10,15 @@ namespace Core.Models
 {
     public class Child
     {
-        string ChildName { get; set; }
-        int ChildAge { get; set; }
-        string TshirtSize { get; set; }
-        string Comment { get; set; }
-        bool BeenHereBefore { get; set; }
-        string Interests { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId Id { get; set; }
+        public int ChildID { get; set; }
+        public string ChildName { get; set; }
+        public int ChildAge { get; set; }
+        public string TshirtSize { get; set; }
+        public string Comment { get; set; }
+        public bool BeenHereBefore { get; set; }
+        public string Interests { get; set; }
     }
 }

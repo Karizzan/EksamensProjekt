@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class Parent
+    public class Application
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
-        public int ParentID { get; set; }
-        public string ParentName { get; set; }
-        public int KræwNumber { get; set; }
-        public string ParentMail { get; set; }
-        public List<Child> Children { get; set; }
+        public int ApplicationID { get; set; }
+        public DateTime SubmitDate { get; set; }
+        public Event Priority1 { get; set; }
+        public Event Priority2 { get; set; }
+        public Parent Parent { get; set; }
+        public bool IsOnWaitingList { get; set; }
+
     }
 }
