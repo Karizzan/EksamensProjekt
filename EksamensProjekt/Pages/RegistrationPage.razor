@@ -1,6 +1,64 @@
 ﻿@page "/registrationPage"
 <h3>RegistrationPage</h3>
 
+		<EditForm EditContext="@bEditContext" OnSubmit="@handleSubmitChange" class="row p-3">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
+
+			<div class="col-md-12 mb-3">
+				<label for="Titel">titel @redigeretAnnonce.Titel</label>
+				<InputText id="Titel" @bind-Value="redigeretAnnonce.Titel" class="form-control" />
+			</div>
+			<div class="col-md-12 mb-3">
+				<label for="Vare">Navn på Varen</label>
+				<InputText id="Vare" @bind-Value="redigeretAnnonce.VareNavn" class="form-control" />
+			</div>
+			<div class="col-md-12 mb-3">
+				<label for="Beskrivelse">Beskrivelse</label>
+				<InputText id="Beskrivelse" @bind-Value="redigeretAnnonce.Beskrivelse" class="form-control" />
+			</div>
+
+			<div class="col-md-12 mb-3">
+				<label for="Pris">Pris</label>
+				<InputNumber id="Pris" @bind-Value="redigeretAnnonce.Pris" class="form-control" />
+			</div>
+			<div class="col-md-12 mb-3">
+				<label for="Kategori">Kategori</label>
+				<InputSelect id="Kategori" @bind-Value="redigeretAnnonce.Kategori" class="form-control">
+
+					@foreach (string anOption in kategorier)
+					{
+						<option value="@anOption">@anOption</option>
+
+					}
+				</InputSelect>
+
+			</div>
+
+			<div class="col-md-12 mb-3">
+				<label for="Lokale">Lokale Nummer</label>
+				<InputSelect id="Lokale" @bind-Value="lokationID" class="form-control">
+
+					@foreach (var lokation in lokationListe)
+					{
+						<option value="@lokation.LokationID">@lokation.LokaleNr</option>
+
+					}
+				</InputSelect>
+
+			</div>
+
+			<div class="col-12 mb-3">
+				<button @type="submit" class="btn btn-primary">Tilføj</button>
+			</div>
+
+			<h4>@fejlBesked</h4>
+
+		</EditForm>
+
 @code {
+
+
+
 
 }
