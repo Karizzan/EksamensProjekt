@@ -15,8 +15,9 @@ namespace ServerAPI.Repositories
         }
         
         public List<Application> GetAllApplications() 
-        { 
-         
+        {
+            List<Application> liste = new();
+            return liste;
         }
 
         public void AddApplication(Application application)

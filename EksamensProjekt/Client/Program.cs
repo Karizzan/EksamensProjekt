@@ -1,4 +1,5 @@
 using EksamensProjekt;
+using EksamensProjekt.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -13,6 +14,7 @@ namespace EksamensProjekt
 			builder.RootComponents.Add<HeadOutlet>("head::after");
 
 			builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+			builder.Services.AddSingleton<IServiceClass, ServiceClassInMemory>();
 
 			await builder.Build().RunAsync();
 		}

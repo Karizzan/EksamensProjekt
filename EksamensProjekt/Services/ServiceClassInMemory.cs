@@ -1,7 +1,8 @@
-﻿using Core.Models;
+﻿using EksamensProjekt.Services;
+using Core.Models;
 namespace EksamensProjekt.Services
 {
-    public class ServiceClassInMemory
+    public class ServiceClassInMemory : IServiceClass
     {
         private static List<Child> children = new List<Child>()
         {

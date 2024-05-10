@@ -17,6 +17,6 @@ namespace Core.Models
         public string ParentName { get; set; }
         public int KræwNumber { get; set; }
         public string ParentMail { get; set; }
-        public List<Child> Children { get; set; }
+        public List<Child> Children { get; set; } = new List<Child>();
     }
 }
