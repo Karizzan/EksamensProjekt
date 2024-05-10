@@ -1,4 +1,5 @@
-﻿using Core.Models;
+﻿using EksamensProjekt.Services;
+using Core.Models;
 namespace EksamensProjekt.Services
 {
     public class ServiceClassInMemory : IServiceClass

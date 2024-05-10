@@ -17,8 +17,8 @@ namespace Core.Models
         public DateTime SubmitDate { get; set; }
         public Event Priority1 { get; set; } = new Event();
         public Event Priority2 { get; set; } = new Event();
-        public Parent Parent { get; set; }
-        public bool IsOnWaitingList { get; set; } = true;
+        public Parent Parent { get; set; } = new Parent();
+        public bool IsOnWaitingList { get; set; }
 
     }
 }

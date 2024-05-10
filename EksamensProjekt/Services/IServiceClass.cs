@@ -2,14 +2,14 @@
 using Core.Models;
 namespace EksamensProjekt.Services
 {
-	public interface IServiceClass
-	{
-		Task<Application[]> GetAllApplications();
+    public interface IServiceClass
+    {
+        Task<Application[]> GetAllApplications();
 
-		Task AddApplication(Application application);
+        Task AddApplication(Application application);
 
-		Task AddParent(Parent parent);
+        Task AddParent(Parent parent);
 
-		Task<Event[]> GetAllEvents();
-	}
+        Task<Event[]> GetAllEvents();
+    }
 }
