@@ -1,62 +1,266 @@
 ﻿@page "/registrationPage"
+@inject NavigationManager navManager
+@inject IJSRuntime js
+@using Core.Models
+@using Services
 <h3>RegistrationPage</h3>
 
-		<EditForm EditContext="@bEditContext" OnSubmit="@handleSubmitChange" class="row p-3">
-			<DataAnnotationsValidator />
-			<ValidationSummary />
+<h1 class="mb-3 mt-3">Tilføj Annonce</h1>
 
-			<div class="col-md-12 mb-3">
-				<label for="Titel">titel @redigeretAnnonce.Titel</label>
-				<InputText id="Titel" @bind-Value="redigeretAnnonce.Titel" class="form-control" />
-			</div>
-			<div class="col-md-12 mb-3">
-				<label for="Vare">Navn på Varen</label>
-				<InputText id="Vare" @bind-Value="redigeretAnnonce.VareNavn" class="form-control" />
-			</div>
-			<div class="col-md-12 mb-3">
-				<label for="Beskrivelse">Beskrivelse</label>
-				<InputText id="Beskrivelse" @bind-Value="redigeretAnnonce.Beskrivelse" class="form-control" />
-			</div>
+<EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
 
-			<div class="col-md-12 mb-3">
-				<label for="Pris">Pris</label>
-				<InputNumber id="Pris" @bind-Value="redigeretAnnonce.Pris" class="form-control" />
-			</div>
-			<div class="col-md-12 mb-3">
-				<label for="Kategori">Kategori</label>
-				<InputSelect id="Kategori" @bind-Value="redigeretAnnonce.Kategori" class="form-control">
+	<div class="col-md-12 mb-3">
+		<label for="ParentName">Navn på forældre</label>
+		<InputText id="ParentName" @bind-Value="parent.ParentName" class="form-control" />
+		<ValidationMessage For="@(() => parent.ParentName)" />
+	</div>
 
-					@foreach (string anOption in kategorier)
-					{
-						<option value="@anOption">@anOption</option>
+	<div class="col-md-12 mb-3">
+		<label for="ParentMail">Forældre Email</label>
+		<InputText id="ParentMail" @bind-Value="parent.ParentMail" class="form-control" />
+	</div>
 
-					}
-				</InputSelect>
+	<div class="col-md-12 mb-3">
+		<label for="KræwNr">KræwNr.</label>
+		<InputNumber id="KræwNr" @bind-Value="parent.KræwNumber" class="form-control" />
 
-			</div>
+	</div>
 
-			<div class="col-md-12 mb-3">
-				<label for="Lokale">Lokale Nummer</label>
-				<InputSelect id="Lokale" @bind-Value="lokationID" class="form-control">
+	<div class="col-md-12 mb-3">
+		<label for="Lokale">1. Prioritet</label>
+		<InputSelect id="Lokale" @bind-Value="prio1" class="form-control">
 
-					@foreach (var lokation in lokationListe)
-					{
-						<option value="@lokation.LokationID">@lokation.LokaleNr</option>
+			@foreach (var Event in allEvents)
+			{
+				<option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
 
-					}
-				</InputSelect>
+			}
+		</InputSelect>
 
-			</div>
+	</div>
 
-			<div class="col-12 mb-3">
-				<button @type="submit" class="btn btn-primary">Tilføj</button>
-			</div>
+	<div class="col-md-12 mb-3">
+		<label for="Lokale">2. Prioritet</label>
+		<InputSelect id="Lokale" @bind-Value="prio2" class="form-control">
 
-			<h4>@fejlBesked</h4>
+			@foreach (var Event in allEvents)
+			{
+				<option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
 
-		</EditForm>
+			}
+		</InputSelect>
+
+	</div>
+
+
+	<h1>Barn 1</h1>
+	<div class="col-md-12 mb-3">
+		<label for="ChildName">Navn på barn</label>
+		<InputText id="Titel" @bind-Value="child.ChildName" class="form-control" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="ChildAge">Alder på barn</label>
+		<InputNumber id="Titel" @bind-Value="child.ChildAge" class="form-control" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="TshirtSize">T-Shirt størrelse</label>
+		<InputText id="Titel" @bind-Value="child.TshirtSize" class="form-control" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="Comment">Bemærkninger</label>
+		<InputText id="Titel" @bind-Value="child.Comment" class="form-control" />
+	</div>
+
+	<div class="col-md-4">
+		<label for="BeenHereBefore">Været her før?</label>
+		<InputCheckbox id="Titel" @bind-Value="child.BeenHereBefore" class="form-checkbox" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="Interests">Interreser</label>
+		<InputText id="Titel" @bind-Value="child.Interests" class="form-control" />
+	</div>
+
+	<div class="col-md-4">
+		<label for="Extrachild">Ekstra barn</label>
+		<InputCheckbox id="Titel" @bind-Value="extraChild" class="form-checkbox" />
+	</div>
+
+	@if(extraChild == true)
+	{
+		<h1>Barn 2</h1>
+		<div class="col-md-12 mb-3">
+			<label for="ChildName">Navn på barn</label>
+			<InputText id="Titel" @bind-Value="child2.ChildName" class="form-control" />
+		</div>
+
+		<div class="col-md-12 mb-3">
+			<label for="ChildAge">Alder på barn</label>
+			<InputNumber id="Titel" @bind-Value="child2.ChildAge" class="form-control" />
+		</div>
+
+		<div class="col-md-12 mb-3">
+			<label for="TshirtSize">T-Shirt størrelse</label>
+			<InputText id="Titel" @bind-Value="child2.TshirtSize" class="form-control" />
+		</div>
+
+		<div class="col-md-12 mb-3">
+			<label for="Comment">Bemærkninger</label>
+			<InputText id="Titel" @bind-Value="child2.Comment" class="form-control" />
+		</div>
+
+		<div class="col-md-4">
+			<label for="BeenHereBefore">Været her før?</label>
+			<InputCheckbox id="Titel" @bind-Value="child2.BeenHereBefore" class="form-checkbox" />
+		</div>
+
+		<div class="col-md-12 mb-3">
+			<label for="Interests">Interreser</label>
+			<InputText id="Titel" @bind-Value="child2.Interests" class="form-control" />
+		</div>
+	}
+	<div class="col-12 mb-3">
+		<button @type="submit" class="btn btn-primary">Send</button>
+	</div>
+
+	<h1>@errorMessage</h1>
+</EditForm>
+
+
+
 
 @code {
+	private EditContext? aEditContext;
+
+	Application application = new();
+	Parent parent = new();
+	Child child = new();
+	Child child2 = new();
+	bool extraChild = false;
+	int numberOfChildren = 1;
+	int prio1; //Importanta DO NOT DELETE
+	int prio2; //Importanta DO NOT DELETE
+
+	string errorMessage = "Fine"; //To check ´the status of the program
+
+	[Inject]
+	private IServiceClass? mService { get; set; }
+
+	private List<Event>? allEvents = new();
+	private List<Application>? allApplications = new();
+
+
+
+	private Event getEventById(int id)
+	{
+		//Til når vi finder lokation
+		Event foundEvent = new();
+
+		foreach (var Event in allEvents)
+		{
+			//Tjekker hvert ID igennem for at se om det passer med bruger input
+			if (Event.EventID == id)
+			{
+				foundEvent = Event;
+				Console.WriteLine("Found lokation");
+			}
+		}
+		return foundEvent;
+
+	}
+
+
+
+	public async Task handleSubmit()
+	{
+		if (aEditContext.Validate())
+		{
+			/*
+			fpath = annonce.Billede;
+			annonce.Billede = BilledeConverter(fpath);
+			*/
+			//Lokationen bliver valgt her
+
+			//await Http.PostAsJsonAsync<Annoncer>($"{serverUrl}/annoncer/add", annonce);
+
+			//BrugerSamlingAfAnnoncer = await Http.GetFromJsonAsync<List<Annoncer>>($"{serverUrl}/annoncer/getbyemail/{brugerEmail}");
+			application.ApplicationID = GenerateApplicationId(allApplications);
+			application.Priority1 = getEventById(prio1);
+			application.Priority2 = getEventById(prio2);
+			application.SubmitDate = DateTime.Now;
+			//application.Parent = parent;
+
+			parent.Children.Add(child);
+
+			if (child2.ChildName != null){
+				parent.Children.Add(child2);
+			} 
+			Console.WriteLine($" NY APPLICTION: Parent Name: {parent.ParentName}, Barn 1 navn: {parent.Children.Count}, Barn 2 navn:{child2.ChildName}, ApplikationsID: {application.ApplicationID}");
+			Console.WriteLine(parent.ParentName);
+			Console.WriteLine(child.ChildName);
+			Console.WriteLine(child2.ChildName);
+
+			//We add the application to the list
+			//allApplications.Add(application);
+			foreach (var application in allApplications)
+			{
+				Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
+			}
+
+			//We add the application to the database
+			await mService.AddApplication(application);
+
+			Console.Write("LISTEN EFTER AWAIT FUNKTIONEN");
+			foreach (var application in allApplications)
+			{
+				Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
+			}
+			//We show a message to the user
+			errorMessage = "Din ansøgning er blevet sendt";
+
+			//We reset the form
+			child = new();
+			child2 = new(); 
+			parent = new();
+			application = new();
+
+		}
+		else
+		{
+			errorMessage = "Error";
+		}
+	}
+
+	private int GenerateApplicationId (List<Application> listOfApplications)
+	{
+		listOfApplications.Sort((x, y) => x.ApplicationID.CompareTo(y.ApplicationID));
+		int highestNumber= 0;
+		foreach (var app in listOfApplications)
+		{
+			Console.WriteLine(app.ApplicationID);
+			highestNumber = app.ApplicationID;
+			highestNumber++;
+
+		}
+		return highestNumber;
+
+	
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		aEditContext = new EditContext(application);
+
+		allEvents = (await mService.GetAllEvents())?.ToList();
+
+		allApplications = (await mService.GetAllApplications())?.ToList();
+
+	}
 
 
 

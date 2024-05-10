@@ -1,14 +1,15 @@
 ﻿using Core.Models;
 namespace EksamensProjekt.Services
 {
-    public class ServiceClassInMemory
+    public class ServiceClassInMemory : IServiceClass
     {
         private static List<Child> children = new List<Child>()
         {
-            new Child(){ChildID = 1, ChildName = "Frederik", ChildAge = 4, BeenHereBefore = false, Comment = "Han er lidt speciel", Interests = "Han elsker bare biler og dinosaurere", TshirtSize = "Large"},
+            //Vi har fjernet alle Child.ID //Marcus og Hudayfa
+            new Child(){ChildName = "Frederik", ChildAge = 4, BeenHereBefore = false, Comment = "Han er lidt speciel", Interests = "Han elsker bare biler og dinosaurere", TshirtSize = "Large"},
             new Child()
     {
-        ChildID = 1,
+      
         ChildName = "Frederik",
         ChildAge = 4,
         BeenHereBefore = false,
@@ -18,7 +19,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 2,
+       
         ChildName = "Sofia",
         ChildAge = 6,
         BeenHereBefore = true,
@@ -28,7 +29,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 3,
+        
         ChildName = "Emil",
         ChildAge = 5,
         BeenHereBefore = false,
@@ -38,7 +39,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 4,
+  
         ChildName = "Liam",
         ChildAge = 7,
         BeenHereBefore = true,
@@ -48,7 +49,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 5,
+ 
         ChildName = "Olivia",
         ChildAge = 4,
         BeenHereBefore = true,
@@ -58,7 +59,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 6,
+      
         ChildName = "Lucas",
         ChildAge = 6,
         BeenHereBefore = false,
@@ -68,7 +69,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 7,
+ 
         ChildName = "Emma",
         ChildAge = 7,
         BeenHereBefore = true,
@@ -78,7 +79,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 8,
+  
         ChildName = "Noah",
         ChildAge = 5,
         BeenHereBefore = true,
@@ -88,7 +89,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 9,
+     
         ChildName = "Ava",
         ChildAge = 6,
         BeenHereBefore = false,
@@ -98,7 +99,7 @@ namespace EksamensProjekt.Services
     },
     new Child()
     {
-        ChildID = 10,
+
         ChildName = "William",
         ChildAge = 4,
         BeenHereBefore = false,
@@ -109,23 +110,32 @@ namespace EksamensProjekt.Services
         };
         private static List<Parent> parents = new List<Parent>()
         {
-            new Parent(){ParentID = 1, ParentName = "Lars", ParentMail = "Lars@gmail.com", KræwNumber = 123, Children = new List<Child>{children[0],children[1]} },
-        new Parent(){ParentID = 2, ParentName = "Mette", ParentMail = "Mette@gmail.com", KræwNumber = 145, Children = new List<Child>{children[2]} },
-        new Parent(){ParentID = 3, ParentName = "Hans", ParentMail = "Hans@gmail.com", KræwNumber = 345, Children = new List<Child>{children[3],children[4]} },
-        new Parent(){ParentID = 4, ParentName = "Dorte", ParentMail = "Dorte@gmail.com", KræwNumber = 112, Children = new List<Child>{children[5],children[6]} },
-        new Parent(){ParentID = 5, ParentName = "Hanne", ParentMail = "Hanne@gmail.com", KræwNumber = 993, Children = new List<Child>{children[7],children[8]} },
-        new Parent(){ParentID = 6, ParentName = "Jørgen", ParentMail = "Jørgen@gmail.com", KræwNumber = 333, Children = new List<Child>{children[9]} }
+            //Vi (Markus og Hudayfa) har fjernet ParentId
+        new Parent(){ParentName = "Lars", ParentMail = "Lars@gmail.com", KræwNumber = 123, Children = new List<Child>{children[0],children[1]} },
+        new Parent(){ParentName = "Mette", ParentMail = "Mette@gmail.com", KræwNumber = 145, Children = new List<Child>{children[2]} },
+        new Parent(){ParentName = "Hans", ParentMail = "Hans@gmail.com", KræwNumber = 345, Children = new List<Child>{children[3],children[4]} },
+        new Parent(){ParentName = "Dorte", ParentMail = "Dorte@gmail.com", KræwNumber = 112, Children = new List<Child>{children[5],children[6]} },
+        new Parent(){ParentName = "Hanne", ParentMail = "Hanne@gmail.com", KræwNumber = 993, Children = new List<Child>{children[7],children[8]} },
+        new Parent(){ParentName = "Jørgen", ParentMail = "Jørgen@gmail.com", KræwNumber = 333, Children = new List<Child>{children[9]} }
 
         };
 
         private static List<Event> Events = new List<Event>()
         {
-            new Event(){EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27"},
-            new Event(){EventID = 2, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "28"},
-            new Event(){EventID = 3, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "30"},
-            new Event(){EventID = 4, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "31"},
+            new Event(){EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Onsdag - Søndag (Hel Uge)"},
+			new Event(){EventID = 2, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Onsdag - Fredag (Halv Uge)"},
+			new Event(){EventID = 3, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Lørdag - Søndag (Weekend)"},
+			new Event(){EventID = 4, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "28", Workdays = "Onsdag - Søndag (Hel Uge)"},
+			new Event(){EventID = 5, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "28", Workdays = "Onsdag - Fredag (Halv Uge)"},
+			new Event(){EventID = 6, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "28", Workdays = "Lørdag - Søndag (Weekend)"},
+			new Event(){EventID = 7, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "30", Workdays = "Onsdag - Søndag (Hel Uge)"},
+			new Event(){EventID = 8, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "30", Workdays = "Onsdag - Fredag (Halv Uge)"},
+			new Event(){EventID = 9, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "30", Workdays = "Lørdag - Søndag (Weekend)"},
+			new Event(){EventID = 10, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "31", Workdays = "Onsdag - Søndag (Hel Uge)"},
+			new Event(){EventID = 11, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "31", Workdays = "Onsdag - Fredag (Halv Uge)"},
+			new Event(){EventID = 12, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "31", Workdays = "Lørdag - Søndag (Weekend)"},
 
-        };
+		};
 
         private static List<Application> applications = new List<Application>()
         {

@@ -13,7 +13,7 @@ namespace Core.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
-        public int ChildID { get; set; }
+        //public int ChildID { get; set; }
         public string ChildName { get; set; }
         public int ChildAge { get; set; }
         public string TshirtSize { get; set; }
