@@ -1,0 +1,179 @@
+﻿@using Core.Models
+@using Services
+@page "/planning"
+
+
+<h3>plan</h3>
+
+<h1>Venteliste</h1>
+<table>
+	<thead>
+		<tr>
+			<th>SubmitDate</th>
+			<th>Prioritet1</th>
+			<th>Prioritet2</th>
+			<th>Forældre</th>
+			<th>Email</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		@if (applications != null)
+		{
+			@foreach (var item in applications)
+			{
+				<tr>
+					<td>@item.SubmitDate</td>
+					<td>Uge @item.Priority1.WeekNumber</td>
+					<td>Uge @item.Priority2.WeekNumber</td>
+					<td>@item.Parent.ParentName</td>
+					<td>@item.Parent.ParentMail</td>
+					<button @onclick="()=>Select(item)">Select</button>
+				</tr>
+			}
+		}
+		
+
+	</tbody>
+
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Uge 27</th>
+			<button @onclick="()=>AddToWeek(Uge27)">Tilføj til uge</button>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Uge27 != null)
+		{
+			@foreach (var item in Uge27)
+			{
+				<tr>
+					<td>@item.Parent.ParentName</td>
+					<td>@item.Parent.ParentMail</td>
+					<td>
+                        <button @onclick="() => AddToWaitingList(Uge27, item)">Add to Waiting List</button>
+                    </td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Uge 28</th>
+			<button @onclick="()=>AddToWeek(Uge28)">Tilføj til uge</button>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Uge28 != null)
+		{
+			@foreach (var item in Uge28)
+			{
+				<tr>
+					<td>@item.Parent.ParentName</td>
+					<td>@item.Parent.ParentMail</td>
+					<td>
+                        <button @onclick="() => AddToWaitingList(Uge28, item)">Add to Waiting List</button>
+                    </td>
+				</tr>
+			}
+		}
+
+	</tbody>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Uge 30</th>
+			<button @onclick="()=>AddToWeek(Uge30)">Tilføj til uge</button>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Uge30 != null)
+		{
+			@foreach (var item in Uge30)
+			{
+				<tr>
+					<td>@item.Parent.ParentName</td>
+					<td>@item.Parent.ParentMail</td>
+					<td>
+						<button @onclick="() => AddToWaitingList(Uge30, item)">Add to Waiting List</button>
+					</td>
+				</tr>
+			}
+		}
+
+	</tbody>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Uge 31</th>
+			<button @onclick="()=>AddToWeek(Uge31)">Tilføj til uge</button>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Uge31 != null)
+		{
+			@foreach (var item in Uge31)
+			{
+				<tr>
+					<td>@item.Parent.ParentName</td>
+					<td>@item.Parent.ParentMail</td>
+					<td>
+						<button @onclick="() => AddToWaitingList(Uge31, item)">Add to Waiting List</button>
+					</td>
+				</tr>
+			}
+		}
+
+	</tbody>
+</table>
+
+@code {
+	private List<Application>? applications = new();
+
+	private Application? SelectedApplication = new Application();
+
+	private List<Application>? Uge27 = new List<Application>();
+	private List<Application>? Uge28 = new List<Application>();
+	private List<Application>? Uge30 = new List<Application>();
+	private List<Application>? Uge31 = new List<Application>();
+
+	[Inject]
+	private IServiceClass? mService { get; set; }
+
+
+	public void Select(Application application)
+	{
+		SelectedApplication = application;
+		Console.WriteLine($"{application.Parent.ParentName} selected");
+	}
+
+	public void AddToWeek(List<Application> list)
+	{
+		list.Add(SelectedApplication);
+		applications = applications.Where(app => app != SelectedApplication).ToList();
+		SelectedApplication = new();
+	}
+
+	public void AddToWaitingList(List<Application> weekList, Application application)
+	{
+		applications.Add(application);
+		weekList.Remove(application);
+		
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		applications = (await mService.GetAllApplications()).ToList();
+	}
+	
+}
