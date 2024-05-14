@@ -14,8 +14,8 @@ namespace ServerAPI.Repositories
         }
         public List<Event> GetAllEvents()
         {
-            return 
-        }
+			return collection.Find(Builders<Event>.Filter.Empty).ToList();
+		}
 
        public void AddEvent(Event Event)
         {

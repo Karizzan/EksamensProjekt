@@ -28,5 +28,13 @@ namespace EksamensProjekt.Services
 		{
 			await http.PostAsJsonAsync<Application>($"{serverUrl}/application/add", application);
 		}
+
+		public async Task<Event[]> GetAllEvents()
+		{
+			var events = await http.GetFromJsonAsync<Event[]>($"{serverUrl}/event/getAll");
+
+			return events.ToArray();
+
+		}
 	}
 }

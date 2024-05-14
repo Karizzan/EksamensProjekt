@@ -37,7 +37,7 @@ namespace ServerAPI.Controllers
 
             [HttpGet]
             [Route("getbyusername/{username}")]
-            public string GetAdminByUserName(string username)
+            public Admin GetAdminByUserName(string username)
             {
                 return mRepo.GetAdminByUserName(username);
             }
