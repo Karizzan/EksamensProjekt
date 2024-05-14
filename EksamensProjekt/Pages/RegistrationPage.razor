@@ -3,7 +3,6 @@
 @inject IJSRuntime js
 @using Core.Models
 @using Services
-<h3>RegistrationPage</h3>
 
 <h1 class="mb-3 mt-3">Ansøg om børnepasning</h1>
 
@@ -13,18 +12,18 @@
 
 	<div class="col-md-12 mb-3">
 		<label for="ParentName">Navn på forældre</label>
-		<InputText id="ParentName" @bind-Value="parent.ParentName" class="form-control" />
+		<InputText id="ParentName" @bind-Value="parent.ParentName" class="form-control" placeholder="f.eks. Gunnar eller Inge" />
 		<ValidationMessage For="@(() => parent.ParentName)" />
 	</div>
 
 	<div class="col-md-12 mb-3">
 		<label for="ParentMail">Forældre Email</label>
-		<InputText id="ParentMail" @bind-Value="parent.ParentMail" class="form-control" />
+		<InputText id="ParentMail" @bind-Value="parent.ParentMail" class="form-control" placeholder="f.eks. gunnargunnarsen@gmail.com" />
 	</div>
 
 	<div class="col-md-12 mb-3">
 		<label for="KræwNr">KræwNr.</label>
-		<InputNumber id="KræwNr" @bind-Value="parent.KræwNumber" class="form-control" />
+		<InputNumber id="KræwNr" @bind-Value="parent.KræwNumber" class="form-control" placeholder="Find KræwNr. på kræwet.dk ved at loggeind" />
 
 	</div>
 
@@ -58,27 +57,27 @@
 	<h1>Barn 1</h1>
 	<div class="col-md-12 mb-3">
 		<label for="ChildName">Navn på barn</label>
-		<InputText id="Titel" @bind-Value="child.ChildName" class="form-control" />
+		<InputText id="Titel" @bind-Value="child.ChildName" class="form-control" placeholder="f.eks. Alberte eller Robert" />
 	</div>
 
 	<div class="col-md-12 mb-3">
 		<label for="ChildAge">Alder på barn</label>
-		<InputNumber id="Titel" @bind-Value="child.ChildAge" class="form-control" />
+		<InputNumber id="Titel" @bind-Value="child.ChildAge" class="form-control" placeholder="f.eks. 12" />
 	</div>
 
 	<div class="col-md-12 mb-3">
 		<label for="TshirtSize">T-Shirt størrelse</label>
-		<InputText id="Titel" @bind-Value="child.TshirtSize" class="form-control" />
+		<InputText id="Titel" @bind-Value="child.TshirtSize" class="form-control" placeholder="f.eks. 146 eller S" />
 	</div>
 
 	<div class="col-md-12 mb-3">
 		<label for="Comment">Bemærkninger</label>
-		<InputText id="Titel" @bind-Value="child.Comment" class="form-control" />
+		<InputText id="Titel" @bind-Value="child.Comment" class="form-control" placeholder="f.eks. diagnoser, psykiske/fysiske udfordringer osv..." />
 	</div>
 
 	<div class="col-md-12 mb-3">
 		<label for="Allergens/Diet supervision">Allegener/Kosttilsyn</label>
-		<InputText id="Titel" @bind-Value="child.Comment" class="form-control" />
+		<InputText id="Titel" @bind-Value="child.Allergies" class="form-control" placeholder="f.eks. gluten, laktoseintolerant, høfeber osv...." />
 	</div>
 
 	<div class="col-md-4">
@@ -88,7 +87,12 @@
 
 	<div class="col-md-12 mb-3">
 		<label for="Interests">Interreser</label>
-		<InputText id="Titel" @bind-Value="child.Interests" class="form-control" />
+		<InputText id="Titel" @bind-Value="child.Interests" class="form-control" placeholder ="f.eks. dyr, fodbold, musik osv..."/>
+	</div>
+
+	<div class="col-md-4">
+		<label for="Verify">Jeg giver hermed tilladelse til at mit barn må deltage i børneklubben</label>
+		<InputCheckbox id="Titel" @bind-Value="child.BeenHereBefore" class="form-checkbox" />
 	</div>
 
 	<div class="col-md-4">
@@ -101,22 +105,27 @@
 		<h1>Barn 2</h1>
 		<div class="col-md-12 mb-3">
 			<label for="ChildName">Navn på barn</label>
-			<InputText id="Titel" @bind-Value="child2.ChildName" class="form-control" />
+			<InputText id="Titel" @bind-Value="child2.ChildName" class="form-control" placeholder="f.eks. Alberte eller Robert" />
 		</div>
 
 		<div class="col-md-12 mb-3">
 			<label for="ChildAge">Alder på barn</label>
-			<InputNumber id="Titel" @bind-Value="child2.ChildAge" class="form-control" />
+			<InputNumber id="Titel" @bind-Value="child2.ChildAge" class="form-control" placeholder="f.eks. 12" />
 		</div>
 
 		<div class="col-md-12 mb-3">
 			<label for="TshirtSize">T-Shirt størrelse</label>
-			<InputText id="Titel" @bind-Value="child2.TshirtSize" class="form-control" />
+			<InputText id="Titel" @bind-Value="child2.TshirtSize" class="form-control" placeholder="f.eks. 146 eller S" />
 		</div>
 
 		<div class="col-md-12 mb-3">
 			<label for="Comment">Bemærkninger</label>
-			<InputText id="Titel" @bind-Value="child2.Comment" class="form-control" />
+			<InputText id="Titel" @bind-Value="child2.Comment" class="form-control" placeholder="f.eks. diagnoser, psykiske/fysiske udfordringer osv..." />
+		</div>
+
+		<div class="col-md-12 mb-3">
+			<label for="Allergens/Diet supervision">Allegener/Kosttilsyn</label>
+			<InputText id="Titel" @bind-Value="child2.Allergies" class="form-control" placeholder="f.eks. gluten, laktoseintolerant, høfeber osv...." />
 		</div>
 
 		<div class="col-md-4">
@@ -126,7 +135,7 @@
 
 		<div class="col-md-12 mb-3">
 			<label for="Interests">Interreser</label>
-			<InputText id="Titel" @bind-Value="child2.Interests" class="form-control" />
+			<InputText id="Titel" @bind-Value="child2.Interests" class="form-control" placeholder="f.eks. dyr, fodbold, musik osv..." />
 		</div>
 	}
 	<div class="col-12 mb-3">

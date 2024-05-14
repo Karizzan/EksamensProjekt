@@ -18,6 +18,7 @@ namespace Core.Models
         public int ChildAge { get; set; }
         public string TshirtSize { get; set; }
         public string Comment { get; set; }
+        public string Allergies { get; set; }
         public bool BeenHereBefore { get; set; }
         public string Interests { get; set; }
     }
