@@ -11,7 +11,7 @@ namespace ServerAPI.Repositories
 		private IMongoCollection<YoungApplication> YAppCollection;
 		public ApplicationRepository()
         {
-            var client = new MongoClient("mongodb+srv://Marcus:Marc6487@cirkusdb.rxb1kpo.mongodb.net/");
+            var client = new MongoClient("mongodb+srv://marcushoumark :Marc6487@cirkusdb.rxb1kpo.mongodb.net/");
             var database = client.GetDatabase("CirkusDB");
             AppCollection = database.GetCollection<Application>("Application");
             YAppCollection = database.GetCollection<YoungApplication>("YoungApplication");
