@@ -19,6 +19,7 @@ namespace Core.Models
         public Event Priority2 { get; set; } = new Event();
         public Parent Parent { get; set; } = new Parent();
         public bool IsOnWaitingList { get; set; } = true;
+        public bool Verified { get; set; } = false;
 
     }
 }
