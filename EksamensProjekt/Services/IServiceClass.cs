@@ -8,8 +8,6 @@ namespace EksamensProjekt.Services
 
         Task AddApplication(Application application);
 
-        Task AddParent(Parent parent);
-
-        Task<Event[]> GetAllEvents();
+        
     }
 }

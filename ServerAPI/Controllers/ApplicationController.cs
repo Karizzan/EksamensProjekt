@@ -37,5 +37,27 @@ namespace ServerAPI.Controllers
 				mRepo.RemoveApplicationByID(applicationID);
 			}
 
+		[HttpGet]
+		[Route("getAllYoung")]
+		public List<YoungApplication> GetAllYoungApplications()
+		{
+			return mRepo.GetAllYoungApplications();
+		}
+
+		[HttpPost]
+		[Route("addYoung")]
+		public void AddYoungApplication(YoungApplication application)
+		{
+			mRepo.AddYoungApplication(application);
+
+		}
+
+		[HttpDelete]
+		[Route("deleteYoung/{id:int}")]
+		public void RemoveYoungApplicationByID(int applicationID)
+		{
+			mRepo.RemoveYoungApplicationByID(applicationID);
+		}
+
 	}
 }

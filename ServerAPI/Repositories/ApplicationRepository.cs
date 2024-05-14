@@ -45,8 +45,8 @@ namespace ServerAPI.Repositories
 
 		public void RemoveYoungApplicationByID(int applicationID)
 		{
-			var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", applicationID);
-			YAppCollection.DeleteOne(filter);
+			    var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", applicationID);
+			    YAppCollection.DeleteOne(filter);
 		}
 	}
 }
