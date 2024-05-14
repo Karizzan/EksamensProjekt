@@ -6,12 +6,15 @@ namespace ServerAPI.Repositories
 {
     public class ApplicationRepository : IApplicationRepository
     {
-        private IMongoCollection<Application> collection;
-        public ApplicationRepository()
+        private IMongoCollection<Application> Appcollection;
+
+		private IMongoCollection<Application> YAppcollection;
+		public ApplicationRepository()
         {
             var client = new MongoClient("mongodb+srv://Marcus:Marc6487@cirkusdb.rxb1kpo.mongodb.net/");
             var database = client.GetDatabase("CirkusDB");
-            collection = database.GetCollection<Application>("Applications");
+            Appcollection = database.GetCollection<Application>("Application");
+            YAppcollection = database.GetCollection<YoungApplication>("YoungApplication");
         }
         
         public List<Application> GetAllApplications() 
