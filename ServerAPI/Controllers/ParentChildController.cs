@@ -17,24 +17,24 @@ namespace ServerAPI.Controllers
 
 		[HttpGet]
 		[Route("getAll")]
-		public List<Parent> GetAllParents()
+		public List<Parent> GetAllParentChilds()
 		{
-			return mRepo.GetAllParents();
+			return mRepo.GetAllParentChilds();
 		}
 
 		[HttpPost]
 		[Route("add")]
-		public void AddParent(Parent parent)
+		public void AddParentChild(Parent parentchild)
 		{
-			mRepo.AddParent(parent);
+			mRepo.AddParentChild(parentchild);
 
 		}
 
 		[HttpDelete]
 		[Route("delete/{id:int}")]
-		public void RemoveParentByID(int parentID)
+		public void RemoveParentChildnByMail(string parentmail)
 		{
-			mRepo.RemoveParentByID(parentID);
+			mRepo.RemoveParentChildnByMail(parentmail);
 		}
 
 	}
