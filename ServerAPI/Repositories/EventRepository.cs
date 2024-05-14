@@ -8,7 +8,7 @@ namespace ServerAPI.Repositories
         private IMongoCollection<Event> collection;
         public EventRepository()
         {
-            var client = new MongoClient("mongodb+srv://Marcus:Marc6487@cirkusdb.rxb1kpo.mongodb.net/");
+            var client = new MongoClient("mongodb+srv://marcushoumark:Marcus@cirkusdb.rxb1kpo.mongodb.net/");
             var database = client.GetDatabase("CirkusDB");
             collection = database.GetCollection<Event>("Event");
         }

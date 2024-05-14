@@ -159,9 +159,9 @@ namespace ServerAPI
 			var d = new ParentChildRepository();
 
 			
-			foreach (var item in parents)
+		/*	foreach (var item in parents)
 			{
-				d.AddParent(item);
+				d.AddParentChild(item);
 			}
 			foreach (var item in applications)
 			{
@@ -170,7 +170,7 @@ namespace ServerAPI
 			foreach (var item in Events)
 			{
 				c.AddEvent(item);
-			}
+			}*/
 			
 
 			
