@@ -9,7 +9,7 @@ namespace EksamensProjekt.Services
 		HttpClient http;
 
 		// adresse på server
-		private string serverUrl = "https://localhost:7279";
+		private string serverUrl = "https://localhost:7270";
 
 		public ServiceClass(HttpClient http)
 		{
@@ -26,7 +26,7 @@ namespace EksamensProjekt.Services
 
 		public async Task AddApplication(Application application)
 		{
-			await http.PostAsJsonAsync<Application>($"{serverUrl}/application/add", application);
+			await http.PostAsJsonAsync($"{serverUrl}/application/add/", application);
 		}
 
 		public async Task<Event[]> GetAllEvents()
