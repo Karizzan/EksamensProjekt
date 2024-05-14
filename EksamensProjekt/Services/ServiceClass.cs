@@ -1,6 +1,32 @@
-﻿namespace EksamensProjekt.Services
+﻿using System.Net.Http.Json;
+using Core.Models;
+
+
+namespace EksamensProjekt.Services
 {
-    public class ServiceClass
+    public class ServiceClass : IServiceClass
     {
-    }
+		HttpClient http;
+
+		// adresse på server
+		private string serverUrl = "https://localhost:7060";
+
+		public ServiceClass(HttpClient http)
+		{
+			this.http = http;
+		}
+
+		public async Task<Application[]> GetAllApplications()
+		{
+			var applications = await http.GetFromJsonAsync<Application[]>($"{serverUrl}/application/getAll");
+
+			return applications.ToArray();
+
+		}
+
+		public async Task AddApplication(Application application)
+		{
+			await http.PostAsJsonAsync<Application>($"{serverUrl}/application/add", application);
+		}
+	}
 }
