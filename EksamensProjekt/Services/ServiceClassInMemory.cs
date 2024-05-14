@@ -2,7 +2,7 @@
 using Core.Models;
 namespace EksamensProjekt.Services
 {
-    public class ServiceClassInMemory : IServiceClass
+    public class ServiceClassInMemory
     {
         private static List<Child> children = new List<Child>()
         {

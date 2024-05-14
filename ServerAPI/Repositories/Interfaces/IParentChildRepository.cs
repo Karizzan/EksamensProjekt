@@ -3,8 +3,8 @@ namespace ServerAPI.Repositories.Interfaces
 {
     public interface IParentChildRepository
     {
-        public List<Parent> GetAllParents();
-        public void AddParent(Parent parent);
-        public void RemoveParentByID(int parentID);
+        public List<Parent> GetAllParentChilds();
+        public void AddParentChild(Parent parentchild);
+        public void RemoveParentChildnByMail(string parentmail);
     }
 }

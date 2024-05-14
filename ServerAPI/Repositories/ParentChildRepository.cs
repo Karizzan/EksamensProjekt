@@ -14,17 +14,20 @@ namespace ServerAPI.Repositories
             ParentChildCollection = database.GetCollection<Parent>("Parent");
         }
 
-        public List<Parent> GetAllParents()
-        {
-            return ParentChildCollection.Find(p => true).ToList();
-        }
-        public void AddParent(Parent parent)
-        {
+		public List<Parent> GetAllParentChilds()
+		{
+			return ParentChildCollection.Find(Builders<Parent>.Filter.Empty).ToList();
+		}
 
-        }
-        public void RemoveParentByID(int parentID)
-        {
+		public void AddParentChild(Parent parentchild)
+		{
+			ParentChildCollection.InsertOne(parentchild);
+		}
 
-        }
-    }
+		public void RemoveParentChildnByMail(string parentmail)
+		{
+			var filter = Builders<Parent>.Filter.Eq("ParentMail", parentmail);
+			ParentChildCollection.DeleteOne(filter);
+		}
+	}
 }

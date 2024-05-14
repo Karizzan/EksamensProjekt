@@ -40,6 +40,7 @@
 
 	</div>
 
+
 	<div class="col-md-12 mb-3">
 		<label for="Lokale">2. Prioritet</label>
 		<InputSelect id="Lokale" @bind-Value="prio2" class="form-control">
@@ -53,6 +54,13 @@
 
 	</div>
 
+	<div class="col-md-6">
+		<InputCheckbox id="Titel" @bind-Value="application.Verified" class="form-checkbox" />
+		<label for="Verify">Jeg giver hermed tilladelse til at mit/mine børn må deltage i børneklubben</label>
+	</div>
+
+	<br />
+	<br />
 
 	<h1>Barn 1</h1>
 	<div class="col-md-12 mb-3">
@@ -80,25 +88,24 @@
 		<InputText id="Titel" @bind-Value="child.Allergies" class="form-control" placeholder="f.eks. gluten, laktoseintolerant, høfeber osv...." />
 	</div>
 
-	<div class="col-md-4">
-		<label for="BeenHereBefore">Været her før?</label>
-		<InputCheckbox id="Titel" @bind-Value="child.BeenHereBefore" class="form-checkbox" />
-	</div>
-
 	<div class="col-md-12 mb-3">
 		<label for="Interests">Interreser</label>
 		<InputText id="Titel" @bind-Value="child.Interests" class="form-control" placeholder ="f.eks. dyr, fodbold, musik osv..."/>
 	</div>
 
-	<div class="col-md-4">
-		<label for="Verify">Jeg giver hermed tilladelse til at mit barn må deltage i børneklubben</label>
+	<div>
+		<label for="BeenHereBefore">Været her før?</label>
 		<InputCheckbox id="Titel" @bind-Value="child.BeenHereBefore" class="form-checkbox" />
 	</div>
-
-	<div class="col-md-4">
+	<br />
+	<br />
+	
+	<div>
 		<label for="Extrachild">Ekstra barn</label>
 		<InputCheckbox id="Titel" @bind-Value="extraChild" class="form-checkbox" />
 	</div>
+	<br />
+	<br />
 
 	@if(extraChild == true)
 	{
@@ -128,14 +135,14 @@
 			<InputText id="Titel" @bind-Value="child2.Allergies" class="form-control" placeholder="f.eks. gluten, laktoseintolerant, høfeber osv...." />
 		</div>
 
-		<div class="col-md-4">
-			<label for="BeenHereBefore">Været her før?</label>
-			<InputCheckbox id="Titel" @bind-Value="child2.BeenHereBefore" class="form-checkbox" />
-		</div>
-
 		<div class="col-md-12 mb-3">
 			<label for="Interests">Interreser</label>
 			<InputText id="Titel" @bind-Value="child2.Interests" class="form-control" placeholder="f.eks. dyr, fodbold, musik osv..." />
+		</div>
+
+		<div>
+			<label for="BeenHereBefore">Været her før?</label>
+			<InputCheckbox id="Titel" @bind-Value="child2.BeenHereBefore" class="form-checkbox" />
 		</div>
 	}
 	<div class="col-12 mb-3">
@@ -160,7 +167,7 @@
 	int prio1; //Importanta DO NOT DELETE
 	int prio2; //Importanta DO NOT DELETE
 
-	string errorMessage = "Fine"; //To check ´the status of the program
+	string errorMessage = ""; //To check ´the status of the program
 
 	[Inject]
 	private IServiceClass? mService { get; set; }
@@ -236,6 +243,7 @@
 			}
 			//We show a message to the user
 			errorMessage = "Din ansøgning er blevet sendt";
+
 
 			//We reset the form
 			child = new();
