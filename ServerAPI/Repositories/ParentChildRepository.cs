@@ -16,7 +16,7 @@ namespace ServerAPI.Repositories
 
         public List<Parent> GetAllParents()
         {
-
+            return ParentChildCollection.Find(p => true).ToList();
         }
         public void AddParent(Parent parent)
         {
