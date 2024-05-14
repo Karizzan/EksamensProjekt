@@ -159,21 +159,21 @@ namespace ServerAPI
 			var c = new EventRepository();
 			var d = new ParentChildRepository();
 
+			
+		/*	foreach (var item in parents)
+			{
+				d.AddParentChild(item);
+			}
 			foreach (var item in applications)
 			{
 				b.AddApplication(item);
-			}
-
-			foreach (var item in parents)
-			{
-				d.AddParentChild(item);
 			}
 			
 			foreach (var item in Events)
 			{
 				c.AddEvent(item);
-			}
-
+			}*/
+			
 
 
 			//  var admin = a.GetAdminByUsername("Seb8530");

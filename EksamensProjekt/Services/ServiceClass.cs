@@ -9,7 +9,7 @@ namespace EksamensProjekt.Services
 		HttpClient http;
 
 		// adresse på server
-		private string serverUrl = "https://localhost:7060";
+		private string serverUrl = "https://localhost:7279";
 
 		public ServiceClass(HttpClient http)
 		{
