@@ -159,6 +159,15 @@ namespace ServerAPI
 			var c = new EventRepository();
 			var d = new ParentChildRepository();
 
+			//Admin admin = new Admin();
+			//admin.AdminID = 1;
+			//admin.AdminName = "Admin1";
+			//admin.Username = "admin1";
+			//admin.Password = "123";
+			
+			
+			//a.AddAdmin(admin);
+
 			
 		/*	foreach (var item in parents)
 			{
