@@ -6,7 +6,7 @@ namespace ServerAPI.Controllers
 {
     
         [ApiController]
-        [Route("admnin")]
+        [Route("admin")]
         public class AdminController : ControllerBase
         {
             private IAdminRepository mRepo;
@@ -19,9 +19,9 @@ namespace ServerAPI.Controllers
 
             [HttpPost]
             [Route("add")]
-            public void AddAdmin(Admin admnin)
+            public void AddAdmin(Admin admin)
             {
-                mRepo.AddAdmin(admnin);
+                mRepo.AddAdmin(admin);
 
             }
 

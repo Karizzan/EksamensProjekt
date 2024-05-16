@@ -35,6 +35,7 @@ namespace ServerAPI.Repositories
 
         public void AddAdmin(Admin admin) 
         {
+
 			collection.InsertOne(admin);
 		}
             
