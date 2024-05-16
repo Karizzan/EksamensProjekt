@@ -19,7 +19,8 @@ namespace ServerAPI.Repositories
         
         public List<Application> GetAllApplications() 
         {
-			return AppCollection.Find(Builders<Application>.Filter.Empty).ToList();
+            return AppCollection.Find(Builders<Application>.Filter.Empty).ToList();
+
         }
 
         public void AddApplication(Application application)
@@ -32,7 +33,7 @@ namespace ServerAPI.Repositories
             var filter = Builders<Application>.Filter.Eq("ApplicationID", applicationID);
             AppCollection.DeleteOne(filter);
         }
-
+        
 		public List<YoungApplication> GetAllYoungApplications()
 		{
 			return YAppCollection.Find(Builders<YoungApplication>.Filter.Empty).ToList();
@@ -48,5 +49,6 @@ namespace ServerAPI.Repositories
 			    var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", applicationID);
 			    YAppCollection.DeleteOne(filter);
 		}
+        
 	}
 }

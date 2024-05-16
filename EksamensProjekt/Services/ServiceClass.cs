@@ -27,7 +27,7 @@ namespace EksamensProjekt.Services
 
 		public async Task AddApplication(Application application)
 		{
-			await http.PostAsJsonAsync($"{serverUrl}/application/add/", application);
+			await http.PostAsJsonAsync($"{serverUrl}/application/add", application);
 		}
 
 		public async Task AddAdmin(Admin admin)
@@ -40,6 +40,10 @@ namespace EksamensProjekt.Services
 			var events = await http.GetFromJsonAsync<Event[]>($"{serverUrl}/event/getAll");
 			return events.ToArray();
 
+		}
+
+		public async Task AddEvent(Event Event){
+			await http.PostAsJsonAsync<Event>($"{serverUrl}/event/add",Event);
 		}
 	}
 }

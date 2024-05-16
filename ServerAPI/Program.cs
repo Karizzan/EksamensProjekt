@@ -5,7 +5,7 @@ using ServerAPI.Repositories.Interfaces;
 namespace ServerAPI
 {
 	public class Program
-	{
+	{/*
 		private static List<Child> children = new List<Child>()
 		{
             //Vi har fjernet alle Child.ID //Marcus og Hudayfa
@@ -148,6 +148,7 @@ namespace ServerAPI
 			new Application() {ApplicationID = 4, SubmitDate = DateTime.Now, Parent = parents[3], IsOnWaitingList = false, Priority1 = Events[1], Priority2 = Events[0]}
 
 		};
+		*/
 		public static void Main(string[] args)
 		{
 
@@ -219,7 +220,7 @@ namespace ServerAPI
 
             var app = builder.Build();
 
-		
+			app.UseAuthentication();
 
 			app.UseHttpsRedirection();
 
