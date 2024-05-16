@@ -12,7 +12,6 @@ namespace EksamensProjekt.Services
 
 
 		Task<Event[]> GetAllEvents();
-        Task<Event[]> GetAllEvents();
 
         Task AddEvent(Event Event);
     }
