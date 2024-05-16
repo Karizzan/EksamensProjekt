@@ -6,7 +6,7 @@
 <h3>plan</h3>
 
 <h1>Venteliste</h1>
-<table>
+<table class="styled-table">
 	<thead>
 		<tr>
 			<th>SubmitDate</th>
@@ -14,6 +14,7 @@
 			<th>Prioritet2</th>
 			<th>Forældre</th>
 			<th>Email</th>
+			<th></th>
 
 		</tr>
 	</thead>
@@ -23,10 +24,12 @@
 			@foreach (var item in applications)
 			{
 				<tr>
-					<td>@item.SubmitDate</td>
-					
+					<td>@item.SubmitDate </td>
+					<td>Uge @item.Priority1.WeekNumber </td>
+					<td>Uge @item.Priority2.WeekNumber </td>
 					<td>@item.Parent.ParentName</td>
 					<td>@item.Parent.ParentMail</td>
+					<button>Mere Info</button>
 					<button @onclick="()=>Select(item)">Select</button>
 				</tr>
 			}
@@ -37,11 +40,11 @@
 
 </table>
 
-<table>
+<table class="styled-table">
 	<thead>
 		<tr>
-			<th>Uge 27</th>
-			<button @onclick="()=>AddToWeek(Uge27)">Tilføj til uge</button>
+			<th>Uge 27 Ballerup</th>
+			<th><button @onclick="()=>AddToWeek(Uge27)">Tilføj til uge</button></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -61,11 +64,11 @@
 	</tbody>
 </table>
 
-<table>
+<table class="styled-table">
 	<thead>
 		<tr>
-			<th>Uge 28</th>
-			<button @onclick="()=>AddToWeek(Uge28)">Tilføj til uge</button>
+			<th>Uge 28 Ballerup</th>
+			<th><button @onclick="()=>AddToWeek(Uge28)">Tilføj til uge</button></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -86,11 +89,11 @@
 	</tbody>
 </table>
 
-<table>
+<table class="styled-table">
 	<thead>
 		<tr>
-			<th>Uge 30</th>
-			<button @onclick="()=>AddToWeek(Uge30)">Tilføj til uge</button>
+			<th>Uge 30 Aarhus</th>
+			<th><button @onclick="()=>AddToWeek(Uge30)">Tilføj til uge</button></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -111,11 +114,11 @@
 	</tbody>
 </table>
 
-<table>
+<table class="styled-table">
 	<thead>
 		<tr>
-			<th>Uge 31</th>
-			<button @onclick="()=>AddToWeek(Uge31)">Tilføj til uge</button>
+			<th>Uge 31 Aarhus</th>
+			<th><button @onclick="()=>AddToWeek(Uge31)">Tilføj til uge</button></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -136,6 +139,79 @@
 	</tbody>
 </table>
 
+
+<style>
+	/* General table styling */
+	.styled-table {
+		border-collapse: collapse;
+		width: 100%;
+		margin: 25px 0;
+		font-size: 18px;
+		font-family: 'Arial', sans-serif;
+		text-align: left;
+	}
+
+		/* Table headers */
+		.styled-table th {
+			background-color: #d72631; /* Red color from the logo */
+			color: #ffffff;
+			text-align: center;
+			padding: 12px 15px;
+		}
+
+		/* Table rows */
+		.styled-table td {
+			padding: 12px 15px;
+			border: 1px solid #dddddd;
+		}
+
+		/* Alternating row colors */
+		.styled-table tr:nth-of-type(even) {
+			background-color: #f9f3f3; /* Light pink color */
+		}
+
+		/* Hover effect */
+		.styled-table tr:hover {
+			background-color: #f1e1e1; /* Slightly darker pink */
+		}
+
+	/* Button styling */
+	.styled-button {
+		background-color: #d72631; /* Red color from the logo */
+		color: white;
+		border: none;
+		padding: 8px 16px;
+		cursor: pointer;
+		font-size: 16px;
+		border-radius: 5px;
+		transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.1s ease;
+		margin: 5px 0;
+	}
+
+		/* Button hover effect */
+		.styled-button:hover {
+			background-color: #e53958; /* Pink color from the logo */
+		}
+
+		/* Button active effect */
+		.styled-button:active {
+			background-color: #c01e28; /* Darker red to indicate active state */
+			transform: scale(0.95); /* More noticeable shrink to indicate press */
+			box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Inset shadow to create pressed effect */
+		}
+
+		/* Button focus effect */
+		.styled-button:focus {
+			outline: none;
+			box-shadow: 0 0 0 3px rgba(215, 38, 49, 0.5); /* Add a pink outline */
+		}
+
+	/* Ensure buttons in table cells fill the cell */
+	.styled-table td .styled-button {
+		width: 100%;
+		box-sizing: border-box;
+	}
+</style>
 @code {
 	
 	private List<Application>? applications = new();

@@ -11,6 +11,7 @@ namespace EksamensProjekt.Services
 		// adresse på server
 		private string serverUrl = "https://localhost:7270";
 
+
 		public ServiceClass(HttpClient http)
 		{
 			this.http = http;
@@ -29,10 +30,14 @@ namespace EksamensProjekt.Services
 			await http.PostAsJsonAsync($"{serverUrl}/application/add", application);
 		}
 
+		public async Task AddAdmin(Admin admin)
+		{
+			await http.PostAsJsonAsync($"{serverUrl}/admin/add/", admin);
+		}
+
 		public async Task<Event[]> GetAllEvents()
 		{
 			var events = await http.GetFromJsonAsync<Event[]>($"{serverUrl}/event/getAll");
-
 			return events.ToArray();
 
 		}

@@ -1,6 +1,111 @@
-﻿@page "/adminPage"
+﻿@inject NavigationManager navManager
+@inject IJSRuntime js
+@using Core.Models
+@using Services
+@page "/adminPage"
 <h3>AdminPage</h3>
+<EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+	<div class="col-md-12 mb-3">
+		<label for="AdminLevel">Admin Type</label>
+		<InputSelect id="AdminLevel" @bind-Value="newAdmin.AdminLevel" class="form-control">
+
+			@foreach (string anOption in adminCategories)
+			{
+				<option value="@anOption">@anOption</option>
+
+			}
+		</InputSelect>
+
+	</div>
+
+
+	<div class="col-md-12 mb-3">
+		<label for="AdminName">Navn på den nye adminstrator</label>
+		<InputText id="AdminName" @bind-Value="newAdmin.AdminName" class="form-control" placeholder="f.eks. Jens Jensen" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="AdminUsername">Brugernavn</label>
+		<InputText id="AdminUserName" @bind-Value="newAdmin.Username" class="form-control" placeholder="f.eks. jens04" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="AdminPassword">Kodeord</label>
+		<InputText id="AdminPassword" @bind-Value="newAdmin.Password" class="form-control"/>
+	</div>
+
+
+	<div class="col-md-12 mb-3">
+		<label for="AdminPassword">Bekræft Kodeord</label>
+		<InputText id="AdminPassword" @bind-Value="doubleCheckPassword" class="form-control" />
+	</div>
+
+
+
+
+	<div class="col-12 mb-3">
+		<button @type="submit" class="btn btn-primary">Send</button>
+	</div>
+
+	<h1>@errorMessage</h1>
+</EditForm>
+
 
 @code {
+	private EditContext? aEditContext;
 
+	Admin newAdmin = new();
+	string errorMessage = "";
+	string doubleCheckPassword = "";
+
+
+	[Inject]
+	private IServiceClass? mService { get; set; }
+
+	//Different Categories of Admins
+	private string[] adminCategories = { "Admin", "ReadOnly"};
+
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		aEditContext = new EditContext(newAdmin);
+
+
+	}
+
+	public async Task handleSubmit()
+	{
+		if (aEditContext.Validate())
+		{
+			if (doubleCheckPassword == newAdmin.Password)
+			{
+			//temporary admin
+				Console.WriteLine($"{newAdmin.AdminName}, type {newAdmin.AdminLevel}");
+				newAdmin.AdminID = 2;
+				await mService.AddAdmin(newAdmin);
+                newAdmin = new();
+
+				//We show a message to the user
+				errorMessage = "Adminstratoren er blevet tilføjet";
+
+			}
+			else
+			{
+				//We show a message to the user
+				errorMessage = "Error Password wasn't the same";
+
+			}
+
+
+
+		}
+		else
+		{
+			errorMessage = "Error";
+		}
+	}
 }
