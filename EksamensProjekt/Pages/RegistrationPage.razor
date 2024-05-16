@@ -30,7 +30,7 @@
 	<div class="col-md-12 mb-3">
 		<label for="Lokale">1. Prioritet</label>
 		<InputSelect id="Lokale" @bind-Value="prio1" class="form-control">
-
+			<option>Vælg</option>
 			@foreach (var Event in allEvents)
 			{
 				<option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
@@ -44,7 +44,7 @@
 	<div class="col-md-12 mb-3">
 		<label for="Lokale">2. Prioritet</label>
 		<InputSelect id="Lokale" @bind-Value="prio2" class="form-control">
-
+			<option>Vælg</option>
 			@foreach (var Event in allEvents)
 			{
 				<option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
@@ -214,14 +214,18 @@
 			application.Priority1 = getEventById(prio1);
 			application.Priority2 = getEventById(prio2);
 			application.SubmitDate = DateTime.Now;
-			//application.Parent = parent;
+			application.Parent = parent;
 
-			parent.Children.Add(child);
+			application.Parent.Children.Add(child);
 
-			if (child2.ChildName != null){
-				parent.Children.Add(child2);
-			} 
-			Console.WriteLine($" NY APPLICTION: Parent Name: {parent.ParentName}, Barn 1 navn: {parent.Children.Count}, Barn 2 navn:{child2.ChildName}, ApplikationsID: {application.ApplicationID}");
+			if (extraChild == true){
+				application.Parent.Children.Add(child2);
+			}
+			else
+			{
+				child2 = new();
+			}
+			Console.WriteLine($" NY APPLICTION: Parent Name: {parent.ParentName}, Barn 1 navn: {child.ChildName}, Barn 2 navn:{child2.ChildName}, ApplikationsID: {application.ApplicationID}");
 			Console.WriteLine(parent.ParentName);
 			Console.WriteLine(child.ChildName);
 			Console.WriteLine(child2.ChildName);
@@ -232,7 +236,8 @@
 			{
 				Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
 			}
-
+			SetDefaults();
+			
 			//We add the application to the database
 			await mService.AddApplication(application);
 
@@ -271,7 +276,7 @@
 		}
 		return highestNumber;
 
-	
+
 	}
 
 	protected override async Task OnInitializedAsync()
@@ -280,10 +285,43 @@
 
 		allEvents = (await mService.GetAllEvents())?.ToList();
 
-		allApplications = (await mService.GetAllApplications())?.ToList();
+		//allApplications = (await mService.GetAllApplications())?.ToList();
 
 	}
 
+
+	public void SetDefaults()
+	{
+		if (child.Interests == null)
+		{
+			child.Interests = "Ingen Interresser";
+		}
+
+		if (child.Comment == null)
+		{
+			child.Comment = "Ingen Kommentar";
+		}
+
+		if (child.Allergies == null)
+		{
+			child.Allergies = "Ingen Allergier";
+		}
+
+		if (child2.Interests == null)
+		{
+			child2.Interests = "Ingen Interresser";
+		}
+
+		if (child2.Comment == null)
+		{
+			child2.Comment = "Ingen Kommentar";
+		}
+
+		if (child2.Allergies == null)
+		{
+			child2.Allergies = "Ingen Allergier";
+		}
+	}
 
 
 

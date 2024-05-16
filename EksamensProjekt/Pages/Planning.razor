@@ -24,8 +24,7 @@
 			{
 				<tr>
 					<td>@item.SubmitDate</td>
-					<td>Uge @item.Priority1.WeekNumber</td>
-					<td>Uge @item.Priority2.WeekNumber</td>
+					
 					<td>@item.Parent.ParentName</td>
 					<td>@item.Parent.ParentMail</td>
 					<button @onclick="()=>Select(item)">Select</button>
@@ -138,6 +137,7 @@
 </table>
 
 @code {
+	
 	private List<Application>? applications = new();
 
 	private Application? SelectedApplication = new Application();
@@ -168,12 +168,14 @@
 	{
 		applications.Add(application);
 		weekList.Remove(application);
-		
+
 	}
 
 	protected override async Task OnInitializedAsync()
 	{
-		applications = (await mService.GetAllApplications()).ToList();
+		Event Event = new Event() { EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Onsdag - Søndag (Hel Uge)" };
+		//pplications = (await mService.GetAllApplications()).ToList();
+		await mService.AddEvent(Event);
 	}
 	
 }
