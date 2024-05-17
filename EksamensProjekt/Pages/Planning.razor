@@ -9,28 +9,34 @@
 <table class="styled-table">
 	<thead>
 		<tr>
-			<th>SubmitDate</th>
 			<th>Prioritet1</th>
 			<th>Prioritet2</th>
 			<th>Forældre</th>
-			<th>Email</th>
+			<th>Antal Børn</th>
 			<th></th>
 
 		</tr>
 	</thead>
 	<tbody>
+		@{
+			int i = 1;
+
+		}
 		@if (applications != null)
 		{
 			@foreach (var item in applications)
 			{
 				<tr>
-					<td>@item.SubmitDate </td>
 					<td>Uge @item.Priority1.WeekNumber </td>
 					<td>Uge @item.Priority2.WeekNumber </td>
 					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<button>Mere Info</button>
-					<button @onclick="()=>Select(item)">Select</button>
+					<td>@item.Parent.Children.Count</td>
+					<td>
+					<button @onclick="()=>åbenModal(item)" class="btn btn-info">Se Mere</button>
+					</td>
+					<td>
+					<button @onclick="()=>Select(item)" class="btn btn-primary">Select</button>
+					</td>
 				</tr>
 			}
 		}
@@ -40,104 +46,96 @@
 
 </table>
 
-<table class="styled-table">
-	<thead>
-		<tr>
-			<th>Uge 27 Ballerup</th>
-			<th><button @onclick="()=>AddToWeek(Uge27)">Tilføj til uge</button></th>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Uge27 != null)
-		{
-			@foreach (var item in Uge27)
+
+@foreach (var item in events)
+{
+	@if (IsAlreadyDisplayed(item.WeekNumber) != true)
+	{
+
+		<h1>Uge @item.WeekNumber</h1>
+
+			@foreach (var item1 in events)
 			{
-				<tr>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<td>
-                        <button @onclick="() => AddToWaitingList(Uge27, item)">Add to Waiting List</button>
-                    </td>
-				</tr>
+				@if (item1.WeekNumber == item.WeekNumber)
+				{
+					
+					<h2>@item1.Workdays</h2>
+					<button @onclick="() => AddToWeek(applications1)">Tilføj til tidspunkt</button>
+				<table>
+					<thead>
+						<tr>
+							<th>Prioritet1</th>
+							<th>Prioritet2</th>
+							<th>Forældre</th>
+							<th>Antal Børn</th>
+						</tr>
+						</thead>
+						@{
+							int i1 = 0;
+							AppArray[i1] = new List<Application>();
+						}
+					@foreach (var item2 in AppArray[i1])
+						{
+								<tbody>
+									<tr>
+										<td>Uge @item2.Priority1.WeekNumber</td>
+										<td>Uge @item2.Priority2.WeekNumber</td>
+										<td>@item2.Parent.ParentName</td>
+										<td>@item2.Parent.Children.Count</td>
+										<td>
+											<button @onclick="()=>åbenModal(item2)" class="btn btn-info">Se Mere</button>
+										</td>
+									</tr>
+								</tbody>
+
+								i1++;
+							
+						}
+					</table>
+				}
 			}
-		}
-	</tbody>
-</table>
+		
+	}
+}
 
-<table class="styled-table">
-	<thead>
-		<tr>
-			<th>Uge 28 Ballerup</th>
-			<th><button @onclick="()=>AddToWeek(Uge28)">Tilføj til uge</button></th>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Uge28 != null)
-		{
-			@foreach (var item in Uge28)
-			{
-				<tr>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<td>
-                        <button @onclick="() => AddToWaitingList(Uge28, item)">Add to Waiting List</button>
-                    </td>
-				</tr>
-			}
-		}
+@foreach (var item in events)
+{
 
-	</tbody>
-</table>
+	int weeknumbers = item.WeekNumber;
+}
 
-<table class="styled-table">
-	<thead>
-		<tr>
-			<th>Uge 30 Aarhus</th>
-			<th><button @onclick="()=>AddToWeek(Uge30)">Tilføj til uge</button></th>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Uge30 != null)
-		{
-			@foreach (var item in Uge30)
-			{
-				<tr>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<td>
-						<button @onclick="() => AddToWaitingList(Uge30, item)">Add to Waiting List</button>
-					</td>
-				</tr>
-			}
-		}
 
-	</tbody>
-</table>
+<ModalDialog @ref="@addDialog" Title="See more details">
+	<h1>Ansøgning</h1>
+	<p>Forældre: @SelectedApplication.Parent.ParentName</p>
+	<p>Forældre Email: @SelectedApplication.Parent.ParentMail</p>
+	<p>Forældre Telefon: @SelectedApplication.Parent.ParentPhone</p>
+	<p>KræwNr.: @SelectedApplication.Parent.KræwNumber</p>
+	<p>Indsendelsesdato: @SelectedApplication.SubmitDate</p>
+	<p>1. Prioritet: Uge @SelectedApplication.Priority1.WeekNumber</p>
+	<p>2. Prioritet: Uge @SelectedApplication.Priority2.WeekNumber</p>
+	<p>På Venteliste: @SelectedApplication.IsOnWaitingList</p>
+	<p>Verified: @SelectedApplication.Verified</p>
+	@{
+	int i = 1;
+	}
 
-<table class="styled-table">
-	<thead>
-		<tr>
-			<th>Uge 31 Aarhus</th>
-			<th><button @onclick="()=>AddToWeek(Uge31)">Tilføj til uge</button></th>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Uge31 != null)
-		{
-			@foreach (var item in Uge31)
-			{
-				<tr>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<td>
-						<button @onclick="() => AddToWaitingList(Uge31, item)">Add to Waiting List</button>
-					</td>
-				</tr>
-			}
-		}
+	@foreach (var child in SelectedApplication.Parent.Children)
+	{
+		<h1>@i. Barn</h1>
+		<p>Navn: @child.ChildName</p>
+		<p>Alder: @child.ChildAge</p>
+		<p>T-shirt str: @child.TshirtSize</p>
+		<p>Kommentar: @child.Comment</p>
+		<p>Allegener: @child.Allergies</p>
+		<p>Været her før?: @child.BeenHereBefore</p>
+		<p>Interesser: @child.Interests</p>
+		i++;
+	}
 
-	</tbody>
-</table>
+
+	<button @onclick="() => addDialog.Close()" class="btn btn-danger">Luk</button>
+    </ModalDialog>
 
 
 <style>
@@ -213,9 +211,11 @@
 	}
 </style>
 @code {
-
-	public List<Application[]> app;
+	private List<int> weekNumbers = new();
 	private List<Application>? applications = new();
+	private static List<Event>? events = new();
+
+	private List<Application>? applications1 = new List<Application>();
 
 	private Application? SelectedApplication = new Application();
 
@@ -224,19 +224,40 @@
 	private List<Application>? Uge30 = new List<Application>();
 	private List<Application>? Uge31 = new List<Application>();
 
+	private List<Application>[] AppArray = new List<Application>[12];
+
+	private Event? SelectedEvent = new Event();
 
 	[Inject]
 	private IServiceClass? mService { get; set; }
+	private ModalDialog? addDialog { get; set; }
 
+	public void setSelectedEvent(Event Event)
+	{
+		SelectedEvent = Event;
+	}
+
+	public void SetSelectedApplication(Application application)
+	{
+		SelectedApplication = application;
+	}
+
+	public void åbenModal(Application application)
+	{
+		addDialog.Open();
+		SetSelectedApplication(application);
+	}
 
 	public void Select(Application application)
 	{
+		weekNumbers = new();
 		SelectedApplication = application;
 		Console.WriteLine($"{application.Parent.ParentName} selected");
 	}
 
 	public void AddToWeek(List<Application> list)
 	{
+		weekNumbers = new();
 		list.Add(SelectedApplication);
 		applications = applications.Where(app => app != SelectedApplication).ToList();
 		SelectedApplication = new();
@@ -251,9 +272,22 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		Event Event = new Event() { EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Onsdag - Søndag (Hel Uge)" };
-		//pplications = (await mService.GetAllApplications()).ToList();
-		await mService.AddEvent(Event);
+		applications = (await mService.GetAllApplications()).ToList();
+
+		events = (await mService.GetAllEvents()).ToList();
 	}
-	
+
+	public bool IsAlreadyDisplayed(int weekNumber)
+	{
+		foreach (var item in weekNumbers)
+		{
+			if (item == weekNumber)
+			{
+				return true;
+			}
+		}
+		weekNumbers.Add(weekNumber);
+		return false;
+
+	}
 }
