@@ -213,7 +213,8 @@
 	}
 </style>
 @code {
-	
+
+	public List<Application[]> app;
 	private List<Application>? applications = new();
 
 	private Application? SelectedApplication = new Application();
@@ -222,6 +223,7 @@
 	private List<Application>? Uge28 = new List<Application>();
 	private List<Application>? Uge30 = new List<Application>();
 	private List<Application>? Uge31 = new List<Application>();
+
 
 	[Inject]
 	private IServiceClass? mService { get; set; }
