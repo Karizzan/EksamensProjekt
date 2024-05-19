@@ -10,7 +10,6 @@ namespace EksamensProjekt.Services
 
 		Task AddAdmin(Admin admin);
 
-
 		Task<Event[]> GetAllEvents();
 
         Task AddEvent(Event Event);
