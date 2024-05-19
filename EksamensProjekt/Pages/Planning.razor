@@ -74,21 +74,21 @@
 							int i1 = 0;
 							AppArray[i1] = new List<Application>();
 						}
-					@foreach (var item2 in AppArray[i1])
-						{
-								<tbody>
-									<tr>
-										<td>Uge @item2.Priority1.WeekNumber</td>
-										<td>Uge @item2.Priority2.WeekNumber</td>
-										<td>@item2.Parent.ParentName</td>
-										<td>@item2.Parent.Children.Count</td>
-										<td>
-											<button @onclick="()=>åbenModal(item2)" class="btn btn-info">Se Mere</button>
-										</td>
-									</tr>
-								</tbody>
+				@foreach (var item2 in AppArray[i1])
+					{
+							<tbody>
+								<tr>
+									<td>Uge @item2.Priority1.WeekNumber</td>
+									<td>Uge @item2.Priority2.WeekNumber</td>
+									<td>@item2.Parent.ParentName</td>
+									<td>@item2.Parent.Children.Count</td>
+									<td>
+										<button @onclick="()=>åbenModal(item2)" class="btn btn-info">Se Mere</button>
+									</td>
+								</tr>
+							</tbody>
 
-								i1++;
+							i1++;
 							
 						}
 					</table>
@@ -218,11 +218,6 @@
 	private List<Application>? applications1 = new List<Application>();
 
 	private Application? SelectedApplication = new Application();
-
-	private List<Application>? Uge27 = new List<Application>();
-	private List<Application>? Uge28 = new List<Application>();
-	private List<Application>? Uge30 = new List<Application>();
-	private List<Application>? Uge31 = new List<Application>();
 
 	private List<Application>[] AppArray = new List<Application>[12];
 
