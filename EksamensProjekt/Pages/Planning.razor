@@ -1,5 +1,6 @@
 ﻿@using Core.Models
 @using Services
+@inject IJSRuntime JS
 @page "/planning"
 
 
@@ -46,35 +47,38 @@
 
 </table>
 
-
+<button @onclick=" ()=> SavePlanning(events)"> Gem Plan </button>
 @foreach (var item in events)
 {
 	@if (IsAlreadyDisplayed(item.WeekNumber) != true)
 	{
 
 		<h1>Uge @item.WeekNumber</h1>
-
+		
+			
+		
 			@foreach (var item1 in events)
 			{
 				@if (item1.WeekNumber == item.WeekNumber)
 				{
-					
+				
+				
 					<h2>@item1.Workdays</h2>
-					<button @onclick="() => AddToWeek(applications1)">Tilføj til tidspunkt</button>
-				<table>
+				<button @onclick="()=>SaveToEmailClipboard(item1.Applications)">@Copy</button>
+				<table class="table-table">
 					<thead>
 						<tr>
 							<th>Prioritet1</th>
 							<th>Prioritet2</th>
 							<th>Forældre</th>
 							<th>Antal Børn</th>
+							<th>
+								<button @onclick="() => AddToWeek(item1.Applications)">Tilføj til tidspunkt</button>
+							</th>
 						</tr>
 						</thead>
-						@{
-							int i1 = 0;
-							AppArray[i1] = new List<Application>();
-						}
-					@foreach (var item2 in AppArray[i1])
+						
+					@foreach (var item2 in item1.Applications)
 						{
 								<tbody>
 									<tr>
@@ -85,18 +89,25 @@
 										<td>
 											<button @onclick="()=>åbenModal(item2)" class="btn btn-info">Se Mere</button>
 										</td>
+										<td>
+											<button @onclick="()=>AddToWaitingList(item1.Applications, item2)">Fortryd</button>
+										</td>
+								
 									</tr>
+
 								</tbody>
 
-								i1++;
+								
 							
 						}
-					</table>
+					
+				</table>
 				}
 			}
 		
 	}
 }
+
 
 @foreach (var item in events)
 {
@@ -136,7 +147,15 @@
 
 	<button @onclick="() => addDialog.Close()" class="btn btn-danger">Luk</button>
     </ModalDialog>
-
+	<script>
+	function copyToClipboard(text) {
+		navigator.clipboard.writeText(text).then(function () {
+			console.log('Successfully copied to clipboard');
+		}, function (err) {
+			console.error('Failed to copy text: ', err);
+		});
+	}
+	</script>
 
 <style>
 	/* General table styling */
@@ -209,6 +228,13 @@
 		width: 100%;
 		box-sizing: border-box;
 	}
+
+	.table-table{
+		display: grid;
+		gap: 10px;
+		padding: 10px;
+	}
+
 </style>
 @code {
 	private List<int> weekNumbers = new();
@@ -225,12 +251,20 @@
 	private List<Application>? Uge31 = new List<Application>();
 
 	private List<Application>[] AppArray = new List<Application>[12];
+	private List<List<Application>> AppList = new();
+
+	private string Emails;
+
+	private string Copy = "Få emails";
+
 
 	private Event? SelectedEvent = new Event();
 
 	[Inject]
 	private IServiceClass? mService { get; set; }
 	private ModalDialog? addDialog { get; set; }
+
+
 
 	public void setSelectedEvent(Event Event)
 	{
@@ -244,6 +278,7 @@
 
 	public void åbenModal(Application application)
 	{
+		weekNumbers = new();
 		addDialog.Open();
 		SetSelectedApplication(application);
 	}
@@ -257,14 +292,24 @@
 
 	public void AddToWeek(List<Application> list)
 	{
-		weekNumbers = new();
-		list.Add(SelectedApplication);
-		applications = applications.Where(app => app != SelectedApplication).ToList();
-		SelectedApplication = new();
+		if (SelectedApplication.Parent.ParentMail != null)
+		{
+			weekNumbers = new();
+			list.Add(SelectedApplication);
+			applications = applications.Where(app => app != SelectedApplication).ToList();
+			SelectedApplication = new();
+		}
+		else
+		{
+			weekNumbers = new();
+		}
+
+
 	}
 
 	public void AddToWaitingList(List<Application> weekList, Application application)
 	{
+		weekNumbers = new();
 		applications.Add(application);
 		weekList.Remove(application);
 
@@ -275,7 +320,52 @@
 		applications = (await mService.GetAllApplications()).ToList();
 
 		events = (await mService.GetAllEvents()).ToList();
+
+		AppArray = new List<Application>[events.Count];
+
+		for (int i = 0; i < AppArray.Length; i++)
+		{
+			AppArray[i] = new();
+		}
+
+
 	}
+
+	public async Task<string> SaveToEmailClipboard(List<Application> weekList)
+	{
+		weekNumbers = new();
+		var emails = weekList.Select(app => app.Parent.ParentMail).Where(email => !string.IsNullOrWhiteSpace(email));
+		Emails = string.Join(",", emails);
+
+		// Call the JavaScript function to copy the emails to clipboard
+		await JS.InvokeVoidAsync("copyToClipboard", Emails);
+
+		Copy = "Gemt";
+
+		// Delay for a few seconds (e.g., 3 seconds)
+		await Task.Delay(3000);
+
+		// Reset the Copy variable
+		Copy = "Gem emails";
+		StateHasChanged(); // Trigger a re-render
+
+		return Emails;
+	}
+
+
+
+	public void SavePlanning(List<Event> EventList)
+	{
+
+		foreach (var item in EventList)
+		{
+			Console.WriteLine(item.Applications.Count);
+			mService.UpdateEvent(item);
+		}
+		weekNumbers = new();
+	}
+
+
 
 	public bool IsAlreadyDisplayed(int weekNumber)
 	{
