@@ -1,6 +1,55 @@
-﻿@page "/adminLoginPage"
-<h3>AdminLoginPage</h3>
+﻿@using Core.Models
+@page "/adminLoginPage"
+@using Services
+@inject NavigationManager NavigationManager
+
+<h1>Admin Login</h1>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p style="color: red">@errorMessage</p>
+}
+
+<form @onsubmit="Login">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" @bind="admin.Username" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" @bind="admin.Password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
 
 @code {
+    [Inject]
+    private IServiceClass? mService { get; set; }
+    private Admin admin = new Admin();
+    private string errorMessage;
 
+    private async Task Login()
+    {
+        errorMessage = null;
+
+        // Check if username and password are provided
+        if (string.IsNullOrEmpty(admin.Username) || string.IsNullOrEmpty(admin.Password))
+        {
+            errorMessage = "Please enter username and password.";
+            return;
+        }
+
+        // Call the backend service to authenticate the admin
+        bool isAuthenticated = await mService.CheckLogin(admin.Username, admin.Password);
+        if (isAuthenticated)
+        {
+            // Redirect to admin dashboard upon successful login
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = "Invalid username or password.";
+        }
+    }
 }
+
