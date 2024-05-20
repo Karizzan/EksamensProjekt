@@ -3,7 +3,31 @@
 @using Core.Models
 @using Services
 @page "/adminPage"
-<h3>AdminPage</h3>
+<h3>Adminstrator Overblik</h3>
+
+<table class="styled-table">
+
+	<thead>
+		<tr>
+			<th>Admin Navn (Brugernavn)</th>
+			<th>Admin Rolle</th>
+		</tr>
+	</thead>
+
+	@foreach (var admin in listOfAdmins)
+	{
+		<tr>
+		<td>@admin.AdminName (@admin.Username)</td>
+		<td>@admin.AdminLevel</td>
+		<td>
+			<button @onclick="()=>DeleteAdmin(admin)" class="btn btn-info">Slet Admin</button>
+		</td>
+		</tr>
+	}
+</table>
+
+
+<h3>Tilføj Adminstrator</h3>
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
 	<DataAnnotationsValidator />
 	<ValidationSummary />
@@ -32,15 +56,33 @@
 		<InputText id="AdminUserName" @bind-Value="newAdmin.Username" class="form-control" placeholder="f.eks. jens04" />
 	</div>
 
+	@{
+		//This is for showing and hiding password
+
+		if (showPassword == true)
+		{
+			passwordType = "null";
+		} else
+		{
+			passwordType = "password";
+		}
+
+	}
+
 	<div class="col-md-12 mb-3">
-		<label for="AdminPassword">Kodeord</label>
-		<InputText id="AdminPassword" @bind-Value="newAdmin.Password" class="form-control"/>
-	</div>
+		<div class="col-md-12 mb-3">
+			<label for="AdminPassword">Kodeord</label>
+			<InputText type="@passwordType" id="AdminPassword" @bind-Value="newAdmin.Password" class="form-control" />
+		</div>
 
 
-	<div class="col-md-12 mb-3">
-		<label for="AdminPassword">Bekræft Kodeord</label>
-		<InputText id="AdminPassword" @bind-Value="doubleCheckPassword" class="form-control" />
+		<div class="col-md-12 mb-3">
+			<label for="AdminPassword">Bekræft Kodeord</label>
+			<InputText type="@passwordType" id="AdminPassword2" @bind-Value="doubleCheckPassword" class="form-control" />
+		</div>
+
+		Vis Kodeord
+		<InputCheckbox id="showPassword" @bind-Value="showPassword" class="form-checkbox" />
 	</div>
 
 
@@ -50,16 +92,99 @@
 		<button @type="submit" class="btn btn-primary">Send</button>
 	</div>
 
-	<h1>@errorMessage</h1>
+	<alert>@errorMessage</alert>
+
 </EditForm>
+
+
+<style>
+	/* General table styling */
+	.styled-table {
+		border-collapse: collapse;
+		width: 100%;
+		margin: 25px 0;
+		font-size: 18px;
+		font-family: 'Arial', sans-serif;
+		text-align: left;
+	}
+
+		/* Table headers */
+		.styled-table th {
+			background-color: #d72631; /* Red color from the logo */
+			color: #ffffff;
+			text-align: center;
+			padding: 12px 15px;
+		}
+
+		/* Table rows */
+		.styled-table td {
+			padding: 12px 15px;
+			border: 1px solid #dddddd;
+		}
+
+		/* Alternating row colors */
+		.styled-table tr:nth-of-type(even) {
+			background-color: #f9f3f3; /* Light pink color */
+		}
+
+		/* Hover effect */
+		.styled-table tr:hover {
+			background-color: #f1e1e1; /* Slightly darker pink */
+		}
+
+	/* Button styling */
+	.styled-button {
+		background-color: #d72631; /* Red color from the logo */
+		color: white;
+		border: none;
+		padding: 8px 16px;
+		cursor: pointer;
+		font-size: 16px;
+		border-radius: 5px;
+		transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.1s ease;
+		margin: 5px 0;
+	}
+
+		/* Button hover effect */
+		.styled-button:hover {
+			background-color: #e53958; /* Pink color from the logo */
+		}
+
+		/* Button active effect */
+		.styled-button:active {
+			background-color: #c01e28; /* Darker red to indicate active state */
+			transform: scale(0.95); /* More noticeable shrink to indicate press */
+			box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Inset shadow to create pressed effect */
+		}
+
+		/* Button focus effect */
+		.styled-button:focus {
+			outline: none;
+			box-shadow: 0 0 0 3px rgba(215, 38, 49, 0.5); /* Add a pink outline */
+		}
+
+	/* Ensure buttons in table cells fill the cell */
+	.styled-table td .styled-button {
+		width: 100%;
+		box-sizing: border-box;
+	}
+</style>
 
 
 @code {
 	private EditContext? aEditContext;
 
+	//THe list of all admins
+	List<Admin> listOfAdmins = new();
 	Admin newAdmin = new();
 	string errorMessage = "";
 	string doubleCheckPassword = "";
+
+	//Used to show password
+	bool showPassword;
+
+	//Used to change the HTML type
+	string passwordType = "Password";
 
 
 	[Inject]
@@ -73,8 +198,28 @@
 	protected override async Task OnInitializedAsync()
 	{
 		aEditContext = new EditContext(newAdmin);
+		listOfAdmins = (await mService.GetAllAdmins()).ToList();
 
 
+	}
+
+	/// <summary>
+	/// Updates the following lists;
+	/// - listOfAdmins
+	/// </summary>
+	/// <returns></returns>
+	public async Task UpdateLists()
+	{
+		listOfAdmins.Clear();
+		listOfAdmins = (await mService.GetAllAdmins()).ToList();
+	}
+
+
+	public async Task DeleteAdmin(Admin admin)
+	{
+		errorMessage = $"{admin.AdminName}({admin.Username}) er blevet slettet";
+		await mService.DeleteAdminByID(admin.AdminID);
+		await UpdateLists();
 	}
 
 	public async Task handleSubmit()
@@ -83,15 +228,15 @@
 		{
 			if (doubleCheckPassword == newAdmin.Password)
 			{
-			//temporary admin
+				//temporary admin
 				Console.WriteLine($"{newAdmin.AdminName}, type {newAdmin.AdminLevel}");
 				newAdmin.AdminID = 2;
 				await mService.AddAdmin(newAdmin);
-                newAdmin = new();
+				newAdmin = new();
 
 				//We show a message to the user
 				errorMessage = "Adminstratoren er blevet tilføjet";
-
+				await UpdateLists();
 			}
 			else
 			{

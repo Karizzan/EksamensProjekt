@@ -20,5 +20,7 @@ namespace Core.Models
         public string Location { get; set; }
         public string Workdays { get; set; }
 
+        public List<Application> Applications { get; set; }
+
     }
 }

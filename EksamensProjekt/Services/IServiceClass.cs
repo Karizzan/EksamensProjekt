@@ -10,6 +10,10 @@ namespace EksamensProjekt.Services
 
 		Task AddAdmin(Admin admin);
 
+        Task DeleteAdminByID(int adminID);
+
+		Task<Admin[]> GetAllAdmins();
+
 		Task<Event[]> GetAllEvents();
 
         Task AddEvent(Event Event);

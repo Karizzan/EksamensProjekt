@@ -38,10 +38,16 @@ namespace ServerAPI.Repositories
 
 			collection.InsertOne(admin);
 		}
-            
-        public void RemoveAdminByID(int admninID)
+
+		public List<Admin> GetAllAdmins()
+		{
+			return collection.Find(Builders<Admin>.Filter.Empty).ToList();
+
+		}
+
+		public void RemoveAdminByID(int adminID)
         {
-			var filter = Builders<Admin>.Filter.Eq("AdmninID", admninID);
+			var filter = Builders<Admin>.Filter.Eq("AdminID", adminID);
 			collection.DeleteOne(filter);
 		}
 

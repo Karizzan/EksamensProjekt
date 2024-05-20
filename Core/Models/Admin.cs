@@ -15,8 +15,8 @@ namespace Core.Models
         public ObjectId Id { get; set; }
         public int AdminID { get; set; }
 
-        public string AdminLevel { get; set; }
-        public string AdminName { get; set; }
+        public string AdminLevel { get; set; } = "Admin";
+		public string AdminName { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }
     }
