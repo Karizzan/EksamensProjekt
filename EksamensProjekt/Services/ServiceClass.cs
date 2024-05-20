@@ -58,5 +58,10 @@ namespace EksamensProjekt.Services
 		public async Task AddEvent(Event Event){
 			await http.PostAsJsonAsync<Event>($"{serverUrl}/event/add",Event);
 		}
+
+		public async Task UpdateEvent(Event Event)
+		{
+			await http.PutAsJsonAsync($"{serverUrl}/event/update", Event);
+		}
 	}
 }

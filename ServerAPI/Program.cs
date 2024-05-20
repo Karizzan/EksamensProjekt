@@ -122,24 +122,24 @@ namespace ServerAPI
 		new Parent(){ParentName = "Jørgen", ParentMail = "Jørgen@gmail.com", KræwNumber = 333, Children = new List<Child>{children[9]} }
 
 		};
-
+		
 		private static List<Event> Events = new List<Event>()
 		{
-			new Event(){EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Onsdag - Søndag (Hel Uge)"},
-			new Event(){EventID = 2, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Onsdag - Fredag (Halv Uge)"},
-			new Event(){EventID = 3, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Lørdag - Søndag (Weekend)"},
-			new Event(){EventID = 4, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "28", Workdays = "Onsdag - Søndag (Hel Uge)"},
-			new Event(){EventID = 5, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "28", Workdays = "Onsdag - Fredag (Halv Uge)"},
-			new Event(){EventID = 6, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "28", Workdays = "Lørdag - Søndag (Weekend)"},
-			new Event(){EventID = 7, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "30", Workdays = "Onsdag - Søndag (Hel Uge)"},
-			new Event(){EventID = 8, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "30", Workdays = "Onsdag - Fredag (Halv Uge)"},
-			new Event(){EventID = 9, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "30", Workdays = "Lørdag - Søndag (Weekend)"},
-			new Event(){EventID = 10, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "31", Workdays = "Onsdag - Søndag (Hel Uge)"},
-			new Event(){EventID = 11, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "31", Workdays = "Onsdag - Fredag (Halv Uge)"},
-			new Event(){EventID = 12, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = "31", Workdays = "Lørdag - Søndag (Weekend)"},
-
+			new Event(){EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 27, Workdays = "Onsdag - Søndag (Hel Uge)", Applications = new()},
+			new Event(){EventID = 2, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 27, Workdays = "Onsdag - Fredag (Halv Uge)", Applications = new()},
+			new Event(){EventID = 3, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 27, Workdays = "Lørdag - Søndag (Weekend)", Applications = new()},
+			new Event(){EventID = 4, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 28, Workdays = "Onsdag - Søndag (Hel Uge)", Applications = new()},
+			new Event(){EventID = 5, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 28, Workdays = "Onsdag - Fredag (Halv Uge)", Applications = new()},
+			new Event(){EventID = 6, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 28, Workdays = "Lørdag - Søndag (Weekend)", Applications = new()},
+			new Event(){EventID = 7, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 30, Workdays = "Onsdag - Søndag (Hel Uge)", Applications = new()},
+			new Event(){EventID = 8, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 30, Workdays = "Onsdag - Fredag (Halv Uge)", Applications = new()},
+			new Event(){EventID = 9, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 30, Workdays = "Lørdag - Søndag (Weekend)", Applications = new()},
+			new Event(){EventID = 10, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 31, Workdays = "Onsdag - Søndag (Hel Uge)", Applications = new()},
+			new Event(){EventID = 11, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 31, Workdays = "Onsdag - Fredag (Halv Uge)", Applications = new()},
+			new Event(){EventID = 12, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 31, Workdays = "Lørdag - Søndag (Weekend)", Applications = new()},
+		
 		};
-
+		
 		private static List<Application> applications = new List<Application>()
 		{
 			new Application() {ApplicationID = 1, SubmitDate = DateTime.Now, Parent = parents[0], IsOnWaitingList = true, Priority1 = Events[0], Priority2 = Events[2]},
@@ -165,25 +165,25 @@ namespace ServerAPI
 			//admin.AdminName = "Admin1";
 			//admin.Username = "admin1";
 			//admin.Password = "123";
-			
-			
+
+
 			//a.AddAdmin(admin);
 
-			
-		/*	foreach (var item in parents)
-			{
-				d.AddParentChild(item);
-			}
-			foreach (var item in applications)
-			{
-				b.AddApplication(item);
-			}
-			
-			foreach (var item in Events)
-			{
-				c.AddEvent(item);
-			}*/
-			
+
+			/*	foreach (var item in parents)
+				{
+					d.AddParentChild(item);
+				}
+				foreach (var item in applications)
+				{
+					b.AddApplication(item);
+				}
+
+				foreach (var item in Events)
+				{
+					c.AddEvent(item);
+				}
+				*/
 
 
 			//  var admin = a.GetAdminByUsername("Seb8530");
