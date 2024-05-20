@@ -75,6 +75,7 @@
     protected override async Task OnInitializedAsync()
     {
         login = await localStorage.GetItemAsync<bool>("isLoggedIn");
+        Console.WriteLine(login);
     }
 
 

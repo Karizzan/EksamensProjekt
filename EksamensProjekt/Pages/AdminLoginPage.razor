@@ -47,7 +47,7 @@
         //aEditContext = new EditContext(newAdmin);
         listOfAdmins = (await mService.GetAllAdmins()).ToList();
 
-        login = await localStorage.GetItemAsync<bool>("login");
+        isLoggedIn = await localStorage.GetItemAsync<bool>("isLoggedIn");
 
 
 
@@ -85,10 +85,17 @@
         return false;
     }
 
+    private void RefreshPage()
+    {
+        navManager.NavigateTo(navManager.Uri, forceLoad: true);
+    }
+
+
     protected async Task ClearStorage()
     {
         await localStorage.ClearAsync();
         navManager.NavigateTo("adminLoginPage", true);
+        RefreshPage();
     }
 
     private async Task Login()
@@ -107,6 +114,7 @@
             await Save("user", admin.Username);
             await saveloggedIn();
             Console.WriteLine(isLoggedIn);
+            RefreshPage();
 
 
         }
