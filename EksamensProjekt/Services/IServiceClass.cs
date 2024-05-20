@@ -14,6 +14,6 @@ namespace EksamensProjekt.Services
 
         Task AddEvent(Event Event);
         Task UpdateEvent(Event Event);
-        Task<bool> CheckLogin(string username, string password);
+        bool CheckLogin(string username, string password);
     }
 }

@@ -52,28 +52,14 @@ namespace EksamensProjekt.Services
 			await http.PutAsJsonAsync($"{serverUrl}/event/update", Event);
 		}
 
-		public async Task<bool> CheckLogin(string username, string password)
-		{
+        public async Task bool CheckLogin(string username, string password)
+        {
+			await http.GetFromJsonAsync<Admin>($"{serverUrl}/admin/checklogin");
+
 			// Send a GET request to the server to check login
-			HttpResponseMessage response = await http.GetAsync($"{serverUrl}/admin/checklogin?username={username}&password={password}");
+			//HttpResponseMessage response = await http.GetAsync($"{serverUrl}/admin/checklogin?username={username}&password={password}");
 
-			// Check if the response indicates success (200 OK)
-			if (response.IsSuccessStatusCode)
-			{
-				// Read the content of the response
-				string responseContent = await response.Content.ReadAsStringAsync();
 
-				// Parse the response content to interpret the result
-				// Assuming the response content is a boolean indicating login success
-				bool isAuthenticated = bool.Parse(responseContent);
-
-				return isAuthenticated;
-			}
-			else
-			{
-				// If the request fails (e.g., server error), return false
-				return false;
-			}
 		}
 	}
 

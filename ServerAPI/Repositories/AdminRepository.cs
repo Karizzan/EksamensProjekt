@@ -17,13 +17,13 @@ namespace ServerAPI.Repositories
         }
         public bool CheckLogin(string username, string password)
         {
-			Admin admnin = new();
+			Admin admin = new();
 			var filter1 = Builders<Admin>.Filter.Eq("Username", username);
 			var filter2 = Builders<Admin>.Filter.Eq("Password", password);
 
-			admnin = collection.Aggregate().Match(filter1).Match(filter2).FirstOrDefault();
+			admin = collection.Aggregate().Match(filter1).Match(filter2).FirstOrDefault();
 
-			if (admnin != null && admnin.Username == username && admnin.Password == password)
+			if (admin != null && admin.Username == username && admin.Password == password)
 			{
 				return true;
 			}
@@ -39,9 +39,9 @@ namespace ServerAPI.Repositories
 			collection.InsertOne(admin);
 		}
             
-        public void RemoveAdminByID(int admninID)
+        public void RemoveAdminByID(int adminID)
         {
-			var filter = Builders<Admin>.Filter.Eq("AdmninID", admninID);
+			var filter = Builders<Admin>.Filter.Eq("AdminID", adminID);
 			collection.DeleteOne(filter);
 		}
 
@@ -50,5 +50,11 @@ namespace ServerAPI.Repositories
 			var filter = Builders<Admin>.Filter.Eq("Username", username);
 			return collection.Find(filter).FirstOrDefault();
         }
+
+		public List<Admin> GetAllAdmins()
+		{
+			return AppCollection.Find(Builders<Application>.Filter.Empty).ToList();
+
+		}
 	}
 }

@@ -2,6 +2,7 @@
 @page "/adminLoginPage"
 @using Services
 @inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <h1>Admin Login</h1>
 
@@ -21,6 +22,8 @@
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
+
 
 @code {
     [Inject]
@@ -43,6 +46,8 @@
         bool isAuthenticated = await mService.CheckLogin(admin.Username, admin.Password);
         if (isAuthenticated)
         {
+            // Store login status in local storage
+            //await localStorage.SetItemAsync("adminLoggedIn", true);
             // Redirect to admin dashboard upon successful login
             NavigationManager.NavigateTo("/");
         }
@@ -52,4 +57,5 @@
         }
     }
 }
+
 
