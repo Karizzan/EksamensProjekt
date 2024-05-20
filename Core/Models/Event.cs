@@ -22,5 +22,7 @@ namespace Core.Models
         public string Workdays { get; set; }
         public List<Application> Applications { get; set; } = new();
 
+        public List<Application> Applications { get; set; }
+
     }
 }

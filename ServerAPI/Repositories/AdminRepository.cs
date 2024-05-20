@@ -38,8 +38,14 @@ namespace ServerAPI.Repositories
 
 			collection.InsertOne(admin);
 		}
-            
-        public void RemoveAdminByID(int adminID)
+
+		public List<Admin> GetAllAdmins()
+		{
+			return collection.Find(Builders<Admin>.Filter.Empty).ToList();
+
+		}
+
+		public void RemoveAdminByID(int adminID)
         {
 			var filter = Builders<Admin>.Filter.Eq("AdminID", adminID);
 			collection.DeleteOne(filter);
@@ -50,11 +56,5 @@ namespace ServerAPI.Repositories
 			var filter = Builders<Admin>.Filter.Eq("Username", username);
 			return collection.Find(filter).FirstOrDefault();
         }
-
-		public List<Admin> GetAllAdmins()
-		{
-			return AppCollection.Find(Builders<Application>.Filter.Empty).ToList();
-
-		}
 	}
 }

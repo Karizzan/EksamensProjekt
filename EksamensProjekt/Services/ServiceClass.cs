@@ -35,6 +35,19 @@ namespace EksamensProjekt.Services
 			await http.PostAsJsonAsync($"{serverUrl}/admin/add/", admin);
 		}
 
+		public async Task DeleteAdminByID(int adminID)
+		{
+			await http.DeleteAsync($"{serverUrl}/admin/delete/{adminID}");
+		}
+
+		public async Task<Admin[]> GetAllAdmins()
+		{
+			var admins = await http.GetFromJsonAsync<Admin[]>($"{serverUrl}/admin/getAll");
+
+			return admins.ToArray();
+
+		}
+
 		public async Task<Event[]> GetAllEvents()
 		{
 			var events = await http.GetFromJsonAsync<Event[]>($"{serverUrl}/event/getAll");
