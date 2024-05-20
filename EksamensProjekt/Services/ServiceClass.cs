@@ -65,14 +65,14 @@ namespace EksamensProjekt.Services
 			await http.PutAsJsonAsync($"{serverUrl}/event/update", Event);
 		}
 
-        public async Task bool CheckLogin(string username, string password)
+        public bool CheckLogin(string username, string password)
         {
-			await http.GetFromJsonAsync<Admin>($"{serverUrl}/admin/checklogin");
+			//await http.GetFromJsonAsync<Admin>($"{serverUrl}/admin/checklogin");
 
 			// Send a GET request to the server to check login
 			//HttpResponseMessage response = await http.GetAsync($"{serverUrl}/admin/checklogin?username={username}&password={password}");
 
-
+			return true;
 		}
 	}
 

@@ -35,26 +35,6 @@
     {
         errorMessage = null;
 
-        // Check if username and password are provided
-        if (string.IsNullOrEmpty(admin.Username) || string.IsNullOrEmpty(admin.Password))
-        {
-            errorMessage = "Please enter username and password.";
-            return;
-        }
-
-        // Call the backend service to authenticate the admin
-        bool isAuthenticated = await mService.CheckLogin(admin.Username, admin.Password);
-        if (isAuthenticated)
-        {
-            // Store login status in local storage
-            //await localStorage.SetItemAsync("adminLoggedIn", true);
-            // Redirect to admin dashboard upon successful login
-            NavigationManager.NavigateTo("/");
-        }
-        else
-        {
-            errorMessage = "Invalid username or password.";
-        }
     }
 }
 
