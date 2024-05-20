@@ -1,6 +1,8 @@
 ﻿@using Core.Models
 @using Services
 @inject IJSRuntime JS
+@using MongoDB.Bson.Serialization.Attributes;
+@using MongoDB.Bson;
 @page "/planning"
 
 
@@ -47,7 +49,7 @@
 
 </table>
 
-<button @onclick=" ()=> SavePlanning(events)"> Gem Plan </button>
+<button @onclick=" ()=> SavePlanning(events,applications)" > Gem Plan </button>
 @foreach (var item in events)
 {
 	@if (IsAlreadyDisplayed(item.WeekNumber) != true)
@@ -313,8 +315,14 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		weekNumbers = new();
+
 		applications = (await mService.GetAllApplications()).ToList();
+
+		foreach (var item in applications)
+		{
+			Console.WriteLine($"{item.ApplicationID}, {item.Id}");
+		}
+
 
 		events = (await mService.GetAllEvents()).ToList();
 
@@ -329,7 +337,7 @@
 			copyButtonStatus[evt.Workdays] = "Få emails";
 		}
 
-
+		weekNumbers = new();
 	}
 
 	public async Task<string> SaveToEmailClipboard(List<Application> weekList, string workDays)
@@ -359,19 +367,51 @@
 
 
 
+	public void SavePlanning(List<Event> EventList, List<Application> applications)
+	{
+		SaveWaitingList(applications);
+		SaveEvents(EventList);
 
-	public void SavePlanning(List<Event> EventList)
+
+		weekNumbers = new();
+	}
+
+	public void SaveEvents(List<Event> EventList)
 	{
 
 		foreach (var item in EventList)
 		{
+
 			Console.WriteLine(item.Applications.Count);
 			mService.UpdateEvent(item);
 		}
+
 		weekNumbers = new();
 	}
 
+	public async void SaveWaitingList(List<Application> applications)
+	{
+		List<Application> templist = new();
+		templist = (await mService.GetAllApplications()).ToList();
+		DeleteAll(templist);
+		if (applications != null)
+		{
+			foreach (var item in applications)
+			{
+				mService.AddApplication(item);
+			}
+		}
 
+		weekNumbers = new();
+	}
+
+	public void DeleteAll(List<Application> listToRemove)
+	{
+		foreach (var item in listToRemove)
+		{
+			mService.DeleteApplicationByID(item.ApplicationID);
+		}
+	}
 
 	public bool IsAlreadyDisplayed(int weekNumber)
 	{

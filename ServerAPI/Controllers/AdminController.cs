@@ -26,8 +26,16 @@ namespace ServerAPI.Controllers
             }
 
 
+		[HttpGet]
+		[Route("getAll")]
+		public List<Admin> GetAllAdmins()
+		{
+			return mRepo.GetAllAdmins();
+		}
 
-            [HttpDelete]
+
+
+		[HttpDelete]
             [Route("delete/{id:int}")]
             public void RemoveAdminByID(int id)
             {

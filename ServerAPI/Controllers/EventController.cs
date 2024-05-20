@@ -39,7 +39,7 @@ namespace ServerAPI.Controllers
 
 		[HttpPut]
 		[Route("update")]
-		public void UpDateEvent(Event Event)
+		public void UpDateEvent([FromBody] Event Event)
 		{
 			mRepo.UpDateEvent(Event);
 		}

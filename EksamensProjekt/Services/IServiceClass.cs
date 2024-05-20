@@ -10,9 +10,16 @@ namespace EksamensProjekt.Services
 
 		Task AddAdmin(Admin admin);
 
+        Task DeleteAdminByID(int adminID);
+
+		Task<Admin[]> GetAllAdmins();
+
 		Task<Event[]> GetAllEvents();
 
         Task AddEvent(Event Event);
         Task UpdateEvent(Event Event);
+        bool CheckLogin(string username, string password);
+        Task UpdateApplication(Application application);    
+        Task DeleteApplicationByID(int id);
     }
 }

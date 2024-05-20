@@ -1,6 +1,132 @@
-﻿@page "/adminLoginPage"
-<h3>AdminLoginPage</h3>
+﻿@using Core.Models
+@page "/adminLoginPage"
+@using Services
+@inject NavigationManager navManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-@code {
+
+<h1>Admin Login</h1>
+
+@if (isLoggedIn == false)
+{
+    <form @onsubmit="Login">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" @bind="admin.Username" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" @bind="admin.Password" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+}
+@if (isLoggedIn == true)
+{
+    <button @onclick="ClearStorage" class="col-12 mb-3">Log ud</button>
 
 }
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p style="color: red">@errorMessage</p>
+}
+
+
+
+
+@code {
+    [Inject]
+    private IServiceClass? mService { get; set; }
+    private Admin admin = new Admin();
+    private string errorMessage;
+    List<Admin> listOfAdmins = new();
+    private bool isLoggedIn = false;
+    private bool login;
+    protected override async Task OnInitializedAsync()
+    {
+        //aEditContext = new EditContext(newAdmin);
+        listOfAdmins = (await mService.GetAllAdmins()).ToList();
+
+        isLoggedIn = await localStorage.GetItemAsync<bool>("isLoggedIn");
+
+
+
+        foreach (var admin in listOfAdmins)
+        {
+            Console.WriteLine(admin.AdminName);
+        }
+    }
+
+    private async Task Save(string key, string item)
+    {
+        await localStorage.SetItemAsStringAsync(key, item);
+    }
+
+    private async Task saveloggedIn()
+    {
+        await localStorage.SetItemAsync<bool>("isLoggedIn", isLoggedIn);
+    }
+
+    private bool checkLogin(Admin logInUser)
+    {
+
+        foreach (var admin in listOfAdmins)
+        {
+            if (admin.Username == logInUser.Username && admin.Password == logInUser.Password)
+            {
+                Console.WriteLine("Log In Successful");
+                isLoggedIn = true;
+                return true;
+
+            }
+
+        }
+        Console.WriteLine();
+        return false;
+    }
+
+    private void RefreshPage()
+    {
+        navManager.NavigateTo(navManager.Uri, forceLoad: true);
+    }
+
+
+    protected async Task ClearStorage()
+    {
+        await localStorage.ClearAsync();
+        navManager.NavigateTo("adminLoginPage", true);
+        RefreshPage();
+    }
+
+    private async Task Login()
+    {
+
+        errorMessage = null;
+        // Check if username and password are provided
+        if (string.IsNullOrEmpty(admin.Username) || string.IsNullOrEmpty(admin.Password))
+        {
+            errorMessage = "Please enter username and password.";
+            return;
+        }
+        if (checkLogin(admin) == true)
+        {
+            errorMessage = "Bruger logget ind";
+            await Save("user", admin.Username);
+            await saveloggedIn();
+            Console.WriteLine(isLoggedIn);
+            RefreshPage();
+
+
+        }
+        else
+        {
+            errorMessage = "Forkert Brugernavn eller Kodeord";
+        }
+
+
+
+        
+    }
+}
+
+

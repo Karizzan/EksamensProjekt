@@ -6,7 +6,10 @@ namespace ServerAPI.Repositories.Interfaces
     {
         public bool CheckLogin(string username, string password);
         public void AddAdmin(Admin admin);
-        public void RemoveAdminByID(int admninID);
+
+		public List<Admin> GetAllAdmins();
+
+		public void RemoveAdminByID(int adminID);
         public Admin GetAdminByUserName(string username);
 
 	}
