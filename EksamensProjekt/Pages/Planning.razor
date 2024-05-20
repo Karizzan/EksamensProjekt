@@ -253,8 +253,6 @@
 
 	private string Emails;
 
-	private string Copy = "Få emails";
-
 
 	private Event? SelectedEvent = new Event();
 
@@ -347,8 +345,8 @@
 
 		weekNumbers = new();
 		StateHasChanged(); // Force the component to re-render
-									// Delay for a few seconds (e.g., 3 seconds)
-		await Task.Delay(3000);
+								
+		await Task.Delay(3000); // Delay for a few seconds (e.g., 3 seconds)
 
 		// Reset the Copy variable
 		copyButtonStatus[workDays] = "Få emails";
