@@ -153,13 +153,13 @@ namespace ServerAPI
 		{
 
 
-
-
+		
+		
 			var a = new AdminRepository();
 			var b = new ApplicationRepository();
 			var c = new EventRepository();
 			var d = new ParentChildRepository();
-
+		
 			//Admin admin = new Admin();
 			//admin.AdminID = 1;
 			//admin.AdminName = "Admin1";
@@ -169,21 +169,23 @@ namespace ServerAPI
 
 			//a.AddAdmin(admin);
 
-
-			/*	foreach (var item in parents)
+			/*
+				foreach (var item in parents)
 				{
 					d.AddParentChild(item);
 				}
+				
 				foreach (var item in applications)
 				{
 					b.AddApplication(item);
 				}
-
+			/*
 				foreach (var item in Events)
 				{
 					c.AddEvent(item);
 				}
 				*/
+				
 
 
 			//  var admin = a.GetAdminByUsername("Seb8530");

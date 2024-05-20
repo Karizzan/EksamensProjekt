@@ -4,6 +4,7 @@
 @using Core.Models
 @using Services
 
+
 <h1 class="mb-3 mt-3">Ansøg om børnepasning</h1>
 
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
@@ -179,21 +180,19 @@
 
 	private Event getEventById(int id)
 	{
-		//Til når vi finder lokation
 		Event foundEvent = new();
 
 		foreach (var Event in allEvents)
 		{
-			//Tjekker hvert ID igennem for at se om det passer med bruger input
 			if (Event.EventID == id)
 			{
 				foundEvent = Event;
-				Console.WriteLine("Found lokation");
+				Console.WriteLine("Found event");
 			}
 		}
 		return foundEvent;
-
 	}
+
 
 
 
@@ -285,7 +284,7 @@
 
 		allEvents = (await mService.GetAllEvents())?.ToList();
 
-		//allApplications = (await mService.GetAllApplications())?.ToList();
+		allApplications = (await mService.GetAllApplications())?.ToList();
 
 	}
 

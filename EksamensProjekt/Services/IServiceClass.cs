@@ -14,5 +14,7 @@ namespace EksamensProjekt.Services
 
         Task AddEvent(Event Event);
         Task UpdateEvent(Event Event);
+        Task UpdateApplication(Application application);    
+        Task DeleteApplicationByID(int id);
     }
 }
