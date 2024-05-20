@@ -1,4 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Services
+@inject NavigationManager navManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">EksamensProjekt</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -7,38 +12,58 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="adminPage">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Admin
-            </NavLink>
-        </div>
-                <div class="nav-item px-3">
-            <NavLink class="nav-link" href="planningPage">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Planning
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="registrationPage">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Registration
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="planning">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Planlægning
-            </NavLink>
-        </div>
-    </nav>
-</div>
+@if (login == true)
+{
+    <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="adminPage">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Admin
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="registrationPage">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Registration
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="planning">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Planlægning
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+
+
+}
+@if (login == false)
+{
+    <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="registrationPage">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Registration
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+
+
+}
 
 @code {
     private bool collapseNavMenu = true;
+    private bool login;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -46,4 +71,11 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        login = await localStorage.GetItemAsync<bool>("isLoggedIn");
+    }
+
+
 }
