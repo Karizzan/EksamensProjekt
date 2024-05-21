@@ -1,9 +1,10 @@
-﻿using EksamensProjekt.Services;
+﻿/*
+using EksamensProjekt.Services;
 using Core.Models;
 namespace EksamensProjekt.Services
 {
     public class ServiceClassInMemory
-    {
+    {/*
         private static List<Child> children = new List<Child>()
         {
             //Vi har fjernet alle Child.ID //Marcus og Hudayfa
@@ -109,6 +110,7 @@ namespace EksamensProjekt.Services
         TshirtSize = "Small"
     }
         };
+        /*
         private static List<Parent> parents = new List<Parent>()
         {
             //Vi (Markus og Hudayfa) har fjernet ParentId
@@ -120,7 +122,8 @@ namespace EksamensProjekt.Services
         new Parent(){ParentName = "Jørgen", ParentMail = "Jørgen@gmail.com", KræwNumber = 333, Children = new List<Child>{children[9]} }
 
         };
-
+        */
+        /*
         private static List<Event> Events = new List<Event>()
         {
             new Event(){EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = "27", Workdays = "Onsdag - Søndag (Hel Uge)"},
@@ -146,7 +149,7 @@ namespace EksamensProjekt.Services
             new Application() {ApplicationID = 4, SubmitDate = DateTime.Now, Parent = parents[3], IsOnWaitingList = false, Priority1 = Events[1], Priority2 = Events[0]}
 
         };
-
+        
         public ServiceClassInMemory() { }
 
         public Task AddApplication(Application application)
@@ -183,3 +186,4 @@ namespace EksamensProjekt.Services
 
 	}
 }
+        */

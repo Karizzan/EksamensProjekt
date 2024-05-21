@@ -27,5 +27,16 @@ namespace ServerAPI.Repositories
 			var filter = Builders<Event>.Filter.Eq("EventID", EventID);
 			collection.DeleteOne(filter);
 		}
+
+		public void UpDateEvent(Event Event)
+		{
+			var filter = Builders<Event>.Filter.Eq("EventID", Event.EventID);
+			var update = Builders<Event>.Update
+				.Set(e => e.Applications, Event.Applications)
+				// Repeat for all properties of Event that should be updated
+				;
+
+			collection.UpdateOne(filter, update);
+		}
 	}
 }

@@ -10,6 +10,7 @@ namespace Core.Models
 {
     public class Application
     {
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }

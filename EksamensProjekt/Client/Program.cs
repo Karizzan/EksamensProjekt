@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Blazorise;
 using Blazorise.Bootstrap;
+using Blazored.LocalStorage;
 
 
 namespace EksamensProjekt
@@ -18,6 +19,7 @@ namespace EksamensProjekt
 
 			builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 			builder.Services.AddSingleton<IServiceClass, ServiceClass>();
+            builder.Services.AddBlazoredLocalStorage();
 
             builder.Services
     .AddBlazorise(options =>

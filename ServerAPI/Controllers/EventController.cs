@@ -37,5 +37,12 @@ namespace ServerAPI.Controllers
 			mRepo.RemoveEventByID(eventID);
 		}
 
+		[HttpPut]
+		[Route("update")]
+		public void UpDateEvent([FromBody] Event Event)
+		{
+			mRepo.UpDateEvent(Event);
+		}
+
 	}
 }

@@ -13,12 +13,15 @@ namespace Core.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
+        
         public int EventID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string WeekNumber { get; set; }
+        public int WeekNumber { get; set; }
         public string Location { get; set; }
         public string Workdays { get; set; }
+        public List<Application> Applications { get; set; } = new();
+
 
     }
 }

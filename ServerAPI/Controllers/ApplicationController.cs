@@ -22,21 +22,30 @@ namespace ServerAPI.Controllers
 				return mRepo.GetAllApplications();
 			}
 
-			[HttpPost]
-			[Route("add")]
-			public void AddApplication(Application application)
-			{
-				mRepo.AddApplication(application);
-
-			}
+		[HttpPost]
+		[Route("add")]
+		public void AddApplication(Application application)
+		{
+			mRepo.AddApplication(application);
+		}
+		
+		
 
 			[HttpDelete]
 			[Route("delete/{id:int}")]
-			public void RemoveApplicationByID(int applicationID)
+			public void RemoveApplicationByID(int id)
 			{
-				mRepo.RemoveApplicationByID(applicationID);
+				mRepo.RemoveApplicationByID(id);
 			}
 
+		[HttpPut]
+		[Route("update")]
+		public void UpdateApplication(Application application)
+		{
+			mRepo.UpdateApplication(application);
+		}
+
+		/*
 		[HttpGet]
 		[Route("getAllYoung")]
 		public List<YoungApplication> GetAllYoungApplications()
@@ -60,6 +69,6 @@ namespace ServerAPI.Controllers
 		{
 			mRepo.RemoveYoungApplicationByID(applicationID);
 		}
-
+		*/
 	}
 }

@@ -6,5 +6,7 @@ namespace ServerAPI.Repositories.Interfaces
         public List<Event> GetAllEvents();
         public void AddEvent(Event Event);
         public void RemoveEventByID(int eventID);
-    }
+        public void UpDateEvent(Event Event);
+
+	}
 }

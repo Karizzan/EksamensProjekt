@@ -1,34 +1,45 @@
 ﻿@using Core.Models
-@using Services 
+@using Services
+@inject IJSRuntime JS
+@using MongoDB.Bson.Serialization.Attributes;
+@using MongoDB.Bson;
 @page "/planning"
 
 
 <h3>plan</h3>
 
 <h1>Venteliste</h1>
-<table>
+<table class="styled-table">
 	<thead>
 		<tr>
-			<th>SubmitDate</th>
 			<th>Prioritet1</th>
 			<th>Prioritet2</th>
 			<th>Forældre</th>
-			<th>Email</th>
+			<th>Antal Børn</th>
+			<th></th>
 
 		</tr>
 	</thead>
 	<tbody>
+		@{
+			int i = 1;
+
+		}
 		@if (applications != null)
 		{
 			@foreach (var item in applications)
 			{
 				<tr>
-					<td>@item.SubmitDate</td>
-					<td>Uge @item.Priority1.WeekNumber</td>
-					<td>Uge @item.Priority2.WeekNumber</td>
+					<td>Uge @item.Priority1.WeekNumber </td>
+					<td>Uge @item.Priority2.WeekNumber </td>
 					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<button @onclick="()=>Select(item)">Select</button>
+					<td>@item.Parent.Children.Count</td>
+					<td>
+					<button @onclick="()=>åbenModal(item)" class="btn btn-info">Se Mere</button>
+					</td>
+					<td>
+					<button @onclick="()=>Select(item)" class="btn btn-primary">Select</button>
+					</td>
 				</tr>
 			}
 		}
@@ -38,142 +49,381 @@
 
 </table>
 
-<table>
-	<thead>
-		<tr>
-			<th>Uge 27</th>
-			<button @onclick="()=>AddToWeek(Uge27)">Tilføj til uge</button>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Uge27 != null)
-		{
-			@foreach (var item in Uge27)
+<button @onclick=" ()=> SavePlanning(events,applications)" > Gem Plan </button>
+@foreach (var item in events)
+{
+	@if (IsAlreadyDisplayed(item.WeekNumber) != true)
+	{
+
+		<h1>Uge @item.WeekNumber</h1>
+		
+			
+		
+			@foreach (var item1 in events)
 			{
-				<tr>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<td>
-                        <button @onclick="() => AddToWaitingList(Uge27, item)">Add to Waiting List</button>
-                    </td>
-				</tr>
+				@if (item1.WeekNumber == item.WeekNumber)
+				{
+				
+				
+					<h2>@item1.Workdays</h2>
+				<button @onclick="()=>SaveToEmailClipboard(item1.Applications, item1.Workdays)">
+					@copyButtonStatus[item1.Workdays]
+				</button>
+				<table class="table-table">
+					<thead>
+						<tr>
+							<th>Prioritet1</th>
+							<th>Prioritet2</th>
+							<th>Forældre</th>
+							<th>Antal Børn</th>
+							<th>
+								<button @onclick="() => AddToWeek(item1.Applications)">Tilføj til tidspunkt</button>
+							</th>
+						</tr>
+						</thead>
+						
+					@foreach (var item2 in item1.Applications)
+						{
+								<tbody>
+									<tr>
+										<td>Uge @item2.Priority1.WeekNumber</td>
+										<td>Uge @item2.Priority2.WeekNumber</td>
+										<td>@item2.Parent.ParentName</td>
+										<td>@item2.Parent.Children.Count</td>
+										<td>
+											<button @onclick="()=>åbenModal(item2)" class="btn btn-info">Se Mere</button>
+										</td>
+										<td>
+											<button @onclick="()=>AddToWaitingList(item1.Applications, item2)">Fortryd</button>
+										</td>
+								
+									</tr>
+
+								</tbody>
+
+								
+							
+						}
+					
+				</table>
+				}
 			}
-		}
-	</tbody>
-</table>
+		
+	}
+}
 
-<table>
-	<thead>
-		<tr>
-			<th>Uge 28</th>
-			<button @onclick="()=>AddToWeek(Uge28)">Tilføj til uge</button>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Uge28 != null)
-		{
-			@foreach (var item in Uge28)
-			{
-				<tr>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<td>
-                        <button @onclick="() => AddToWaitingList(Uge28, item)">Add to Waiting List</button>
-                    </td>
-				</tr>
-			}
-		}
 
-	</tbody>
-</table>
+@foreach (var item in events)
+{
 
-<table>
-	<thead>
-		<tr>
-			<th>Uge 30</th>
-			<button @onclick="()=>AddToWeek(Uge30)">Tilføj til uge</button>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Uge30 != null)
-		{
-			@foreach (var item in Uge30)
-			{
-				<tr>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<td>
-						<button @onclick="() => AddToWaitingList(Uge30, item)">Add to Waiting List</button>
-					</td>
-				</tr>
-			}
-		}
+	int weeknumbers = item.WeekNumber;
+}
 
-	</tbody>
-</table>
 
-<table>
-	<thead>
-		<tr>
-			<th>Uge 31</th>
-			<button @onclick="()=>AddToWeek(Uge31)">Tilføj til uge</button>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Uge31 != null)
-		{
-			@foreach (var item in Uge31)
-			{
-				<tr>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.ParentMail</td>
-					<td>
-						<button @onclick="() => AddToWaitingList(Uge31, item)">Add to Waiting List</button>
-					</td>
-				</tr>
-			}
+<ModalDialog @ref="@addDialog" Title="See more details">
+	<h1>Ansøgning</h1>
+	<p>Forældre: @SelectedApplication.Parent.ParentName</p>
+	<p>Forældre Email: @SelectedApplication.Parent.ParentMail</p>
+	<p>Forældre Telefon: @SelectedApplication.Parent.ParentPhone</p>
+	<p>KræwNr.: @SelectedApplication.Parent.KræwNumber</p>
+	<p>Indsendelsesdato: @SelectedApplication.SubmitDate</p>
+	<p>1. Prioritet: Uge @SelectedApplication.Priority1.WeekNumber</p>
+	<p>2. Prioritet: Uge @SelectedApplication.Priority2.WeekNumber</p>
+	<p>På Venteliste: @SelectedApplication.IsOnWaitingList</p>
+	<p>Verified: @SelectedApplication.Verified</p>
+	@{
+	int i = 1;
+	}
+
+	@foreach (var child in SelectedApplication.Parent.Children)
+	{
+		<h1>@i. Barn</h1>
+		<p>Navn: @child.ChildName</p>
+		<p>Alder: @child.ChildAge</p>
+		<p>T-shirt str: @child.TshirtSize</p>
+		<p>Kommentar: @child.Comment</p>
+		<p>Allegener: @child.Allergies</p>
+		<p>Været her før?: @child.BeenHereBefore</p>
+		<p>Interesser: @child.Interests</p>
+		i++;
+	}
+
+
+	<button @onclick="() => addDialog.Close()" class="btn btn-danger">Luk</button>
+    </ModalDialog>
+	<script>
+	function copyToClipboard(text) {
+		navigator.clipboard.writeText(text).then(function () {
+			console.log('Successfully copied to clipboard');
+		}, function (err) {
+			console.error('Failed to copy text: ', err);
+		});
+	}
+	</script>
+
+<style>
+	/* General table styling */
+	.styled-table {
+		border-collapse: collapse;
+		width: 100%;
+		margin: 25px 0;
+		font-size: 18px;
+		font-family: 'Arial', sans-serif;
+		text-align: left;
+	}
+
+		/* Table headers */
+		.styled-table th {
+			background-color: #d72631; /* Red color from the logo */
+			color: #ffffff;
+			text-align: center;
+			padding: 12px 15px;
 		}
 
-	</tbody>
-</table>
+		/* Table rows */
+		.styled-table td {
+			padding: 12px 15px;
+			border: 1px solid #dddddd;
+		}
 
+		/* Alternating row colors */
+		.styled-table tr:nth-of-type(even) {
+			background-color: #f9f3f3; /* Light pink color */
+		}
+
+		/* Hover effect */
+		.styled-table tr:hover {
+			background-color: #f1e1e1; /* Slightly darker pink */
+		}
+
+	/* Button styling */
+	.styled-button {
+		background-color: #d72631; /* Red color from the logo */
+		color: white;
+		border: none;
+		padding: 8px 16px;
+		cursor: pointer;
+		font-size: 16px;
+		border-radius: 5px;
+		transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.1s ease;
+		margin: 5px 0;
+	}
+
+		/* Button hover effect */
+		.styled-button:hover {
+			background-color: #e53958; /* Pink color from the logo */
+		}
+
+		/* Button active effect */
+		.styled-button:active {
+			background-color: #c01e28; /* Darker red to indicate active state */
+			transform: scale(0.95); /* More noticeable shrink to indicate press */
+			box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Inset shadow to create pressed effect */
+		}
+
+		/* Button focus effect */
+		.styled-button:focus {
+			outline: none;
+			box-shadow: 0 0 0 3px rgba(215, 38, 49, 0.5); /* Add a pink outline */
+		}
+
+	/* Ensure buttons in table cells fill the cell */
+	.styled-table td .styled-button {
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.table-table{
+		display: grid;
+		gap: 10px;
+		padding: 10px;
+	}
+
+</style>
 @code {
+	private List<int> weekNumbers = new();
 	private List<Application>? applications = new();
+	private static List<Event>? events = new();
+	private Dictionary<string, string> copyButtonStatus = new();
+
+	private List<Application>? applications1 = new List<Application>();
 
 	private Application? SelectedApplication = new Application();
 
-	private List<Application>? Uge27 = new List<Application>();
-	private List<Application>? Uge28 = new List<Application>();
-	private List<Application>? Uge30 = new List<Application>();
-	private List<Application>? Uge31 = new List<Application>();
+	private List<Application>[] AppArray = new List<Application>[12];
+	private List<List<Application>> AppList = new();
+
+	private string Emails;
+
+
+	private Event? SelectedEvent = new Event();
 
 	[Inject]
 	private IServiceClass? mService { get; set; }
+	private ModalDialog? addDialog { get; set; }
 
+
+
+	public void setSelectedEvent(Event Event)
+	{
+		SelectedEvent = Event;
+	}
+
+	public void SetSelectedApplication(Application application)
+	{
+		SelectedApplication = application;
+	}
+
+	public void åbenModal(Application application)
+	{
+		weekNumbers = new();
+		addDialog.Open();
+		SetSelectedApplication(application);
+	}
 
 	public void Select(Application application)
 	{
+		weekNumbers = new();
 		SelectedApplication = application;
 		Console.WriteLine($"{application.Parent.ParentName} selected");
 	}
 
 	public void AddToWeek(List<Application> list)
 	{
-		list.Add(SelectedApplication);
-		applications = applications.Where(app => app != SelectedApplication).ToList();
-		SelectedApplication = new();
+		if (SelectedApplication.Parent.ParentMail != null)
+		{
+			weekNumbers = new();
+			list.Add(SelectedApplication);
+			applications = applications.Where(app => app != SelectedApplication).ToList();
+			SelectedApplication = new();
+		}
+		else
+		{
+			weekNumbers = new();
+		}
+
+
 	}
 
 	public void AddToWaitingList(List<Application> weekList, Application application)
 	{
+		weekNumbers = new();
 		applications.Add(application);
 		weekList.Remove(application);
-		
+
 	}
 
 	protected override async Task OnInitializedAsync()
 	{
+
 		applications = (await mService.GetAllApplications()).ToList();
+
+		foreach (var item in applications)
+		{
+			Console.WriteLine($"{item.ApplicationID}, {item.Id}");
+		}
+
+
+		events = (await mService.GetAllEvents()).ToList();
+
+		AppArray = new List<Application>[events.Count];
+
+		for (int i = 0; i < AppArray.Length; i++)
+		{
+			AppArray[i] = new();
+		}
+		foreach (var evt in events)
+		{
+			copyButtonStatus[evt.Workdays] = "Få emails";
+		}
+
+		weekNumbers = new();
 	}
-	
+
+	public async Task<string> SaveToEmailClipboard(List<Application> weekList, string workDays)
+	{
+		weekNumbers = new();
+		var emails = weekList.Select(app => app.Parent.ParentMail).Where(email => !string.IsNullOrWhiteSpace(email));
+		Emails = string.Join(",", emails);
+
+        // Call the JavaScript function to copy the emails to clipboard
+		await JS.InvokeVoidAsync("copyToClipboard", Emails);
+
+		copyButtonStatus[workDays] = "Gemt";
+
+		weekNumbers = new();
+		StateHasChanged(); // Force the component to re-render
+								
+		await Task.Delay(3000); // Delay for a few seconds (e.g., 3 seconds)
+
+		// Reset the Copy variable
+		copyButtonStatus[workDays] = "Få emails";
+
+        StateHasChanged(); // Force the component to re-render
+		weekNumbers = new();
+
+        return Emails;
+    }
+
+
+
+	public void SavePlanning(List<Event> EventList, List<Application> applications)
+	{
+		SaveWaitingList(applications);
+		SaveEvents(EventList);
+
+
+		weekNumbers = new();
+	}
+
+	public void SaveEvents(List<Event> EventList)
+	{
+
+		foreach (var item in EventList)
+		{
+
+			Console.WriteLine(item.Applications.Count);
+			mService.UpdateEvent(item);
+		}
+
+		weekNumbers = new();
+	}
+
+	public async void SaveWaitingList(List<Application> applications)
+	{
+		List<Application> templist = new();
+		templist = (await mService.GetAllApplications()).ToList();
+		DeleteAll(templist);
+		if (applications != null)
+		{
+			foreach (var item in applications)
+			{
+				mService.AddApplication(item);
+			}
+		}
+
+		weekNumbers = new();
+	}
+
+	public void DeleteAll(List<Application> listToRemove)
+	{
+		foreach (var item in listToRemove)
+		{
+			mService.DeleteApplicationByID(item.ApplicationID);
+		}
+	}
+
+	public bool IsAlreadyDisplayed(int weekNumber)
+	{
+		foreach (var item in weekNumbers)
+		{
+			if (item == weekNumber)
+			{
+				return true;
+			}
+		}
+		weekNumbers.Add(weekNumber);
+		return false;
+
+	}
 }
