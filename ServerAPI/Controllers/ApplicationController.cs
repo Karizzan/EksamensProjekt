@@ -46,11 +46,13 @@ namespace ServerAPI.Controllers
 
 		[HttpPost]
 		[Route("addYoung")]
-		public void AddYoungApplication(YoungApplication application)
-		{
-			mRepo.AddYoungApplication(application);
+        public IActionResult AddYoungApplication([FromBody] YoungApplication application)
+        {
+			 mRepo.AddYoungApplication(application);
+           
 
-		}
+        }
+
 
 		[HttpDelete]
 		[Route("deleteYoung/{id:int}")]

@@ -9,5 +9,8 @@ namespace EksamensProjekt.Services
         Task AddApplication(Application application);
 
         Task<Event[]> GetAllEvents();
+
+        Task AddYoungApplication(YoungApplication application);
+
     }
 }

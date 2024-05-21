@@ -1,0 +1,120 @@
+﻿@page "/youngApplication"
+
+
+@inject NavigationManager navManager
+@inject IJSRuntime js
+@inject IServiceClass service
+
+@using Services
+@using Core.Models
+@using Blazorise.SignaturePad
+@using Blazorise
+@using Blazorise.Bootstrap
+
+<h1 class="mb-3 mt-3">Ansøg som ung frivillig</h1>
+
+@if (isSubmitted)
+{
+    <p>Application submitted successfully!</p>
+}
+else
+{
+<EditForm Model="@application" OnValidSubmit="SubmitForm">
+    <DataAnnotationsValidator />
+    <Blazorise.ValidationSummary />
+
+
+    <div class="form-group">
+            <label for="AParentName">Forældre navn</label>
+            <input type="text" class="form-control" @bind="application.AParentName" id="AParentName">
+        </div>
+        <div class="form-group">
+            <label for="APhoneNr">Telefonnr på forældre</label>
+            <input type="text" class="form-control" @bind="application.AParentPhoneNr" id="APhoneNr">
+        </div>
+        <div class="form-group">
+            <label for="AParentMail">Forældre email</label>
+            <input type="email" class="form-control" @bind="application.AParentMail" id="AParentMail">
+        </div>
+        <div class="form-group">
+            <label for="AName">Navn</label>
+            <input type="text" class="form-control" @bind="application.AName" id="AName">
+        </div>
+        <div class="form-group">
+            <label for="AMail">Email</label>
+            <input type="email" class="form-control" @bind="application.AMail" id="AMail">
+        </div>
+        <div class="form-group">
+            <label for="KræwNr">Kræw Nummer</label>
+            <input type="text" class="form-control" @bind="application.KræwNr" id="KræwNr">
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" @bind="application.Declaration" id="Declaration">
+            <label class="form-check-label" for="Declaration">tilkendegivelse </label>
+            <p>Ved at trykke "Tilkendegivelse" bekræfter jeg, at mit barn må være frivillig.</p>
+        </div>
+
+    <div style="border: 2px solid black; padding: 10px; display: inline-block;">
+        <p>Forældres underskrift her:</p>
+        <button type="button" class="btn btn-primary" @onclick="async () => await UndoSignature()">Undo</button>
+        <SignaturePad @ref="signaturePad" CanvasWidth="500" CanvasHeight="200" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+}
+
+@code
+{
+    private Core.Models.YoungApplication application = new Core.Models.YoungApplication();
+    private bool isSubmitted = false;
+    private SignaturePad signaturePad;
+
+    private void ClearSignature()
+    {
+        signaturePad.Clear();
+    }
+
+    private async Task SaveSignature()
+    {
+        try
+        {
+            string signatureImage = await js.InvokeAsync<string>("getSignatureImage", signaturePad.ElementId);
+
+            if (!string.IsNullOrEmpty(signatureImage))
+            {
+                application.SignatureImage = Convert.FromBase64String(signatureImage.Replace("data:image/png;base64,", ""));
+            }
+            else
+            {
+                Console.WriteLine("SignatureImage is null or empty");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in SaveSignature: {ex.Message}");
+        }
+    }
+
+    private async Task UndoSignature()
+    {
+        await signaturePad.Undo();
+    }
+
+    private async Task SubmitForm()
+    {
+        // Save the signature before submitting the form
+        await SaveSignature();
+
+        try
+        {
+            await service.AddYoungApplication(application);
+            isSubmitted = true;
+            Console.WriteLine("Form submitted successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in SubmitForm: {ex.Message}");
+        }
+    }
+}

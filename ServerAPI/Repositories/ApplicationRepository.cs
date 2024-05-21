@@ -38,12 +38,12 @@ namespace ServerAPI.Repositories
 			return YAppCollection.Find(Builders<YoungApplication>.Filter.Empty).ToList();
 		}
 
-		public void AddYoungApplication(YoungApplication application)
-		{
+        public void AddYoungApplication(YoungApplication application)
+        {
             YAppCollection.InsertOne(application);
-		}
+        }
 
-		public void RemoveYoungApplicationByID(int applicationID)
+        public void RemoveYoungApplicationByID(int applicationID)
 		{
 			    var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", applicationID);
 			    YAppCollection.DeleteOne(filter);

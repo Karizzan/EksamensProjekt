@@ -2,6 +2,9 @@ using EksamensProjekt;
 using EksamensProjekt.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Blazorise;
+using Blazorise.Bootstrap;
+
 
 namespace EksamensProjekt
 {
@@ -16,7 +19,20 @@ namespace EksamensProjekt
 			builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 			builder.Services.AddSingleton<IServiceClass, ServiceClass>();
 
-			await builder.Build().RunAsync();
+            builder.Services
+    .AddBlazorise(options =>
+    {
+        // Configure Blazorise options if needed
+    })
+    .AddBootstrapProviders();
+
+            ;
+
+
+            await builder.Build().RunAsync();
 		}
+
+
 	}
+
 }

@@ -36,5 +36,11 @@ namespace EksamensProjekt.Services
 			return events.ToArray();
 
 		}
-	}
+        public async Task AddYoungApplication(YoungApplication application)
+        {
+            await http.PostAsJsonAsync($"{serverUrl}/application/addYoung/", application);
+        }
+
+
+    }
 }
