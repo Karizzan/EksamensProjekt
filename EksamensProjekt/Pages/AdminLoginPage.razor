@@ -50,11 +50,6 @@
         isLoggedIn = await localStorage.GetItemAsync<bool>("isLoggedIn");
 
 
-
-        foreach (var admin in listOfAdmins)
-        {
-            Console.WriteLine(admin.AdminName);
-        }
     }
 
     private async Task Save(string key, string item)
