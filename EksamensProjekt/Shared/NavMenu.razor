@@ -64,6 +64,8 @@
 @code {
     private bool collapseNavMenu = true;
     private bool login;
+    private string adminLevel;
+    private string name;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -75,6 +77,10 @@
     protected override async Task OnInitializedAsync()
     {
         login = await localStorage.GetItemAsync<bool>("isLoggedIn");
+        //adminLevel = await localStorage.GetItemAsStringAsync("adminLevel");
+        name = await localStorage.GetItemAsStringAsync("user");
+
+
         Console.WriteLine(login);
     }
 
