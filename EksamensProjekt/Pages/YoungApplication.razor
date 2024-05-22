@@ -86,6 +86,7 @@ else
                 signaturePad.Clear();
             }
 
+
             /*private async Task SaveSignature()
             {
                 try
@@ -115,8 +116,8 @@ else
             private async Task SubmitForm()
             {
 
-
-                //await mservice.AddYoungApplication(application);
+                //We send it to the database
+                await mservice.AddYoungApplication(application);
                 isSubmitted = true;
                 Console.WriteLine("Form submitted successfully.");
 
