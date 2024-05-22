@@ -6,111 +6,70 @@
 @page "/planning"
 
 
-<h3>plan</h3>
-
-<h1>Venteliste</h1>
-<table class="styled-table">
-	<thead>
-		<tr>
-			<th>Prioritet1</th>
-			<th>Prioritet2</th>
-			<th>Forældre</th>
-			<th>Antal Børn</th>
-			<th></th>
-
-		</tr>
-	</thead>
-	<tbody>
-		@{
-			int i = 1;
-
-		}
-		@if (applications != null)
-		{
-			@foreach (var item in applications)
-			{
-				<tr>
-					<td>Uge @item.Priority1.WeekNumber </td>
-					<td>Uge @item.Priority2.WeekNumber </td>
-					<td>@item.Parent.ParentName</td>
-					<td>@item.Parent.Children.Count</td>
-					<td>
-					<button @onclick="()=>åbenModal(item)" class="btn btn-info">Se Mere</button>
-					</td>
-					<td>
-					<button @onclick="()=>Select(item)" class="btn btn-primary">Select</button>
-					</td>
-				</tr>
-			}
-		}
-		
-
-	</tbody>
-
-</table>
-
-<button @onclick=" ()=> SavePlanning(events,applications)" > Gem Plan </button>
+<h1>Plan</h1>
+<button @onclick=" ()=> SavePlanning(events,applications)" class="btn btn-primary"> Gem Plan </button>
+<br/>
+<br />
 @foreach (var item in events)
 {
+	string WeekdaynoticeColor = "";
+	string WeekendnoticeColor = "";
+	string WeekdayWarningMessage = "";
+	string WeekendWarningMessage = "";
 	@if (IsAlreadyDisplayed(item.WeekNumber) != true)
 	{
-
-		<h1>Uge @item.WeekNumber</h1>
-		
-			
-		
-			@foreach (var item1 in events)
+		int weekdayChildren = 0;
+		int weekendChildren = 0;
+		foreach (var workdays in events.Where(e => e.WeekNumber == item.WeekNumber))
+		{
+			foreach (var application in workdays.Applications)
 			{
-				@if (item1.WeekNumber == item.WeekNumber)
+				if (workdays.Workdays == "Onsdag - Søndag (Hel Uge)" || workdays.Workdays == "Onsdag - Fredag (Halv Uge)")
 				{
-				
-				
-					<h2>@item1.Workdays</h2>
-				<button @onclick="()=>SaveToEmailClipboard(item1.Applications, item1.Workdays)">
-					@copyButtonStatus[item1.Workdays]
-				</button>
-				<table class="table-table">
-					<thead>
-						<tr>
-							<th>Prioritet1</th>
-							<th>Prioritet2</th>
-							<th>Forældre</th>
-							<th>Antal Børn</th>
-							<th>
-								<button @onclick="() => AddToWeek(item1.Applications)">Tilføj til tidspunkt</button>
-							</th>
-						</tr>
-						</thead>
-						
-					@foreach (var item2 in item1.Applications)
-						{
-								<tbody>
-									<tr>
-										<td>Uge @item2.Priority1.WeekNumber</td>
-										<td>Uge @item2.Priority2.WeekNumber</td>
-										<td>@item2.Parent.ParentName</td>
-										<td>@item2.Parent.Children.Count</td>
-										<td>
-											<button @onclick="()=>åbenModal(item2)" class="btn btn-info">Se Mere</button>
-										</td>
-										<td>
-											<button @onclick="()=>AddToWaitingList(item1.Applications, item2)">Fortryd</button>
-										</td>
-								
-									</tr>
-
-								</tbody>
-
-								
-							
-						}
-					
-				</table>
+					weekdayChildren += application.Parent.Children.Count;
+				}
+				if (workdays.Workdays == "Lørdag - Søndag (Weekend)" || workdays.Workdays == "Onsdag - Søndag (Hel Uge)")
+				{
+					weekendChildren += application.Parent.Children.Count;
 				}
 			}
-		
+		}
+		if (weekdayChildren >= 15)
+		{
+			WeekdayWarningMessage = "";
+			WeekdaynoticeColor = "orange";
+		}
+		if (weekendChildren >= 15)
+		{
+			WeekendWarningMessage = "";
+			WeekendnoticeColor = "orange";
+		}
+		if (weekendChildren > 20)
+		{
+			WeekendnoticeColor = "red";
+			WeekendWarningMessage = "Advarsel: Der er for mange børn tilmeldt";
+		}
+		if (weekdayChildren > 20)
+		{
+			WeekdaynoticeColor = "red";
+			WeekdayWarningMessage = "Advarsel: Der er for mange børn tilmeldt";
+		}
+
+
+		<h1>Uge @item.WeekNumber | @item.Location</h1>
+		<p>Hverdage: <p style="color: @WeekdaynoticeColor"> @weekdayChildren/20 </p></p>
+		<p style="color @WeekdaynoticeColor">@WeekdayWarningMessage</p>
+
+		<p>Weekend: <p style="color: @WeekendnoticeColor">@weekendChildren/20 </p></p>
+		<p style="color @WeekendnoticeColor">@WeekendWarningMessage</p>
+
+		<Button @onclick="()=>OpenDialog(item)" class="btn btn-primary" id="modelback">Åben</Button>
+		<br />
+		<br />
+
 	}
 }
+
 
 
 @foreach (var item in events)
@@ -119,6 +78,110 @@
 	int weeknumbers = item.WeekNumber;
 }
 
+<ModalDialog @ref="@addDialog1" Title="See more details">
+	<h1>Venteliste</h1>
+	<div class="scrollable-div">
+		<table class="styled-table">
+			<thead>
+				<tr>
+					<th>Prioritet1</th>
+					<th>Prioritet2</th>
+					<th>Forældre</th>
+					<th>Antal Børn</th>
+					<th></th>
+
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					int i = 1;
+
+				}
+				@if (applications != null)
+				{
+					@foreach (var item in applications)
+					{
+						<tr>
+							<td>Uge @item.Priority1.WeekNumber </td>
+							<td>Uge @item.Priority2.WeekNumber </td>
+							<td>@item.Parent.ParentName</td>
+							<td>@item.Parent.Children.Count</td>
+							<td>
+								<button @onclick="()=>OpenModal(item)" class="btn btn-info">Se Mere</button>
+							</td>
+							<td>
+								<button @onclick="()=>Select(item)" class="btn btn-primary">Select</button>
+							</td>
+						</tr>
+					}
+				}
+
+
+			</tbody>
+
+		</table>
+	</div>
+	<h1>Week Number: @SelectedEvent?.WeekNumber</h1>
+
+
+	@foreach (var workday in events)
+	{
+		if (workday.WeekNumber == SelectedEvent.WeekNumber)
+		{
+			int totalChildren = 0;
+			foreach (var application in workday.Applications)
+			{
+				totalChildren += application.Parent.Children.Count;
+			}
+
+			<h2>@workday.Workdays | Børn: @totalChildren</h2>
+
+			<table class="table-table">
+				<thead>
+					<tr>
+						<th>Prioritet1</th>
+						<th>Prioritet2</th>
+						<th>Forældre</th>
+						<th>Antal Børn</th>
+						<th>
+							<button @onclick="() => AddToWeek(workday.Applications)">Tilføj til tidspunkt</button>
+						</th>
+					</tr>
+				</thead>
+				@foreach (var item2 in workday.Applications)
+				{
+
+
+
+					<tbody>
+						<tr>
+							<td>Uge @item2.Priority1.WeekNumber</td>
+							<td>Uge @item2.Priority2.WeekNumber</td>
+							<td>@item2.Parent.ParentName</td>
+							<td>@item2.Parent.Children.Count</td>
+							<td>
+								<button @onclick="()=>OpenModal(item2)" class="btn btn-info" id="modelfront">Se Mere</button>
+							</td>
+							<td>
+								<button @onclick="()=>AddToWaitingList(workday.Applications, item2)">Fortryd</button>
+							</td>
+							<td>
+								<button @onclick="()=>SaveToEmailClipboard(item2.Parent.ParentMail)">
+									Kopier mailadresse
+								</button>
+							</td>
+
+						</tr>
+
+					</tbody>
+				}
+			</table>
+		}
+
+	}
+
+	<button @onclick=" ()=> SavePlanning(events,applications)"> Gem Plan </button>
+</ModalDialog>
 
 <ModalDialog @ref="@addDialog" Title="See more details">
 	<h1>Ansøgning</h1>
@@ -132,7 +195,7 @@
 	<p>På Venteliste: @SelectedApplication.IsOnWaitingList</p>
 	<p>Verified: @SelectedApplication.Verified</p>
 	@{
-	int i = 1;
+		int i = 1;
 	}
 
 	@foreach (var child in SelectedApplication.Parent.Children)
@@ -148,10 +211,11 @@
 		i++;
 	}
 
+</ModalDialog>
 
-	<button @onclick="() => addDialog.Close()" class="btn btn-danger">Luk</button>
-    </ModalDialog>
-	<script>
+
+
+<script>
 	function copyToClipboard(text) {
 		navigator.clipboard.writeText(text).then(function () {
 			console.log('Successfully copied to clipboard');
@@ -159,7 +223,7 @@
 			console.error('Failed to copy text: ', err);
 		});
 	}
-	</script>
+</script>
 
 <style>
 	/* General table styling */
@@ -233,12 +297,26 @@
 		box-sizing: border-box;
 	}
 
-	.table-table{
+	.table-table {
 		display: grid;
 		gap: 10px;
 		padding: 10px;
 	}
 
+	#modelfront {
+		z-index: 500;
+		position: relative
+	}
+
+	#modelback {
+		z-index: 400;
+		position: relative
+	}
+
+	.scrollable-div {
+		overflow: auto;
+		max-height: 200px;
+	}
 </style>
 @code {
 	private List<int> weekNumbers = new();
@@ -261,6 +339,7 @@
 	[Inject]
 	private IServiceClass? mService { get; set; }
 	private ModalDialog? addDialog { get; set; }
+	private ModalDialog? addDialog1 { get; set; }
 
 
 
@@ -274,11 +353,18 @@
 		SelectedApplication = application;
 	}
 
-	public void åbenModal(Application application)
+	public void OpenModal(Application application)
 	{
 		weekNumbers = new();
 		addDialog.Open();
 		SetSelectedApplication(application);
+	}
+
+	public void OpenDialog(Event Event)
+	{
+		weekNumbers = new();
+		addDialog1.Open();
+		setSelectedEvent(Event);
 	}
 
 	public void Select(Application application)
@@ -340,30 +426,16 @@
 		weekNumbers = new();
 	}
 
-	public async Task<string> SaveToEmailClipboard(List<Application> weekList, string workDays)
+
+	public async Task SaveToEmailClipboard(string email)
 	{
+		if (!string.IsNullOrWhiteSpace(email))
+		{
+			await JS.InvokeVoidAsync("copyToClipboard", email);
+		}
 		weekNumbers = new();
-		var emails = weekList.Select(app => app.Parent.ParentMail).Where(email => !string.IsNullOrWhiteSpace(email));
-		Emails = string.Join(",", emails);
+	}
 
-        // Call the JavaScript function to copy the emails to clipboard
-		await JS.InvokeVoidAsync("copyToClipboard", Emails);
-
-		copyButtonStatus[workDays] = "Gemt";
-
-		weekNumbers = new();
-		StateHasChanged(); // Force the component to re-render
-								
-		await Task.Delay(3000); // Delay for a few seconds (e.g., 3 seconds)
-
-		// Reset the Copy variable
-		copyButtonStatus[workDays] = "Få emails";
-
-        StateHasChanged(); // Force the component to re-render
-		weekNumbers = new();
-
-        return Emails;
-    }
 
 
 
@@ -426,4 +498,5 @@
 		return false;
 
 	}
+
 }

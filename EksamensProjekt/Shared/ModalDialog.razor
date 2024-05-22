@@ -21,7 +21,7 @@
 @code {
     [Parameter]
     public string? Title { get; set; }
-
+    private List<int> weekNumbers = new();
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
