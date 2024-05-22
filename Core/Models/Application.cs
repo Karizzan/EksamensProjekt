@@ -21,6 +21,7 @@ namespace Core.Models
         public Parent Parent { get; set; } = new Parent();
         public bool IsOnWaitingList { get; set; } = true;
         public bool Verified { get; set; } = false;
+        public string Signature { get; set; } // Underskrift
         public byte[] SignatureImage { get; set; }
 
     }
