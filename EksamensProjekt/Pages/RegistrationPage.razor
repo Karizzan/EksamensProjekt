@@ -64,12 +64,13 @@ else
 
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-12">
         <InputCheckbox id="Titel" @bind-Value="application.Verified" class="form-checkbox" />
         <label for="Verify">Jeg giver hermed tilladelse til at mit/mine børn må deltage i børneklubben</label>
     </div>
+
         <div class="col-md-12 mb-3" style="border: 2px solid black; padding: 10px;">
-            <p>Forældres underskrift her:</p>
+            <p>Forælder underskrift her:</p>
             <button type="button" class="btn btn-primary mb-2" @onclick="ClearSignature">Clear</button>
             <button type="button" class="btn btn-secondary mb-2" @onclick="async () => await UndoSignature()">Undo</button>
             <SignaturePad @ref="signaturePad" CanvasWidth="500" CanvasHeight="200" />
