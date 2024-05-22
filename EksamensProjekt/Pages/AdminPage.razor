@@ -2,6 +2,8 @@
 @inject IJSRuntime js
 @using Core.Models
 @using Services
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
 @page "/adminPage"
 <h3>Adminstrator Overblik</h3>
 
@@ -19,9 +21,14 @@
 		<tr>
 		<td>@admin.AdminName (@admin.Username)</td>
 		<td>@admin.AdminLevel</td>
-		<td>
-			<button @onclick="()=>DeleteAdmin(admin)" class="btn btn-info">Slet Admin</button>
-		</td>
+
+			@if (loggedInAdminLevel == "Admin")
+			{
+				<td>
+					<button @onclick="()=>DeleteAdmin(admin)" class="btn btn-info">Slet Admin</button>
+				</td>
+				
+			}
 		</tr>
 	}
 </table>
@@ -174,11 +181,15 @@
 @code {
 	private EditContext? aEditContext;
 
+	private string loggedInAdminLevel;
+	private string loggedInUsername;
+
 	//THe list of all admins
 	List<Admin> listOfAdmins = new();
 	Admin newAdmin = new();
 	string errorMessage = "";
 	string doubleCheckPassword = "";
+
 
 	//Used to show password
 	bool showPassword;
@@ -199,6 +210,12 @@
 	{
 		aEditContext = new EditContext(newAdmin);
 		listOfAdmins = (await mService.GetAllAdmins()).ToList();
+		loggedInAdminLevel = await localStorage.GetItemAsStringAsync("adminLevel");
+		loggedInUsername = await localStorage.GetItemAsStringAsync("user");
+
+
+		Console.WriteLine($"The user is {loggedInUsername} and their level is {loggedInAdminLevel}");
+
 
 
 	}

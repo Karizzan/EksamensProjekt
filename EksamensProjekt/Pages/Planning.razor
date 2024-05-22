@@ -1,6 +1,8 @@
 ﻿@using Core.Models
 @using Services
 @inject IJSRuntime JS
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
 @using MongoDB.Bson.Serialization.Attributes;
 @using MongoDB.Bson;
 @page "/planning"
@@ -246,6 +248,7 @@
 	private static List<Event>? events = new();
 	private Dictionary<string, string> copyButtonStatus = new();
 
+	private string adminLevel;
 	private List<Application>? applications1 = new List<Application>();
 
 	private Application? SelectedApplication = new Application();
@@ -290,16 +293,25 @@
 
 	public void AddToWeek(List<Application> list)
 	{
-		if (SelectedApplication.Parent.ParentMail != null)
+		if (adminLevel == "Admin")
 		{
-			weekNumbers = new();
-			list.Add(SelectedApplication);
-			applications = applications.Where(app => app != SelectedApplication).ToList();
-			SelectedApplication = new();
+			if (SelectedApplication.Parent.ParentMail != null)
+			{
+				weekNumbers = new();
+				list.Add(SelectedApplication);
+				applications = applications.Where(app => app != SelectedApplication).ToList();
+				SelectedApplication = new();
+			}
+			else
+			{
+				weekNumbers = new();
+			}
+
 		}
 		else
 		{
 			weekNumbers = new();
+			Console.WriteLine("You are not authorized to edit the page");
 		}
 
 
@@ -307,9 +319,18 @@
 
 	public void AddToWaitingList(List<Application> weekList, Application application)
 	{
-		weekNumbers = new();
-		applications.Add(application);
-		weekList.Remove(application);
+		if (adminLevel == "Admin")
+		{
+			weekNumbers = new();
+			applications.Add(application);
+			weekList.Remove(application);
+		}
+		else
+		{
+			weekNumbers = new();
+			Console.WriteLine("You're not authorized to make changes");
+		}
+
 
 	}
 
@@ -317,6 +338,9 @@
 	{
 
 		applications = (await mService.GetAllApplications()).ToList();
+
+		adminLevel = await localStorage.GetItemAsStringAsync("adminLevel");
+		Console.WriteLine(adminLevel);
 
 		foreach (var item in applications)
 		{
@@ -378,6 +402,7 @@
 
 	public void SaveEvents(List<Event> EventList)
 	{
+
 
 		foreach (var item in EventList)
 		{

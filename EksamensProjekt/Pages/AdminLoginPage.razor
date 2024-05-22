@@ -42,12 +42,17 @@
     List<Admin> listOfAdmins = new();
     private bool isLoggedIn = false;
     private bool login;
+    private string adminLevel;
     protected override async Task OnInitializedAsync()
     {
-        //aEditContext = new EditContext(newAdmin);
         listOfAdmins = (await mService.GetAllAdmins()).ToList();
 
         isLoggedIn = await localStorage.GetItemAsync<bool>("isLoggedIn");
+
+        adminLevel = await localStorage.GetItemAsStringAsync("adminLevel");
+
+
+        Console.WriteLine($"AdminLevel retrieved from local storage: {adminLevel}");
 
 
     }
@@ -55,11 +60,16 @@
     private async Task Save(string key, string item)
     {
         await localStorage.SetItemAsStringAsync(key, item);
+
     }
 
     private async Task saveloggedIn()
     {
         await localStorage.SetItemAsync<bool>("isLoggedIn", isLoggedIn);
+        await localStorage.SetItemAsStringAsync("adminLevel", admin.AdminLevel);
+        await localStorage.SetItemAsStringAsync("user", admin.Username);
+
+
     }
 
     private bool checkLogin(Admin logInUser)
@@ -71,6 +81,9 @@
             {
                 Console.WriteLine("Log In Successful");
                 isLoggedIn = true;
+
+                Console.WriteLine($"Admin er {admin.Username} kode: {admin.Password} og adgangniveau er {admin.AdminLevel}");
+                logInUser.AdminLevel = admin.AdminLevel;
                 return true;
 
             }
@@ -105,9 +118,15 @@
         }
         if (checkLogin(admin) == true)
         {
+            Console.WriteLine($"Brugeren er {admin.Username} og adgangniveau er {admin.AdminLevel}");
             errorMessage = "Bruger logget ind";
+
             await Save("user", admin.Username);
+
+            await Save("adminLevel", admin.AdminLevel);
+
             await saveloggedIn();
+            Console.WriteLine($"Admin efter localstorage: {adminLevel}");
             Console.WriteLine(isLoggedIn);
             RefreshPage();
 
