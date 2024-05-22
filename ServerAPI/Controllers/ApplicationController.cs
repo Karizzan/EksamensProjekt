@@ -53,21 +53,27 @@ namespace ServerAPI.Controllers
 			return mRepo.GetAllYoungApplications();
 		}
 
-		[HttpPost]
-		[Route("addYoung")]
-        public void AddYoungApplication([FromBody] YoungApplication application)
-        {
-			 mRepo.AddYoungApplication(application);
-           
-
-        }
+        [HttpPost]
+        [Route("addYoung")]
+        public void AddYoungApplication (YoungApplication application)
+		{
+			mRepo.AddYoungApplication(application);
+		}
 
 
-		[HttpDelete]
+
+        [HttpDelete]
 		[Route("deleteYoung/{id:int}")]
 		public void RemoveYoungApplicationByID(int applicationID)
 		{
 			mRepo.RemoveYoungApplicationByID(applicationID);
+		}
+
+		[HttpPut]
+		[Route("update")]
+		public void UpdateYoungApplication (YoungApplication application)
+		{
+			mRepo.UpdateYoungApplication(application);
 		}
 		
 	}

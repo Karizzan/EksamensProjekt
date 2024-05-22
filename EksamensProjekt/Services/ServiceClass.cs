@@ -83,14 +83,34 @@ namespace EksamensProjekt.Services
 			//HttpResponseMessage response = await http.GetAsync($"{serverUrl}/admin/checklogin?username={username}&password={password}");
 
 			return true;
-		}
-        public async Task AddYoungApplication(YoungApplication application)
-        {
-            await http.PostAsJsonAsync($"{serverUrl}/application/addYoung", application);
+
+           
         }
 
+        public async Task<YoungApplication[]> GetAllYoungApplication()
+        {
+            var youngApplications = await http.GetFromJsonAsync<YoungApplication[]>($"{serverUrl}/youngApplication/getAll");
+
+			return youngApplications.ToArray();
+
+        }
+        public async Task AddYoungApplication(YoungApplication application)
+        {
+            await http.PostAsJsonAsync($"{serverUrl}/$application/addYoung", application);
+        }
+
+        public async Task UpdateYoungApplication(YoungApplication application)
+        {
+            await http.PutAsJsonAsync($"{serverUrl}/application/update", application);
+        }
+
+        public async Task DeleteYoungApplicationByID(int id)
+        {
+            await http.DeleteAsync($"{serverUrl}/application/delete/{id}");
+        }
 
     }
+
 }
 
 

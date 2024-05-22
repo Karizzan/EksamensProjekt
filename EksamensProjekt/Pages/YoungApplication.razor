@@ -19,12 +19,12 @@
 }
 else
 {
-<EditForm Model="@application" OnValidSubmit="SubmitForm">
-    <DataAnnotationsValidator />
-    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+    <EditForm Model="@application" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator />
+        <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
 
 
-    <div class="form-group">
+        <div class="form-group">
             <label for="AParentName">Forældre navn</label>
             <input type="text" class="form-control" @bind="application.AParentName" id="AParentName">
         </div>
@@ -54,63 +54,73 @@ else
             <p>Ved at trykke "Tilkendegivelse" bekræfter jeg, at mit barn må være frivillig.</p>
         </div>
 
-    <div style="border: 2px solid black; padding: 10px; display: inline-block;">
-        <p>Forældres underskrift her:</p>
-        <button type="button" class="btn btn-primary" @onclick="async () => await UndoSignature()">Undo</button>
-        <SignaturePad @ref="signaturePad" CanvasWidth="500" CanvasHeight="200" />
-    </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-</EditForm>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
 }
+
+
+
 
 @code
 {
-    [Inject]
-    private IServiceClass mservice { get; set; }
-    private Core.Models.YoungApplication application = new Core.Models.YoungApplication();
-    private bool isSubmitted = false;
-    private SignaturePad signaturePad;
 
-    private void ClearSignature()
-    {
-        signaturePad.Clear();
-    }
+   /* <div style="border: 2px solid black; padding: 10px; display: inline-block;">
+        <p>Forældres underskrift her:</p>
+        <button type="button" class="btn btn-primary" @onclick="async () => await UndoSignature()">Undo</button>
+        <SignaturePad @ref="signaturePad" CanvasWidth="500" CanvasHeight="200" />
+    </div>*/
 
-    private async Task SaveSignature()
-    {
-        try
-        {
-            string signatureImage = await js.InvokeAsync<string>("getSignatureImage", signaturePad.ElementId);
 
-            if (!string.IsNullOrEmpty(signatureImage))
+
+
+        [Inject]
+            private IServiceClass mservice { get; set; }
+            private Core.Models.YoungApplication application = new Core.Models.YoungApplication();
+            private bool isSubmitted = false;
+            private SignaturePad signaturePad;
+
+            private void ClearSignature()
             {
-                application.SignatureImage = Convert.FromBase64String(signatureImage.Replace("data:image/png;base64,", ""));
+                signaturePad.Clear();
             }
-            else
+
+            /*private async Task SaveSignature()
             {
-                Console.WriteLine("SignatureImage is null or empty");
+                try
+                {
+                    string signatureImage = await js.InvokeAsync<string>("getSignatureImage", signaturePad.ElementId);
+                    if (!string.IsNullOrEmpty(signatureImage))
+                    {
+                        application.SignatureImage = Convert.FromBase64String(signatureImage.Replace("data:image/png;base64,", ""));
+                    }
+                    else
+                    {
+                        Console.WriteLine("SignatureImage is null or empty");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception in SaveSignature: {ex.Message}");
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception in SaveSignature: {ex.Message}");
-        }
-    }
-
-    private async Task UndoSignature()
-    {
-        await signaturePad.Undo();
-    }
-
-    private async Task SubmitForm()
-    {
-        // Save the signature before submitting the form
-        await SaveSignature();
 
 
-            await mservice.AddYoungApplication(application);
-            isSubmitted = true;
-            Console.WriteLine("Form submitted successfully.");
-    }
+            private async Task UndoSignature()
+            {
+                await signaturePad.Undo();
+            }
+            */
+            private async Task SubmitForm()
+            {
+
+
+                //await mservice.AddYoungApplication(application);
+                isSubmitted = true;
+                Console.WriteLine("Form submitted successfully.");
+
+
+
+            }
+
 }

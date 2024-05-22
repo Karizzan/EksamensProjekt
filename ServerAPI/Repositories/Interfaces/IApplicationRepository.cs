@@ -9,10 +9,13 @@ namespace ServerAPI.Repositories.Interfaces
         
         
 		public List<YoungApplication> GetAllYoungApplications();
-		public void AddYoungApplication(YoungApplication application);
-		public void RemoveYoungApplicationByID(int applicationID);
+		public void AddYoungApplication(YoungApplication youngApplication);
+		public void RemoveYoungApplicationByID(int youngApplicationId);
         
         public void UpdateApplication(Application application);
+        public void UpdateYoungApplication(YoungApplication youngApplication);
+
+       
         
 	}
 }

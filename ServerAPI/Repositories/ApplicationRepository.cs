@@ -54,16 +54,24 @@ namespace ServerAPI.Repositories
 			return YAppCollection.Find(Builders<YoungApplication>.Filter.Empty).ToList();
 		}
 
-        public void AddYoungApplication(YoungApplication application)
+        public void AddYoungApplication(YoungApplication youngApplication)
         {
-            YAppCollection.InsertOne(application);
+            YAppCollection.InsertOne(youngApplication);
         }
 
-      public   void RemoveYoungApplicationByID(int applicationID)
+      public   void RemoveYoungApplicationByID(int youngApplicationID)
 		{
-			    var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", applicationID);
+			    var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", youngApplicationID);
 			    YAppCollection.DeleteOne(filter);
 		}
+
+        public void UpdateYoungApplication(YoungApplication youngApplication)
+        {
+            var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", youngApplication.YoungApplicationID);
+            var update = Builders<YoungApplication>.Update
+                .Set(e => e, youngApplication);
+            YAppCollection.UpdateOne(filter, update);
+        }
         
 	}
 		
