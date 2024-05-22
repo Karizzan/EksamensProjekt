@@ -1,5 +1,8 @@
 ﻿@page "/registrationPage"
 @inject NavigationManager navManager
+@using Blazorise.SignaturePad
+@using Blazorise
+@using Blazorise.Bootstrap
 @inject IJSRuntime js
 @using Core.Models
 @using Services
@@ -65,6 +68,12 @@ else
         <InputCheckbox id="Titel" @bind-Value="application.Verified" class="form-checkbox" />
         <label for="Verify">Jeg giver hermed tilladelse til at mit/mine børn må deltage i børneklubben</label>
     </div>
+        <div class="col-md-12 mb-3" style="border: 2px solid black; padding: 10px;">
+            <p>Forældres underskrift her:</p>
+            <button type="button" class="btn btn-primary mb-2" @onclick="ClearSignature">Clear</button>
+            <button type="button" class="btn btn-secondary mb-2" @onclick="async () => await UndoSignature()">Undo</button>
+            <SignaturePad @ref="signaturePad" CanvasWidth="500" CanvasHeight="200" />
+        </div>
 
     <br />
     <br />
@@ -164,7 +173,7 @@ else
 
 @code {
     private EditContext? aEditContext;
-
+   
     private bool isSubmitted = false;
     Application application = new();
     Parent parent = new();
@@ -182,7 +191,7 @@ else
 
     private List<Event>? allEvents = new();
     private List<Application>? allApplications = new();
-
+    private SignaturePad signaturePad;
 
 
 	private Event getEventById(int id)
@@ -199,7 +208,34 @@ else
 		}
 		return foundEvent;
 	}
+    private void ClearSignature()
+    {
+        signaturePad.Clear();
+    }
+    private async Task SaveSignature()
+    {
+        try
+        {
+            string signatureImage = await js.InvokeAsync<string>("getSignatureImage", signaturePad.ElementId);
 
+            if (!string.IsNullOrEmpty(signatureImage))
+            {
+                application.SignatureImage = Convert.FromBase64String(signatureImage.Replace("data:image/png;base64,", ""));
+            }
+            else
+            {
+                Console.WriteLine("SignatureImage is null or empty");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in SaveSignature: {ex.Message}");
+        }
+    }
+    private async Task UndoSignature()
+    {
+        await signaturePad.Undo();
+    }
 
 
 
@@ -207,6 +243,7 @@ else
 	{
 		if (aEditContext.Validate())
 		{
+            await SaveSignature();
 	
 			application.ApplicationID = GenerateApplicationId(allApplications);
 			application.Priority1 = getEventById(prio1);
