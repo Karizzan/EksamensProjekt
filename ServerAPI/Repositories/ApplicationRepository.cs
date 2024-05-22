@@ -14,7 +14,7 @@ namespace ServerAPI.Repositories
             var client = new MongoClient("mongodb+srv://marcushoumark:Marcus@cirkusdb.rxb1kpo.mongodb.net/");
             var database = client.GetDatabase("CirkusDB");
             AppCollection = database.GetCollection<Application>("Application");
-            YAppCollection = database.GetCollection<YoungApplication>("YoungApplication");
+           YAppCollection = database.GetCollection<YoungApplication>("YoungApplication");
         }
         
         public List<Application> GetAllApplications() 
@@ -28,27 +28,43 @@ namespace ServerAPI.Repositories
             AppCollection.InsertOne(application);
         }
 
-        public void RemoveApplicationByID(int applicationID) 
+        public void RemoveApplicationByID(int id) 
         {
-            var filter = Builders<Application>.Filter.Eq("ApplicationID", applicationID);
-            AppCollection.DeleteOne(filter);
+			
+				var filter = Builders<Application>.Filter.Eq("ApplicationID", id);
+				AppCollection.DeleteMany(filter);
+			
+
+            
         }
-        
+		public void UpdateApplication(Application application)
+		{
+			var filter = Builders<Application>.Filter.Eq("ApplicaitonID", application.ApplicationID);
+			var update = Builders<Application>.Update
+				.Set(e => e, application)
+				
+				// Repeat for all properties of Event that should be updated
+				;
+			AppCollection.UpdateOne(filter, update);
+		}
+
+		
 		public List<YoungApplication> GetAllYoungApplications()
 		{
 			return YAppCollection.Find(Builders<YoungApplication>.Filter.Empty).ToList();
 		}
 
-		public void AddYoungApplication(YoungApplication application)
-		{
+        public void AddYoungApplication(YoungApplication application)
+        {
             YAppCollection.InsertOne(application);
-		}
+        }
 
-		public void RemoveYoungApplicationByID(int applicationID)
+      public   void RemoveYoungApplicationByID(int applicationID)
 		{
 			    var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", applicationID);
 			    YAppCollection.DeleteOne(filter);
 		}
         
 	}
+		
 }

@@ -2,7 +2,10 @@ using EksamensProjekt;
 using EksamensProjekt.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Blazorise;
+using Blazorise.Bootstrap;
 using Blazored.LocalStorage;
+
 
 namespace EksamensProjekt
 {
@@ -18,7 +21,20 @@ namespace EksamensProjekt
 			builder.Services.AddSingleton<IServiceClass, ServiceClass>();
             builder.Services.AddBlazoredLocalStorage();
 
+            builder.Services
+    .AddBlazorise(options =>
+    {
+        // Configure Blazorise options if needed
+    })
+    .AddBootstrapProviders();
+
+            ;
+
+
             await builder.Build().RunAsync();
 		}
+
+
 	}
+
 }

@@ -33,10 +33,17 @@ namespace ServerAPI.Controllers
 
 			[HttpDelete]
 			[Route("delete/{id:int}")]
-			public void RemoveApplicationByID(int applicationID)
+			public void RemoveApplicationByID(int id)
 			{
-				mRepo.RemoveApplicationByID(applicationID);
+				mRepo.RemoveApplicationByID(id);
 			}
+
+		[HttpPut]
+		[Route("update")]
+		public void UpdateApplication(Application application)
+		{
+			mRepo.UpdateApplication(application);
+		}
 
 		
 		[HttpGet]
@@ -48,11 +55,13 @@ namespace ServerAPI.Controllers
 
 		[HttpPost]
 		[Route("addYoung")]
-		public void AddYoungApplication(YoungApplication application)
-		{
-			mRepo.AddYoungApplication(application);
+        public void AddYoungApplication([FromBody] YoungApplication application)
+        {
+			 mRepo.AddYoungApplication(application);
+           
 
-		}
+        }
+
 
 		[HttpDelete]
 		[Route("deleteYoung/{id:int}")]

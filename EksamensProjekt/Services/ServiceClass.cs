@@ -30,6 +30,16 @@ namespace EksamensProjekt.Services
 			await http.PostAsJsonAsync($"{serverUrl}/application/add", application);
 		}
 
+		public async Task UpdateApplication (Application application)
+		{
+			await http.PutAsJsonAsync($"{serverUrl}/application/update", application );
+		}
+
+		public async Task DeleteApplicationByID(int id)
+		{
+			await http.DeleteAsync($"{serverUrl}/application/delete/{id}");
+		}
+
 		public async Task AddAdmin(Admin admin)
 		{
 			await http.PostAsJsonAsync($"{serverUrl}/admin/add/", admin);
@@ -74,10 +84,13 @@ namespace EksamensProjekt.Services
 
 			return true;
 		}
-	}
+        public async Task AddYoungApplication(YoungApplication application)
+        {
+            await http.PostAsJsonAsync($"{serverUrl}/application/addYoung", application);
+        }
 
 
-
+    }
 }
 
 

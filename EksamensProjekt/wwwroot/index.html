@@ -27,6 +27,19 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
-</body>
+    <script src="js/signature.js"></script>
 
+    <script>window.getSignatureImage = (canvasId) => {
+            var canvas = document.getElementById(canvasId).querySelector("canvas");
+            if (canvas) {
+                return canvas.toDataURL();
+            }
+            return null;
+        };</script>
+
+    <link href="_content/Blazorise/blazorise.css" rel="stylesheet">
+    <link href="_content/Blazorise.Bootstrap/blazorise.bootstrap.css" rel="stylesheet">
+    <script src="_content/Blazorise/blazorise.js"></script>
+
+</body>
 </html>
