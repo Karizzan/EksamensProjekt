@@ -33,76 +33,80 @@
 	}
 </table>
 
+@if (loggedInAdminLevel == "Admin") //Only admin has access to this feature
+{
+	<h3>Tilføj Adminstrator</h3>
+	<EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
+		<DataAnnotationsValidator />
+		<Microsoft.AspNetCore.Components.Forms.ValidationSummary />
 
-<h3>Tilføj Adminstrator</h3>
-<EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
-	<DataAnnotationsValidator />
-    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+		<div class="col-md-12 mb-3">
+			<label for="AdminLevel">Admin Type</label>
+			<InputSelect id="AdminLevel" @bind-Value="newAdmin.AdminLevel" class="form-control">
 
-	<div class="col-md-12 mb-3">
-		<label for="AdminLevel">Admin Type</label>
-		<InputSelect id="AdminLevel" @bind-Value="newAdmin.AdminLevel" class="form-control">
+				@foreach (string anOption in adminCategories)
+				{
+					<option value="@anOption">@anOption</option>
 
-			@foreach (string anOption in adminCategories)
+				}
+			</InputSelect>
+
+		</div>
+
+
+		<div class="col-md-12 mb-3">
+			<label for="AdminName">Navn på den nye adminstrator</label>
+			<InputText id="AdminName" @bind-Value="newAdmin.AdminName" class="form-control" placeholder="f.eks. Jens Jensen" />
+		</div>
+
+		<div class="col-md-12 mb-3">
+			<label for="AdminUsername">Brugernavn</label>
+			<InputText id="AdminUserName" @bind-Value="newAdmin.Username" class="form-control" placeholder="f.eks. jens04" />
+		</div>
+
+		@{
+			//This is for showing and hiding password
+
+			if (showPassword == true)
 			{
-				<option value="@anOption">@anOption</option>
-
+				passwordType = "null";
 			}
-		</InputSelect>
+			else
+			{
+				passwordType = "password";
+			}
 
-	</div>
-
-
-	<div class="col-md-12 mb-3">
-		<label for="AdminName">Navn på den nye adminstrator</label>
-		<InputText id="AdminName" @bind-Value="newAdmin.AdminName" class="form-control" placeholder="f.eks. Jens Jensen" />
-	</div>
-
-	<div class="col-md-12 mb-3">
-		<label for="AdminUsername">Brugernavn</label>
-		<InputText id="AdminUserName" @bind-Value="newAdmin.Username" class="form-control" placeholder="f.eks. jens04" />
-	</div>
-
-	@{
-		//This is for showing and hiding password
-
-		if (showPassword == true)
-		{
-			passwordType = "null";
-		} else
-		{
-			passwordType = "password";
 		}
 
-	}
-
-	<div class="col-md-12 mb-3">
 		<div class="col-md-12 mb-3">
-			<label for="AdminPassword">Kodeord</label>
-			<InputText type="@passwordType" id="AdminPassword" @bind-Value="newAdmin.Password" class="form-control" />
+			<div class="col-md-12 mb-3">
+				<label for="AdminPassword">Kodeord</label>
+				<InputText type="@passwordType" id="AdminPassword" @bind-Value="newAdmin.Password" class="form-control" />
+			</div>
+
+
+			<div class="col-md-12 mb-3">
+				<label for="AdminPassword">Bekræft Kodeord</label>
+				<InputText type="@passwordType" id="AdminPassword2" @bind-Value="doubleCheckPassword" class="form-control" />
+			</div>
+
+			Vis Kodeord
+			<InputCheckbox id="showPassword" @bind-Value="showPassword" class="form-checkbox" />
 		</div>
 
 
-		<div class="col-md-12 mb-3">
-			<label for="AdminPassword">Bekræft Kodeord</label>
-			<InputText type="@passwordType" id="AdminPassword2" @bind-Value="doubleCheckPassword" class="form-control" />
+
+
+		<div class="col-12 mb-3">
+			<button @type="submit" class="btn btn-primary">Send</button>
 		</div>
 
-		Vis Kodeord
-		<InputCheckbox id="showPassword" @bind-Value="showPassword" class="form-checkbox" />
-	</div>
+		<alert>@errorMessage</alert>
+
+	</EditForm>
 
 
-
-
-	<div class="col-12 mb-3">
-		<button @type="submit" class="btn btn-primary">Send</button>
-	</div>
-
-	<alert>@errorMessage</alert>
-
-</EditForm>
-
+}
 
 <style>
 	/* General table styling */
@@ -243,6 +247,7 @@
 	{
 		if (aEditContext.Validate())
 		{
+
 			if (doubleCheckPassword == newAdmin.Password)
 			{
 				//temporary admin
