@@ -21,7 +21,7 @@ else
 {
 <EditForm Model="@application" OnValidSubmit="SubmitForm">
     <DataAnnotationsValidator />
-    <Blazorise.ValidationSummary />
+    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
 
 
     <div class="form-group">
@@ -66,6 +66,8 @@ else
 
 @code
 {
+    [Inject]
+    private IServiceClass mservice { get; set; }
     private Core.Models.YoungApplication application = new Core.Models.YoungApplication();
     private bool isSubmitted = false;
     private SignaturePad signaturePad;
@@ -106,15 +108,9 @@ else
         // Save the signature before submitting the form
         await SaveSignature();
 
-        try
-        {
-            await service.AddYoungApplication(application);
+
+            await mservice.AddYoungApplication(application);
             isSubmitted = true;
             Console.WriteLine("Form submitted successfully.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception in SubmitForm: {ex.Message}");
-        }
     }
 }

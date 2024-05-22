@@ -86,7 +86,7 @@ namespace EksamensProjekt.Services
 		}
         public async Task AddYoungApplication(YoungApplication application)
         {
-            await http.PostAsJsonAsync($"{serverUrl}/application/addYoung/", application);
+            await http.PostAsJsonAsync($"{serverUrl}/application/addYoung", application);
         }
 
 

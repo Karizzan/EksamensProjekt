@@ -7,11 +7,11 @@ namespace ServerAPI.Repositories.Interfaces
        public void AddApplication(Application application);
        public void RemoveApplicationByID(int id);
         
-        /*
+        
 		public List<YoungApplication> GetAllYoungApplications();
 		public void AddYoungApplication(YoungApplication application);
 		public void RemoveYoungApplicationByID(int applicationID);
-        */
+        
         public void UpdateApplication(Application application);
         
 	}

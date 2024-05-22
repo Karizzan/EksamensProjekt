@@ -8,13 +8,13 @@ namespace ServerAPI.Repositories
     {
         private IMongoCollection<Application> AppCollection;
 
-		//private IMongoCollection<YoungApplication> YAppCollection;
+		private IMongoCollection<YoungApplication> YAppCollection;
 		public ApplicationRepository()
         {
             var client = new MongoClient("mongodb+srv://marcushoumark:Marcus@cirkusdb.rxb1kpo.mongodb.net/");
             var database = client.GetDatabase("CirkusDB");
             AppCollection = database.GetCollection<Application>("Application");
-           // YAppCollection = database.GetCollection<YoungApplication>("YoungApplication");
+           YAppCollection = database.GetCollection<YoungApplication>("YoungApplication");
         }
         
         public List<Application> GetAllApplications() 
@@ -48,7 +48,7 @@ namespace ServerAPI.Repositories
 			AppCollection.UpdateOne(filter, update);
 		}
 
-		/*
+		
 		public List<YoungApplication> GetAllYoungApplications()
 		{
 			return YAppCollection.Find(Builders<YoungApplication>.Filter.Empty).ToList();
@@ -59,12 +59,12 @@ namespace ServerAPI.Repositories
             YAppCollection.InsertOne(application);
         }
 
-        public void RemoveYoungApplicationByID(int applicationID)
+      public   void RemoveYoungApplicationByID(int applicationID)
 		{
 			    var filter = Builders<YoungApplication>.Filter.Eq("YoungApplicationID", applicationID);
 			    YAppCollection.DeleteOne(filter);
 		}
-        */
+        
 	}
 		
 }

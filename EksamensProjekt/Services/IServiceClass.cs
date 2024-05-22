@@ -21,7 +21,6 @@ namespace EksamensProjekt.Services
         bool CheckLogin(string username, string password);
         Task UpdateApplication(Application application);    
         Task DeleteApplicationByID(int id);
-        Task<Event[]> GetAllEvents();
 
         Task AddYoungApplication(YoungApplication application);
 

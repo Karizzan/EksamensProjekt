@@ -45,7 +45,7 @@ namespace ServerAPI.Controllers
 			mRepo.UpdateApplication(application);
 		}
 
-		/*
+		
 		[HttpGet]
 		[Route("getAllYoung")]
 		public List<YoungApplication> GetAllYoungApplications()
@@ -55,7 +55,7 @@ namespace ServerAPI.Controllers
 
 		[HttpPost]
 		[Route("addYoung")]
-        public IActionResult AddYoungApplication([FromBody] YoungApplication application)
+        public void AddYoungApplication([FromBody] YoungApplication application)
         {
 			 mRepo.AddYoungApplication(application);
            
@@ -69,6 +69,6 @@ namespace ServerAPI.Controllers
 		{
 			mRepo.RemoveYoungApplicationByID(applicationID);
 		}
-		*/
+		
 	}
 }

@@ -5,6 +5,12 @@
 @using Services
 
 
+@if (isSubmitted)
+{
+    <h1>Ansøgning er sendt!</h1>
+}
+else
+{
 <h1 class="mb-3 mt-3">Ansøg om børnepasning</h1>
 
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
@@ -152,13 +158,14 @@
 
     <h1>@errorMessage</h1>
 </EditForm>
-
+}
 
 
 
 @code {
     private EditContext? aEditContext;
 
+    private bool isSubmitted = false;
     Application application = new();
     Parent parent = new();
     Child child = new();
@@ -200,15 +207,7 @@
 	{
 		if (aEditContext.Validate())
 		{
-			/*
-			fpath = annonce.Billede;
-			annonce.Billede = BilledeConverter(fpath);
-			*/
-			//Lokationen bliver valgt her
-
-            //await Http.PostAsJsonAsync<Annoncer>($"{serverUrl}/annoncer/add", annonce);
-
-			//BrugerSamlingAfAnnoncer = await Http.GetFromJsonAsync<List<Annoncer>>($"{serverUrl}/annoncer/getbyemail/{brugerEmail}");
+	
 			application.ApplicationID = GenerateApplicationId(allApplications);
 			application.Priority1 = getEventById(prio1);
 			application.Priority2 = getEventById(prio2);
@@ -230,7 +229,6 @@
 			Console.WriteLine(child2.ChildName);
 
 			//We add the application to the list
-			//allApplications.Add(application);
 			foreach (var application in allApplications)
 			{
 				Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
@@ -245,8 +243,7 @@
             {
                 Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
             }
-            //We show a message to the user
-            errorMessage = "Din ansøgning er blevet sendt";
+            isSubmitted = true;
 
 
             //We reset the form
@@ -288,33 +285,6 @@
 
     }
 
-
-    public void SetDefaults()
-    {
-        if (child.Interests == null)
-        {
-            child.Interests = "Ingen Interresser";
-        }
-
-        if (child.Comment == null)
-        {
-            child.Comment = "Ingen Kommentar";
-        }
-
-        if (child.Allergies == null)
-        {
-            child.Allergies = "Ingen Allergier";
-        }
-
-        if (child2.Interests == null)
-        {
-            child2.Interests = "Ingen Interresser";
-        }
-
-        if (child2.Comment == null)
-        {
-            child2.Comment = "Ingen Kommentar";
-        }
 
 
 	public void SetDefaults()
