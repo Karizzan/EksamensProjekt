@@ -1,0 +1,158 @@
+﻿@page "/Underskrifter"
+
+@inject NavigationManager navManager
+@inject IJSRuntime js
+@inject IServiceClass service
+
+@using Services
+@using Core.Models
+
+@using MongoDB.Bson.Serialization.Attributes;
+@using MongoDB.Bson;
+
+@using iText.Kernel.Pdf
+@using iText.Layout
+@using iText.Layout.Element
+@using iText.IO.Image
+
+
+
+
+<h1 class="mb-3 mt-3">Alle registeringer med underskrift</h1>
+
+@if (applications == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (applications.Count == 0)
+{
+    <p>No applications found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Forældre navn</th>
+                <th>Telefonnr på forældre</th>
+                <th>Forældre email</th>
+                <th>Navn</th>
+                <th>Email</th>
+                <th>Kræw Nummer</th>
+                <th>Underskrift billede</th>
+                <th>Download som pdf</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var app in applications)
+            {
+                <tr>
+                    <td>@app.AParentName</td>
+                    <td>@app.AParentPhoneNr</td>
+                    <td>@app.AParentMail</td>
+                    <td>@app.AName</td>
+                    <td>@app.AMail</td>
+                    <td>@app.KræwNr</td>
+                    <td>
+                        @if (app.ImageData != null)
+                        {
+                            <img src="data:image/png;base64,@Convert.ToBase64String(app.ImageData)" alt="Signature Image" style="max-width: 100px; max-height: 100px;" />
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="(e) => GeneratePdf(app)">Download PDF</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Button to download all entries as a single PDF -->
+    <button class="btn btn-primary mt-3" @onclick="DownloadAllAsPdf">Download alle som pdf</button>
+}
+
+
+
+@code {
+    private List<Core.Models.YoungApplication> applications;
+
+    private async Task GeneratePdf(Core.Models.YoungApplication selectedApplication)
+    {
+        using (var stream = new MemoryStream())
+        {
+            using (var writer = new PdfWriter(stream))
+            {
+                using (var pdf = new PdfDocument(writer))
+                {
+                    var document = new iText.Layout.Document(pdf);
+
+                    // Add application details to the PDF for the selected application
+                    document.Add(new iText.Layout.Element.Paragraph($"Forældre navn: {selectedApplication.AParentName}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Telefonnr på forældre: {selectedApplication.AParentPhoneNr}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Forældre email: {selectedApplication.AParentMail}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Navn: {selectedApplication.AName}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Email: {selectedApplication.AMail}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Kræw Nummer: {selectedApplication.KræwNr}"));
+
+                    // Add signature image to the PDF
+                    if (selectedApplication.ImageData != null)
+                    {
+                        var image = new iText.Layout.Element.Image(ImageDataFactory.Create(selectedApplication.ImageData));
+                        document.Add(image);
+                    }
+                }
+            }
+
+            // Save the PDF to a byte array
+            var pdfBytes = stream.ToArray();
+
+            // Invoke JavaScript to initiate the download
+            await js.InvokeVoidAsync("saveAsFile", $"{selectedApplication.AName}_Application.pdf", Convert.ToBase64String(pdfBytes));
+        }
+    }
+
+    private async Task DownloadAllAsPdf()
+    {
+        using (var stream = new MemoryStream())
+        {
+            using (var writer = new PdfWriter(stream))
+            {
+                using (var pdf = new PdfDocument(writer))
+                {
+                    var document = new iText.Layout.Document(pdf);
+
+                    foreach (var app in applications)
+                    {
+                        // Add application details to the PDF for each application
+                        document.Add(new iText.Layout.Element.Paragraph($"Forældre navn: {app.AParentName}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Telefonnr på forældre: {app.AParentPhoneNr}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Forældre email: {app.AParentMail}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Navn: {app.AName}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Email: {app.AMail}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Kræw Nummer: {app.KræwNr}"));
+
+                        // Add signature image to the PDF if available
+                        if (app.ImageData != null)
+                        {
+                            var image = new iText.Layout.Element.Image(ImageDataFactory.Create(app.ImageData));
+                            document.Add(image);
+                        }
+
+                        // Add a new page for the next application
+                        document.Add(new AreaBreak());
+                    }
+                }
+            }
+
+            // Save the combined PDF to a byte array
+            var pdfBytes = stream.ToArray();
+
+            // Invoke JavaScript to initiate the download of the combined PDF
+            await js.InvokeVoidAsync("saveAsFile", "All_Applications.pdf", Convert.ToBase64String(pdfBytes));
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        applications = (await service.GetAllYoungApplications()).ToList();
+    }
+}

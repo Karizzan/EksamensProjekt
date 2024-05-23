@@ -23,9 +23,8 @@ namespace Core.Models
         public string AParentMail { get; set; }
         public int KræwNr { get; set; }
         public bool AVerified { get; set; } = false;
-        //public string Signature { get; set; }
-        //public byte[] SignatureImage { get; set; }
         public bool Declaration { get; set; }
+        public byte[] ImageData { get; set; } // Add this property
     }
 
 }

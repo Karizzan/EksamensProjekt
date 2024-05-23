@@ -20,44 +20,48 @@
 else
 {
     //YEAH
-    <EditForm Model="@application" OnValidSubmit="SubmitForm">
-        <DataAnnotationsValidator />
-        <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+<EditForm Model="@application" OnValidSubmit="SubmitForm">
+    <DataAnnotationsValidator />
+    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
 
 
-        <div class="form-group">
-            <label for="AParentName">Forældre navn</label>
-            <input type="text" class="form-control" @bind="application.AParentName" id="AParentName">
-        </div>
-        <div class="form-group">
-            <label for="APhoneNr">Telefonnr på forældre</label>
-            <input type="text" class="form-control" @bind="application.AParentPhoneNr" id="APhoneNr">
-        </div>
-        <div class="form-group">
-            <label for="AParentMail">Forældre email</label>
-            <input type="email" class="form-control" @bind="application.AParentMail" id="AParentMail">
-        </div>
-        <div class="form-group">
-            <label for="AName">Navn</label>
-            <input type="text" class="form-control" @bind="application.AName" id="AName">
-        </div>
-        <div class="form-group">
-            <label for="AMail">Email</label>
-            <input type="email" class="form-control" @bind="application.AMail" id="AMail">
-        </div>
-        <div class="form-group">
-            <label for="KræwNr">Kræw Nummer</label>
-            <input type="text" class="form-control" @bind="application.KræwNr" id="KræwNr">
-        </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" @bind="application.Declaration" id="Declaration">
-            <label class="form-check-label" for="Declaration">tilkendegivelse </label>
-            <p>Ved at trykke "Tilkendegivelse" bekræfter jeg, at mit barn må være frivillig.</p>
-        </div>
+    <div class="form-group">
+        <label for="AParentName">Forældre navn</label>
+        <input type="text" class="form-control" @bind="application.AParentName" id="AParentName" placeholder="f.eks. Gunnar eller Inge">
+    </div>
+    <div class="form-group">
+        <label for="APhoneNr">Telefonnr på forældre</label>
+        <input type="text" class="form-control" @bind="application.AParentPhoneNr" id="APhoneNr" placeholder="+4512345678">
+    </div>
+    <div class="form-group">
+        <label for="AParentMail">Forældre email</label>
+        <input type="email" class="form-control" @bind="application.AParentMail" id="AParentMail" placeholder="f.eks. ane@gmail.com">
+    </div>
+    <div class="form-group">
+        <label for="AName">Navn</label>
+        <input type="text" class="form-control" @bind="application.AName" id="AName" placeholder="f.eks. Alex eller Marie">
+    </div>
+    <div class="form-group">
+        <label for="AMail">Email</label>
+        <input type="email" class="form-control" @bind="application.AMail" id="AMail" placeholder="f.eks. Alex@gmail.com">
+    </div>
+    <div class="form-group">
+        <label for="KræwNr">Kræw Nummer</label>
+        <input type="text" class="form-control" @bind="application.KræwNr" id="KræwNr" placeholder="Find KræwNr. på kræwet.dk ved at loggeind">
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" @bind="application.Declaration" id="Declaration">
+        <label class="form-check-label" for="Declaration">tilkendegivelse </label>
+        <p>Ved at trykke "Tilkendegivelse" bekræfter jeg, at mit barn må være frivillig.</p>
+    </div>
 
+    <div class="form-group">
+        <label for="ImageUpload">Upload billede</label>
+        <InputFile OnChange="HandleSelectedImage" id="ImageUpload" />
+    </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </EditForm>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
 }
 
 
@@ -66,63 +70,38 @@ else
 @code
 {
 
-   /* <div style="border: 2px solid black; padding: 10px; display: inline-block;">
-        <p>Forældres underskrift her:</p>
-        <button type="button" class="btn btn-primary" @onclick="async () => await UndoSignature()">Undo</button>
-        <SignaturePad @ref="signaturePad" CanvasWidth="500" CanvasHeight="200" />
-    </div>*/
+    [Inject]
+    private IServiceClass mservice { get; set; }
+    private Core.Models.YoungApplication application = new Core.Models.YoungApplication();
+    private bool isSubmitted = false;
 
 
-
-
-        [Inject]
-            private IServiceClass mservice { get; set; }
-            private Core.Models.YoungApplication application = new Core.Models.YoungApplication();
-            private bool isSubmitted = false;
-            private SignaturePad signaturePad;
-
-            private void ClearSignature()
+    private async Task HandleSelectedImage(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            using (var stream = new MemoryStream())
             {
-                signaturePad.Clear();
+                await file.OpenReadStream().CopyToAsync(stream);
+                application.ImageData = stream.ToArray();
             }
-
-
-            /*private async Task SaveSignature()
-            {
-                try
-                {
-                    string signatureImage = await js.InvokeAsync<string>("getSignatureImage", signaturePad.ElementId);
-                    if (!string.IsNullOrEmpty(signatureImage))
-                    {
-                        application.SignatureImage = Convert.FromBase64String(signatureImage.Replace("data:image/png;base64,", ""));
-                    }
-                    else
-                    {
-                        Console.WriteLine("SignatureImage is null or empty");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Exception in SaveSignature: {ex.Message}");
-                }
-            }
-
-
-            private async Task UndoSignature()
-            {
-                await signaturePad.Undo();
-            }
-            */
-            private async Task SubmitForm()
-            {
-
-                //We send it to the database
-                await mservice.AddYoungApplication(application);
-                isSubmitted = true;
-                Console.WriteLine("Form submitted successfully.");
+        }
+    }
 
 
 
-            }
+
+    private async Task SubmitForm()
+    {
+
+        //We send it to the database
+        await mservice.AddYoungApplication(application);
+        isSubmitted = true;
+        Console.WriteLine("Form submitted successfully.");
+
+
+
+    }
 
 }
