@@ -121,7 +121,7 @@
 
 		</table>
 	</div>
-	<h1>Week Number: @SelectedEvent?.WeekNumber</h1>
+	<h1>Uge @SelectedEvent?.WeekNumber | @SelectedEvent?.Location </h1>
 
 
 	@foreach (var workday in events)
@@ -135,8 +135,8 @@
 			}
 
 			<h2>@workday.Workdays | Børn: @totalChildren</h2>
-
-			<table class="table-table">
+			<div class="scrollable-div">
+			<table class="styled-table">
 				<thead>
 					<tr>
 						<th>Prioritet1</th>
@@ -176,6 +176,7 @@
 					</tbody>
 				}
 			</table>
+			</div>
 		}
 
 	}
@@ -315,8 +316,13 @@
 
 	.scrollable-div {
 		overflow: auto;
-		max-height: 200px;
+		max-height: 26vh;
 	}
+
+    .modal-dialog {
+        overflow: auto;
+        max-height: 95vh; /* Adjust this value as needed */
+    }
 </style>
 @code {
 	private List<int> weekNumbers = new();
