@@ -22,6 +22,8 @@ namespace Core.Models
 		public List<Application> Applications { get; set; } = new();
 		public string FacebookGroup { get; set; } = "";
 
+        public string FacebookGroup { get; set; }
+
 
 	}
 }

@@ -35,8 +35,14 @@ namespace ServerAPI.Repositories
 
         public void AddAdmin(Admin admin) 
         {
+            var max = 0;
+            if (collection.Count(Builders<Admin>.Filter.Empty) > 0)
+            {
+                max = collection.Find(Builders<Admin>.Filter.Empty).SortByDescending(r => r.AdminID).Limit(1).ToList()[0].AdminID;
+            }
+            admin.AdminID = max + 1;
 
-			collection.InsertOne(admin);
+            collection.InsertOne(admin);
 		}
 
 		public List<Admin> GetAllAdmins()
