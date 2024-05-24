@@ -1,6 +1,8 @@
 ﻿@using Core.Models
 @page "/event"
 @using Services
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
 @inject NavigationManager navManager
 
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
@@ -88,8 +90,7 @@
 				events.Add(Event);
 				Event.EventID = generateID();
 				Event.Workdays = workday;
-				mService.AddEvent(Event);
-			}
+				mService.AddEvent(Event);			}
 		}
 	}
 
