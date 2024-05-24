@@ -23,7 +23,11 @@ namespace EksamensProjekt.Services
         Task UpdateApplication(Application application);    
         Task DeleteApplicationByID(int id);
 
-        Task AddYoungApplication(YoungApplication application);
+        Task<YoungApplication[]> GetAllYoungApplications();
+        Task AddYoungApplication(YoungApplication youngApplication);
+        Task UpdateYoungApplication(YoungApplication youngApplication);
+        Task DeleteYoungApplicationByID(int id);
+
 
     }
 }

@@ -57,7 +57,7 @@ namespace ServerAPI
 		ChildAge = 4,
 		BeenHereBefore = true,
 		Comment = "Vild med prinsesser",
-		Interests = "Eventyrbøger",
+		Interests = "Eventyrbï¿½ger",
 		TshirtSize = "Small"
 	},
 	new Child()
@@ -114,29 +114,29 @@ namespace ServerAPI
 		private static List<Parent> parents = new List<Parent>()
 		{
             //Vi (Markus og Hudayfa) har fjernet ParentId
-        new Parent(){ParentName = "Lars", ParentMail = "Lars@gmail.com", KræwNumber = 123, Children = new List<Child>{children[0],children[1]} },
-		new Parent(){ParentName = "Mette", ParentMail = "Mette@gmail.com", KræwNumber = 145, Children = new List<Child>{children[2]} },
-		new Parent(){ParentName = "Hans", ParentMail = "Hans@gmail.com", KræwNumber = 345, Children = new List<Child>{children[3],children[4]} },
-		new Parent(){ParentName = "Dorte", ParentMail = "Dorte@gmail.com", KræwNumber = 112, Children = new List<Child>{children[5],children[6]} },
-		new Parent(){ParentName = "Hanne", ParentMail = "Hanne@gmail.com", KræwNumber = 993, Children = new List<Child>{children[7],children[8]} },
-		new Parent(){ParentName = "Jørgen", ParentMail = "Jørgen@gmail.com", KræwNumber = 333, Children = new List<Child>{children[9]} }
+        new Parent(){ParentName = "Lars", ParentMail = "Lars@gmail.com", Krï¿½wNumber = 123, Children = new List<Child>{children[0],children[1]} },
+		new Parent(){ParentName = "Mette", ParentMail = "Mette@gmail.com", Krï¿½wNumber = 145, Children = new List<Child>{children[2]} },
+		new Parent(){ParentName = "Hans", ParentMail = "Hans@gmail.com", Krï¿½wNumber = 345, Children = new List<Child>{children[3],children[4]} },
+		new Parent(){ParentName = "Dorte", ParentMail = "Dorte@gmail.com", Krï¿½wNumber = 112, Children = new List<Child>{children[5],children[6]} },
+		new Parent(){ParentName = "Hanne", ParentMail = "Hanne@gmail.com", Krï¿½wNumber = 993, Children = new List<Child>{children[7],children[8]} },
+		new Parent(){ParentName = "Jï¿½rgen", ParentMail = "Jï¿½rgen@gmail.com", Krï¿½wNumber = 333, Children = new List<Child>{children[9]} }
 
 		};
 		
 		private static List<Event> Events = new List<Event>()
 		{
-			new Event(){EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 27, Workdays = "Onsdag - Søndag (Hel Uge)", Applications = new()},
+			new Event(){EventID = 1, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 27, Workdays = "Onsdag - Sï¿½ndag (Hel Uge)", Applications = new()},
 			new Event(){EventID = 2, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 27, Workdays = "Onsdag - Fredag (Halv Uge)", Applications = new()},
-			new Event(){EventID = 3, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 27, Workdays = "Lørdag - Søndag (Weekend)", Applications = new()},
-			new Event(){EventID = 4, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 28, Workdays = "Onsdag - Søndag (Hel Uge)", Applications = new()},
+			new Event(){EventID = 3, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 27, Workdays = "Lï¿½rdag - Sï¿½ndag (Weekend)", Applications = new()},
+			new Event(){EventID = 4, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 28, Workdays = "Onsdag - Sï¿½ndag (Hel Uge)", Applications = new()},
 			new Event(){EventID = 5, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 28, Workdays = "Onsdag - Fredag (Halv Uge)", Applications = new()},
-			new Event(){EventID = 6, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 28, Workdays = "Lørdag - Søndag (Weekend)", Applications = new()},
-			new Event(){EventID = 7, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 30, Workdays = "Onsdag - Søndag (Hel Uge)", Applications = new()},
+			new Event(){EventID = 6, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Balderup", WeekNumber = 28, Workdays = "Lï¿½rdag - Sï¿½ndag (Weekend)", Applications = new()},
+			new Event(){EventID = 7, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 30, Workdays = "Onsdag - Sï¿½ndag (Hel Uge)", Applications = new()},
 			new Event(){EventID = 8, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 30, Workdays = "Onsdag - Fredag (Halv Uge)", Applications = new()},
-			new Event(){EventID = 9, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 30, Workdays = "Lørdag - Søndag (Weekend)", Applications = new()},
-			new Event(){EventID = 10, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 31, Workdays = "Onsdag - Søndag (Hel Uge)", Applications = new()},
+			new Event(){EventID = 9, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 30, Workdays = "Lï¿½rdag - Sï¿½ndag (Weekend)", Applications = new()},
+			new Event(){EventID = 10, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 31, Workdays = "Onsdag - Sï¿½ndag (Hel Uge)", Applications = new()},
 			new Event(){EventID = 11, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 31, Workdays = "Onsdag - Fredag (Halv Uge)", Applications = new()},
-			new Event(){EventID = 12, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 31, Workdays = "Lørdag - Søndag (Weekend)", Applications = new()},
+			new Event(){EventID = 12, StartDate = DateTime.Now, EndDate = DateTime.Now, Location = "Aarhus", WeekNumber = 31, Workdays = "Lï¿½rdag - Sï¿½ndag (Weekend)", Applications = new()},
 		
 		};
 		
@@ -206,7 +206,7 @@ namespace ServerAPI
 			builder.Services.AddSingleton<IApplicationRepository, ApplicationRepository>();
 			builder.Services.AddSingleton<IParentChildRepository, ParentChildRepository>();
 			builder.Services.AddSingleton<IEventRepository, EventRepository>();
-
+		
 			
 
             builder.Services.AddCors(options =>
