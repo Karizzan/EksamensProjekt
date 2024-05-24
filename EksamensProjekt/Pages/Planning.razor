@@ -170,6 +170,9 @@
 									Kopier mailadresse
 								</button>
 							</td>
+							<td>
+								<button @onclick="()=>SaveGeneratedMailToClipboard()">Kopier generet mail</button>
+							</td>
 
 						</tr>
 
@@ -371,6 +374,8 @@
 
 	private string Emails;
 
+	private string GeneratedMail;
+
 	//The event that is selected
 	private Event? SelectedEvent = new Event();
 
@@ -464,6 +469,23 @@
 		weekNumbers = new();
 	}
 
+	public async Task SaveGeneratedMailToClipboard()
+	{
+		if (SelectedApplication.Parent.Children.Count == 2)
+		{
+			GeneratedMail = "Kære " + SelectedApplication.Parent.ParentName + "\n\n" +
+			"Dette er mailen som bekræfter at" + SelectedApplication.Parent.Children[0].ChildName + " og " + SelectedApplication.Parent.Children[1].ChildName + " er tilmeldt perioden " + SelectedEvent.Workdays + " i uge " + SelectedEvent.WeekNumber + ".\n\n" +
+			"Jeg håber I får en kanon-god oplevelse på Cirkus Summarum. Håber I har nogle børn der glæder sig rigtigt meget\n\n" +
+			"Der er lavet en facebookgruppe, så I kan starte snakken og se hvem jeres børn skal bruge tiden sammen med, mens I er ude på cirkuspladsen og være seje!\n\n" +
+			SelectedEvent.FacebookGroup + "\n\n" +
+			"(Husk at melde jer ind i gruppen, da videre kommunikationen kommer derigennem)\n\n" +
+			"Vi glæder os til at se jer på Cirkus Summarum\n\n" +
+			"Med venlig hilsen\n" +
+			"Team Cirkus Summarum";
+		}
+		
+
+	}
 
 	public async Task SaveToEmailClipboard(string email)
 	{
