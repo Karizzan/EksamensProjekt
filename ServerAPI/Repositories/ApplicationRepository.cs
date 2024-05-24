@@ -25,6 +25,12 @@ namespace ServerAPI.Repositories
 
         public void AddApplication(Application application)
         {
+            var max = 0;
+            if (AppCollection.Count(Builders<Application>.Filter.Empty) > 0)
+            {
+                max = AppCollection.Find(Builders<Application>.Filter.Empty).SortByDescending(r => r.ApplicationID).Limit(1).ToList()[0].ApplicationID;
+            }
+            application.ApplicationID= max + 1;
             AppCollection.InsertOne(application);
         }
 
@@ -56,6 +62,12 @@ namespace ServerAPI.Repositories
 
         public void AddYoungApplication(YoungApplication application)
         {
+            var max = 0;
+            if (YAppCollection.Count(Builders<YoungApplication>.Filter.Empty) > 0)
+            {
+                max = YAppCollection.Find(Builders<YoungApplication>.Filter.Empty).SortByDescending(r => r.YoungApplicationID).Limit(1).ToList()[0].YoungApplicationID;
+            }
+            application.YoungApplicationID = max + 1;
             YAppCollection.InsertOne(application);
         }
 

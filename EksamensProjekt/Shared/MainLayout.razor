@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="page">
     <div class="sidebar">
@@ -7,7 +8,16 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="adminLoginPage">AdminLogin</a>
+            @if (login == true)
+            {
+                <p>@name (@adminLevel)
+                <a href="adminLoginPage">Log ud</a>
+                </p>
+
+            } else
+            {
+                <a href="adminLoginPage">Admin Login</a>
+            }
         </div>
 
         <article class="content px-4">
@@ -16,3 +26,20 @@
     </main>
 </div>
 
+@code {
+    private string adminLevel;
+    private string name;
+    private bool login;
+    protected override async Task OnInitializedAsync()
+    {
+        login = await localStorage.GetItemAsync<bool>("isLoggedIn");
+        adminLevel = await localStorage.GetItemAsStringAsync("adminLevel");
+        name = await localStorage.GetItemAsStringAsync("user");
+
+
+    }
+
+
+
+
+}
