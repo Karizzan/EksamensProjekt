@@ -91,10 +91,13 @@ namespace EksamensProjekt.Services
 
 			return true;
 		}
-	}
+        public async Task AddYoungApplication(YoungApplication application)
+        {
+            await http.PostAsJsonAsync($"{serverUrl}/application/addYoung", application);
+        }
 
 
-
+    }
 }
 
 

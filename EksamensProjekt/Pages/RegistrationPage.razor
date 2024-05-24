@@ -5,28 +5,34 @@
 @using Services
 
 
+@if (isSubmitted)
+{
+    <h1>Ansøgning er sendt!</h1>
+}
+else
+{
 <h1 class="mb-3 mt-3">Ansøg om børnepasning</h1>
 
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
-	<DataAnnotationsValidator />
-	<ValidationSummary />
+    <DataAnnotationsValidator />
 
-	<div class="col-md-12 mb-3">
-		<label for="ParentName">Navn på forældre</label>
-		<InputText id="ParentName" @bind-Value="parent.ParentName" class="form-control" placeholder="f.eks. Gunnar eller Inge" />
-		<ValidationMessage For="@(() => parent.ParentName)" />
-	</div>
 
-	<div class="col-md-12 mb-3">
-		<label for="ParentMail">Forældre Email</label>
-		<InputText id="ParentMail" @bind-Value="parent.ParentMail" class="form-control" placeholder="f.eks. gunnargunnarsen@gmail.com" />
-	</div>
+    <div class="col-md-12 mb-3">
+        <label for="ParentName">Navn på forældre</label>
+        <InputText id="ParentName" @bind-Value="parent.ParentName" class="form-control" placeholder="f.eks. Gunnar eller Inge" />
+        <ValidationMessage For="@(() => parent.ParentName)" />
+    </div>
 
-	<div class="col-md-12 mb-3">
-		<label for="KræwNr">KræwNr.</label>
-		<InputNumber id="KræwNr" @bind-Value="parent.KræwNumber" class="form-control" placeholder="Find KræwNr. på kræwet.dk ved at loggeind" />
+    <div class="col-md-12 mb-3">
+        <label for="ParentMail">Forældre Email</label>
+        <InputText id="ParentMail" @bind-Value="parent.ParentMail" class="form-control" placeholder="f.eks. gunnargunnarsen@gmail.com" />
+    </div>
 
-	</div>
+    <div class="col-md-12 mb-3">
+        <label for="KræwNr">KræwNr.</label>
+        <InputNumber id="KræwNr" @bind-Value="parent.KræwNumber" class="form-control" placeholder="Find KræwNr. på kræwet.dk ved at loggeind" />
+
+    </div>
 
 	<div class="col-md-12 mb-3">
 		<label for="Lokale">1. Prioritet</label>
@@ -36,10 +42,10 @@
 			{
 				<option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
 
-			}
-		</InputSelect>
+            }
+        </InputSelect>
 
-	</div>
+    </div>
 
 
 	<div class="col-md-12 mb-3">
@@ -50,131 +56,132 @@
 			{
 				<option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
 
-			}
-		</InputSelect>
+            }
+        </InputSelect>
 
-	</div>
+    </div>
 
-	<div class="col-md-6">
-		<InputCheckbox id="Titel" @bind-Value="application.Verified" class="form-checkbox" />
-		<label for="Verify">Jeg giver hermed tilladelse til at mit/mine børn må deltage i børneklubben</label>
-	</div>
+    <div class="col-md-6">
+        <InputCheckbox id="Titel" @bind-Value="application.Verified" class="form-checkbox" />
+        <label for="Verify">Jeg giver hermed tilladelse til at mit/mine børn må deltage i børneklubben</label>
+    </div>
 
-	<br />
-	<br />
+    <br />
+    <br />
 
-	<h1>Barn 1</h1>
-	<div class="col-md-12 mb-3">
-		<label for="ChildName">Navn på barn</label>
-		<InputText id="Titel" @bind-Value="child.ChildName" class="form-control" placeholder="f.eks. Alberte eller Robert" />
-	</div>
+    <h1>Barn 1</h1>
+    <div class="col-md-12 mb-3">
+        <label for="ChildName">Navn på barn</label>
+        <InputText id="Titel" @bind-Value="child.ChildName" class="form-control" placeholder="f.eks. Alberte eller Robert" />
+    </div>
 
-	<div class="col-md-12 mb-3">
-		<label for="ChildAge">Alder på barn</label>
-		<InputNumber id="Titel" @bind-Value="child.ChildAge" class="form-control" placeholder="f.eks. 12" />
-	</div>
+    <div class="col-md-12 mb-3">
+        <label for="ChildAge">Alder på barn</label>
+        <InputNumber id="Titel" @bind-Value="child.ChildAge" class="form-control" placeholder="f.eks. 12" />
+    </div>
 
-	<div class="col-md-12 mb-3">
-		<label for="TshirtSize">T-Shirt størrelse</label>
-		<InputText id="Titel" @bind-Value="child.TshirtSize" class="form-control" placeholder="f.eks. 146 eller S" />
-	</div>
+    <div class="col-md-12 mb-3">
+        <label for="TshirtSize">T-Shirt størrelse</label>
+        <InputText id="Titel" @bind-Value="child.TshirtSize" class="form-control" placeholder="f.eks. 146 eller S" />
+    </div>
 
-	<div class="col-md-12 mb-3">
-		<label for="Comment">Bemærkninger</label>
-		<InputText id="Titel" @bind-Value="child.Comment" class="form-control" placeholder="f.eks. diagnoser, psykiske/fysiske udfordringer osv..." />
-	</div>
+    <div class="col-md-12 mb-3">
+        <label for="Comment">Bemærkninger</label>
+        <InputText id="Titel" @bind-Value="child.Comment" class="form-control" placeholder="f.eks. diagnoser, psykiske/fysiske udfordringer osv..." />
+    </div>
 
-	<div class="col-md-12 mb-3">
-		<label for="Allergens/Diet supervision">Allegener/Kosttilsyn</label>
-		<InputText id="Titel" @bind-Value="child.Allergies" class="form-control" placeholder="f.eks. gluten, laktoseintolerant, høfeber osv...." />
-	</div>
+    <div class="col-md-12 mb-3">
+        <label for="Allergens/Diet supervision">Allegener/Kosttilsyn</label>
+        <InputText id="Titel" @bind-Value="child.Allergies" class="form-control" placeholder="f.eks. gluten, laktoseintolerant, høfeber osv...." />
+    </div>
 
-	<div class="col-md-12 mb-3">
-		<label for="Interests">Interreser</label>
-		<InputText id="Titel" @bind-Value="child.Interests" class="form-control" placeholder ="f.eks. dyr, fodbold, musik osv..."/>
-	</div>
+    <div class="col-md-12 mb-3">
+        <label for="Interests">Interreser</label>
+        <InputText id="Titel" @bind-Value="child.Interests" class="form-control" placeholder="f.eks. dyr, fodbold, musik osv..." />
+    </div>
 
-	<div>
-		<label for="BeenHereBefore">Været her før?</label>
-		<InputCheckbox id="Titel" @bind-Value="child.BeenHereBefore" class="form-checkbox" />
-	</div>
-	<br />
-	<br />
-	
-	<div>
-		<label for="Extrachild">Ekstra barn</label>
-		<InputCheckbox id="Titel" @bind-Value="extraChild" class="form-checkbox" />
-	</div>
-	<br />
-	<br />
+    <div>
+        <label for="BeenHereBefore">Været her før?</label>
+        <InputCheckbox id="Titel" @bind-Value="child.BeenHereBefore" class="form-checkbox" />
+    </div>
+    <br />
+    <br />
 
-	@if(extraChild == true)
-	{
-		<h1>Barn 2</h1>
-		<div class="col-md-12 mb-3">
-			<label for="ChildName">Navn på barn</label>
-			<InputText id="Titel" @bind-Value="child2.ChildName" class="form-control" placeholder="f.eks. Alberte eller Robert" />
-		</div>
+    <div>
+        <label for="Extrachild">Ekstra barn</label>
+        <InputCheckbox id="Titel" @bind-Value="extraChild" class="form-checkbox" />
+    </div>
+    <br />
+    <br />
 
-		<div class="col-md-12 mb-3">
-			<label for="ChildAge">Alder på barn</label>
-			<InputNumber id="Titel" @bind-Value="child2.ChildAge" class="form-control" placeholder="f.eks. 12" />
-		</div>
+    @if (extraChild == true)
+    {
+        <h1>Barn 2</h1>
+        <div class="col-md-12 mb-3">
+            <label for="ChildName">Navn på barn</label>
+            <InputText id="Titel" @bind-Value="child2.ChildName" class="form-control" placeholder="f.eks. Alberte eller Robert" />
+        </div>
 
-		<div class="col-md-12 mb-3">
-			<label for="TshirtSize">T-Shirt størrelse</label>
-			<InputText id="Titel" @bind-Value="child2.TshirtSize" class="form-control" placeholder="f.eks. 146 eller S" />
-		</div>
+        <div class="col-md-12 mb-3">
+            <label for="ChildAge">Alder på barn</label>
+            <InputNumber id="Titel" @bind-Value="child2.ChildAge" class="form-control" placeholder="f.eks. 12" />
+        </div>
 
-		<div class="col-md-12 mb-3">
-			<label for="Comment">Bemærkninger</label>
-			<InputText id="Titel" @bind-Value="child2.Comment" class="form-control" placeholder="f.eks. diagnoser, psykiske/fysiske udfordringer osv..." />
-		</div>
+        <div class="col-md-12 mb-3">
+            <label for="TshirtSize">T-Shirt størrelse</label>
+            <InputText id="Titel" @bind-Value="child2.TshirtSize" class="form-control" placeholder="f.eks. 146 eller S" />
+        </div>
 
-		<div class="col-md-12 mb-3">
-			<label for="Allergens/Diet supervision">Allegener/Kosttilsyn</label>
-			<InputText id="Titel" @bind-Value="child2.Allergies" class="form-control" placeholder="f.eks. gluten, laktoseintolerant, høfeber osv...." />
-		</div>
+        <div class="col-md-12 mb-3">
+            <label for="Comment">Bemærkninger</label>
+            <InputText id="Titel" @bind-Value="child2.Comment" class="form-control" placeholder="f.eks. diagnoser, psykiske/fysiske udfordringer osv..." />
+        </div>
 
-		<div class="col-md-12 mb-3">
-			<label for="Interests">Interreser</label>
-			<InputText id="Titel" @bind-Value="child2.Interests" class="form-control" placeholder="f.eks. dyr, fodbold, musik osv..." />
-		</div>
+        <div class="col-md-12 mb-3">
+            <label for="Allergens/Diet supervision">Allegener/Kosttilsyn</label>
+            <InputText id="Titel" @bind-Value="child2.Allergies" class="form-control" placeholder="f.eks. gluten, laktoseintolerant, høfeber osv...." />
+        </div>
 
-		<div>
-			<label for="BeenHereBefore">Været her før?</label>
-			<InputCheckbox id="Titel" @bind-Value="child2.BeenHereBefore" class="form-checkbox" />
-		</div>
-	}
-	<div class="col-12 mb-3">
-		<button @type="submit" class="btn btn-primary">Send</button>
-	</div>
+        <div class="col-md-12 mb-3">
+            <label for="Interests">Interreser</label>
+            <InputText id="Titel" @bind-Value="child2.Interests" class="form-control" placeholder="f.eks. dyr, fodbold, musik osv..." />
+        </div>
 
-	<h1>@errorMessage</h1>
+        <div>
+            <label for="BeenHereBefore">Været her før?</label>
+            <InputCheckbox id="Titel" @bind-Value="child2.BeenHereBefore" class="form-checkbox" />
+        </div>
+    }
+    <div class="col-12 mb-3">
+        <button @type="submit" class="btn btn-primary">Send</button>
+    </div>
+
+    <h1>@errorMessage</h1>
 </EditForm>
-
+}
 
 
 
 @code {
-	private EditContext? aEditContext;
+    private EditContext? aEditContext;
 
-	private Application application = new();
-	private Parent parent = new();
-	private Child child = new();
-	private Child child2 = new();
-	private bool extraChild = false;
-	private int numberOfChildren = 1;
-	private int prio1; //Importanta DO NOT DELETE
-	private int prio2; //Importanta DO NOT DELETE
+    private bool isSubmitted = false;
+    Application application = new();
+    Parent parent = new();
+    Child child = new();
+    Child child2 = new();
+    bool extraChild = false;
+    int numberOfChildren = 1;
+    int prio1; //Importanta DO NOT DELETE
+    int prio2; //Importanta DO NOT DELETE
 
-	string errorMessage = ""; //To check ´the status of the program
+    string errorMessage = ""; //To check ´the status of the program
 
-	[Inject]
-	private IServiceClass? mService { get; set; }
+    [Inject]
+    private IServiceClass? mService { get; set; }
 
-	private List<Event>? allEvents = new();
-	private List<Application>? allApplications = new();
+    private List<Event>? allEvents = new();
+    private List<Application>? allApplications = new();
 
 
 
@@ -201,15 +208,7 @@
 	{
 		if (aEditContext.Validate())
 		{
-			/*
-			fpath = annonce.Billede;
-			annonce.Billede = BilledeConverter(fpath);
-			*/
-			//Lokationen bliver valgt her
-
-			//await Http.PostAsJsonAsync<Annoncer>($"{serverUrl}/annoncer/add", annonce);
-
-			//BrugerSamlingAfAnnoncer = await Http.GetFromJsonAsync<List<Annoncer>>($"{serverUrl}/annoncer/getbyemail/{brugerEmail}");
+	
 			application.ApplicationID = GenerateApplicationId(allApplications);
 			application.Priority1 = getEventById(prio1);
 			application.Priority2 = getEventById(prio2);
@@ -231,7 +230,6 @@
 			Console.WriteLine(child2.ChildName);
 
 			//We add the application to the list
-			//allApplications.Add(application);
 			foreach (var application in allApplications)
 			{
 				Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
@@ -241,53 +239,53 @@
 			//We add the application to the database
 			await mService.AddApplication(application);
 
-			Console.Write("LISTEN EFTER AWAIT FUNKTIONEN");
-			foreach (var application in allApplications)
-			{
-				Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
-			}
-			//We show a message to the user
-			errorMessage = "Din ansøgning er blevet sendt";
+            Console.Write("LISTEN EFTER AWAIT FUNKTIONEN");
+            foreach (var application in allApplications)
+            {
+                Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
+            }
+            isSubmitted = true;
 
 
-			//We reset the form
-			child = new();
-			child2 = new(); 
-			parent = new();
-			application = new();
+            //We reset the form
+            child = new();
+            child2 = new();
+            parent = new();
+            application = new();
 
-		}
-		else
-		{
-			errorMessage = "Error";
-		}
+        }
+        else
+        {
+            errorMessage = "Error";
+        }
+    }
+
+    private int GenerateApplicationId(List<Application> listOfApplications)
+    {
+        listOfApplications.Sort((x, y) => x.ApplicationID.CompareTo(y.ApplicationID));
+        int highestNumber = 0;
+        foreach (var app in listOfApplications)
+        {
+            Console.WriteLine(app.ApplicationID);
+            highestNumber = app.ApplicationID;
+            highestNumber++;
+
+        }
+        return highestNumber;
+
+
 	}
 
-	private int GenerateApplicationId (List<Application> listOfApplications)
-	{
-		listOfApplications.Sort((x, y) => x.ApplicationID.CompareTo(y.ApplicationID));
-		int highestNumber= 0;
-		foreach (var app in listOfApplications)
-		{
-			Console.WriteLine(app.ApplicationID);
-			highestNumber = app.ApplicationID;
-			highestNumber++;
+    protected override async Task OnInitializedAsync()
+    {
+        aEditContext = new EditContext(application);
 
-		}
-		return highestNumber;
+        allEvents = (await mService.GetAllEvents())?.ToList();
 
+        //allApplications = (await mService.GetAllApplications())?.ToList();
 
-	}
+    }
 
-	protected override async Task OnInitializedAsync()
-	{
-		aEditContext = new EditContext(application);
-
-		allEvents = (await mService.GetAllEvents())?.ToList();
-
-		allApplications = (await mService.GetAllApplications())?.ToList();
-
-	}
 
 
 	public void SetDefaults()
