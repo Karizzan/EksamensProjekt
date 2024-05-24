@@ -5,7 +5,7 @@
 
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
 	<DataAnnotationsValidator />
-	<ValidationSummary />
+	<Microsoft.AspNetCore.Components.Forms.ValidationSummary />
 
 
 
@@ -88,7 +88,8 @@
 				events.Add(Event);
 				Event.EventID = generateID();
 				Event.Workdays = workday;
-				mService.AddEvent(Event);			}
+				mService.AddEvent(Event);
+			}
 		}
 	}
 
