@@ -66,8 +66,8 @@ namespace ServerAPI.Repositories
             {
                 max = YAppCollection.Find(Builders<YoungApplication>.Filter.Empty).SortByDescending(r => r.YoungApplicationID).Limit(1).ToList()[0].YoungApplicationID;
             }
-            application.YoungApplicationID = max + 1;
-            YAppCollection.InsertOne(application);
+            youngApplication.YoungApplicationID = max + 1;
+            YAppCollection.InsertOne(youngApplication);
         }
 
       public   void RemoveYoungApplicationByID(int youngApplicationID)
