@@ -32,9 +32,9 @@ namespace ServerAPI.Controllers
 
 		[HttpDelete]
 		[Route("delete/{id:int}")]
-		public void RemoveEventByID(int eventID)
+		public void RemoveEventByWeekNumber(int id)
 		{
-			mRepo.RemoveEventByID(eventID);
+			mRepo.RemoveEventByWeekNumber(id);
 		}
 
 		[HttpPut]

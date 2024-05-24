@@ -75,6 +75,13 @@ namespace EksamensProjekt.Services
 			await http.PutAsJsonAsync($"{serverUrl}/event/update", Event);
 		}
 
+		public async Task RemoveEventByWeekNumber(int weekNumber)
+		{
+			await http.DeleteAsync($"{serverUrl}/event/delete/{weekNumber}");
+			Console.WriteLine(weekNumber);
+			Console.WriteLine("heeey");
+		}
+
         public bool CheckLogin(string username, string password)
         {
 			//await http.GetFromJsonAsync<Admin>($"{serverUrl}/admin/checklogin");

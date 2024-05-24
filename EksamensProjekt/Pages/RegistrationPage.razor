@@ -159,14 +159,14 @@
 @code {
 	private EditContext? aEditContext;
 
-	Application application = new();
-	Parent parent = new();
-	Child child = new();
-	Child child2 = new();
-	bool extraChild = false;
-	int numberOfChildren = 1;
-	int prio1; //Importanta DO NOT DELETE
-	int prio2; //Importanta DO NOT DELETE
+	private Application application = new();
+	private Parent parent = new();
+	private Child child = new();
+	private Child child2 = new();
+	private bool extraChild = false;
+	private int numberOfChildren = 1;
+	private int prio1; //Importanta DO NOT DELETE
+	private int prio2; //Importanta DO NOT DELETE
 
 	string errorMessage = ""; //To check ´the status of the program
 
@@ -180,6 +180,7 @@
 
 	private Event getEventById(int id)
 	{
+		
 		Event foundEvent = new();
 
 		foreach (var Event in allEvents)

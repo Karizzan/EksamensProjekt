@@ -1,0 +1,140 @@
+﻿@using Core.Models
+@page "/event"
+@using Services
+@inject NavigationManager navManager
+
+<EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+
+
+	<div class="col-md-12 mb-3">
+		<label for="StartDate"> Start Dato </label>
+		<InputDate id="StartDate" @bind-Value="Event.StartDate" class="form-control" placeholder="f.eks. Jens Jensen" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="EndDate">Slut Dato</label>
+		<InputDate id="EndDate" @bind-Value="Event.EndDate" class="form-control" placeholder="f.eks. jens04" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="WeekNumber">Uge nummer</label>
+		<InputNumber id="WeekNumber" @bind-Value="Event.WeekNumber" class="form-control" placeholder="f.eks. jens04" />
+	</div>
+
+	<div class="col-md-12 mb-3">
+		<label for="Location"> Lokation </label>
+		<InputText id="Location" @bind-Value="Event.Location" class="form-control" placeholder="f.eks. Jens Jensen" />
+	</div>
+
+
+
+	<div class="col-12 mb-3">
+		<button @type="submit" class="btn btn-primary">Send</button>
+	</div>
+
+
+
+</EditForm>
+
+<table>
+	<thead>
+		<tr>
+			<th>Start Dato</th>
+			<th>Slut Dato</th>
+			<th>Uge</th>
+			<th>Lokation</th>
+		</tr>
+	</thead>
+	@if (events != null)
+	{
+		List<int> WeekNumbers= new();
+		foreach (var item in events)
+		{
+			if (IsAlreadyDisplayed(item.WeekNumber, WeekNumbers) != true)
+			{
+				<tr>
+					<th>@item.StartDate.ToString("dd/MM/yyyy")</th>
+					<th>@item.EndDate.Date.ToString("dd/MM/yyyy")</th>
+					<th>@item.WeekNumber</th>
+					<th>@item.Location</th>
+					<button @onclick="()=>RemoveEvent(item.WeekNumber)"> Fjern event </button>
+				</tr>
+			}
+		}
+		WeekNumbers = new();
+	}
+	</table>
+
+@code {
+	private EditContext? aEditContext;
+	private Event Event = new();
+	private List<Event>? events;
+	private string[] WorkDays = { "Onsdag - Søndag (Hel Uge)", "Onsdag - Fredag (Halv Uge)", "Lørdag - Søndag (Weekend)" };
+
+	[Inject]
+	private IServiceClass? mService { get; set; }
+
+	public async Task handleSubmit()
+	{
+		if (aEditContext.Validate())
+		{
+			Event.Applications = new();
+
+			foreach(var workday in WorkDays)
+			{
+				events.Add(Event);
+				Event.EventID = generateID();
+				Event.Workdays = workday;
+				mService.AddEvent(Event);			}
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		aEditContext = new EditContext(Event);
+		events = (await mService.GetAllEvents()).ToList();
+
+	}
+
+	public int generateID()
+	{
+		int id;
+		List<int> ids = new();
+		foreach (var item in events)
+		{
+			ids.Add(item.EventID);
+		}
+		id = ids.Max() + 1;	
+		return id;
+
+	}
+	public bool IsAlreadyDisplayed(int weekNumber, List<int> weekNumbers)
+	{
+		foreach (var item in weekNumbers)
+		{
+			if (item == weekNumber)
+			{
+				return true;
+			}
+		}
+		weekNumbers.Add(weekNumber);
+		return false;
+
+	}
+
+	public void RemoveEvent(int weekNumber)
+	{
+		List<Event> eventsToRemove = new();
+		mService.RemoveEventByWeekNumber(weekNumber);
+		eventsToRemove = events.FindAll(x=> x.WeekNumber == weekNumber);
+
+		foreach (var item in eventsToRemove)
+		{
+			Console.WriteLine("uge" + item.WeekNumber);
+			events.Remove(item);
+		}
+	}
+}

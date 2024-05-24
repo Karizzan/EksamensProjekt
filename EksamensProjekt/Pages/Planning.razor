@@ -67,7 +67,8 @@
 				
 					<h2>@item1.Workdays</h2>
 				<button @onclick="()=>SaveToEmailClipboard(item1.Applications, item1.Workdays)">
-					@copyButtonStatus[item1.Workdays]
+					Få Emails fra periode
+					<!--@copyButtonStatus[item1.Workdays] -->
 				</button>
 				<table class="table-table">
 					<thead>
@@ -100,9 +101,6 @@
 									</tr>
 
 								</tbody>
-
-								
-							
 						}
 					
 				</table>
@@ -233,7 +231,7 @@
 		box-sizing: border-box;
 	}
 
-	.table-table{
+	.table-table {
 		display: grid;
 		gap: 10px;
 		padding: 10px;
@@ -262,6 +260,7 @@
 
 	[Inject]
 	private IServiceClass? mService { get; set; }
+
 	private ModalDialog? addDialog { get; set; }
 
 

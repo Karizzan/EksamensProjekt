@@ -18,6 +18,7 @@ namespace EksamensProjekt.Services
 
         Task AddEvent(Event Event);
         Task UpdateEvent(Event Event);
+        Task RemoveEventByWeekNumber(int weekNumber);
         bool CheckLogin(string username, string password);
         Task UpdateApplication(Application application);    
         Task DeleteApplicationByID(int id);

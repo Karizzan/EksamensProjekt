@@ -22,10 +22,11 @@ namespace ServerAPI.Repositories
 			collection.InsertOne(Event);
 		}
 
-		public void RemoveEventByID(int EventID)
+		public void RemoveEventByWeekNumber(int weekNumber)
 		{
-			var filter = Builders<Event>.Filter.Eq("EventID", EventID);
-			collection.DeleteOne(filter);
+			var filter = Builders<Event>.Filter.Eq("WeekNumber", weekNumber);
+			collection.DeleteMany(filter);
+			
 		}
 
 		public void UpDateEvent(Event Event)
