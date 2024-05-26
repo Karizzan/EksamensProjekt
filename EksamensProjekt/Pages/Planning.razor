@@ -140,6 +140,7 @@
 						<th>Prioritet1</th>
 						<th>Prioritet2</th>
 						<th>Antal Børn</th>
+						<th>Mail Sendt</th>
 						<th>
 							<button @onclick="() => AddToWeek(workday.Applications)" id="button-addtoweek">Tilføj til tidspunkt</button>
 						</th>
@@ -158,6 +159,7 @@
 							<td>Uge @item2.Priority1.WeekNumber</td>
 							<td>Uge @item2.Priority2.WeekNumber</td>
 							<td>@item2.Parent.Children.Count</td>
+							<td>@item2.MailSent</td>
 							<td>
 								<button @onclick="()=>OpenModal(item2)" class="btn btn-info" id="modelfront">Se Mere</button>
 							</td>
@@ -246,6 +248,7 @@
 	private string Emails;
 
 	private string GeneratedMail;
+
 
 	//The event that is selected
 	private Event? SelectedEvent = new Event();
@@ -372,6 +375,7 @@
 				string GeneratedMail = GenerateMailContent(parent, Event);
 				await JS.InvokeVoidAsync("copyToClipboard", GeneratedMail);
 				Console.WriteLine("Mail content copied to clipboard");
+				await UpdateMailSentStatus(SelectedApplication);
 			}
 			else
 			{
@@ -382,11 +386,13 @@
 		{
 			Console.WriteLine("SelectedApplication or SelectedEvent is null");
 		}
+		weekNumbers = new();
 	}
 
 
 	private string GenerateMailContent(Parent parent, Event Event)
 	{
+
 		var children = parent.Children;
 
 		if (children.Count >= 2)
@@ -431,11 +437,21 @@
 		if (!string.IsNullOrWhiteSpace(email))
 		{
 			await JS.InvokeVoidAsync("copyToClipboard", email);
+			await UpdateMailSentStatus(SelectedApplication);
 		}
 		weekNumbers = new();
 	}
 
 
+	public async Task UpdateMailSentStatus(Application application)
+	{
+		if (application != null)
+		{
+			application.MailSent = true;
+			await mService.UpdateApplication(application); // Assuming mService has a method to update the application in the database
+		}
+		weekNumbers = new();
+    }
 
 
 	public void SavePlanning(List<Event> EventList, List<Application> applications)

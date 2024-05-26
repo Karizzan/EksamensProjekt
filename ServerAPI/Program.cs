@@ -153,13 +153,13 @@ namespace ServerAPI
 		{
 
 
-		
-		
+
+
 			var a = new AdminRepository();
 			var b = new ApplicationRepository();
 			var c = new EventRepository();
 			var d = new ParentChildRepository();
-		
+
 			//Admin admin = new Admin();
 			//admin.AdminID = 1;
 			//admin.AdminName = "Admin1";
@@ -185,7 +185,7 @@ namespace ServerAPI
 					c.AddEvent(item);
 				}
 				*/
-				
+
 
 
 			//  var admin = a.GetAdminByUsername("Seb8530");
@@ -199,28 +199,29 @@ namespace ServerAPI
 
 			var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+			// Add services to the container.
 
-            builder.Services.AddControllers();
-            builder.Services.AddSingleton<IAdminRepository, AdminRepository>();
+			builder.Services.AddControllers();
+			builder.Services.AddSingleton<IAdminRepository, AdminRepository>();
 			builder.Services.AddSingleton<IApplicationRepository, ApplicationRepository>();
 			builder.Services.AddSingleton<IParentChildRepository, ParentChildRepository>();
 			builder.Services.AddSingleton<IEventRepository, EventRepository>();
-		
-			
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("policy",
-                                  policy =>
-                                  {
-                                      policy.AllowAnyOrigin();
-                                      policy.AllowAnyMethod();
-                                      policy.AllowAnyHeader();
-                                  });
-            });
 
-            var app = builder.Build();
+
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("policy",
+								  policy =>
+								  {
+
+									  policy.AllowAnyOrigin();
+									  policy.AllowAnyMethod();
+									  policy.AllowAnyHeader();
+								  });
+			});
+
+			var app = builder.Build();
 
 			app.UseAuthentication();
 
@@ -228,9 +229,9 @@ namespace ServerAPI
 
 			app.UseAuthorization();
 
-            app.UseCors("policy");
+			app.UseCors("policy");
 
-            app.MapControllers();
+			app.MapControllers();
 
 			app.Run();
 		}
