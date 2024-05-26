@@ -1,0 +1,170 @@
+﻿@page "/applicationsignature"
+
+@inject NavigationManager navManager
+@inject IJSRuntime js
+@inject IServiceClass service
+
+@using Core.Models
+@using iText.Kernel.Pdf
+@using iText.Layout
+@using iText.Layout.Element
+@using iText.IO.Image
+@using Services
+@using Core.Models
+
+@using MongoDB.Bson.Serialization.Attributes;
+@using MongoDB.Bson;
+
+
+<h1 class="mb-3 mt-3">Alle almindelig Registreringer</h1>
+
+@if (applications == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (applications.Count == 0)
+{
+    <p>No applications found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Forældre Navn</th>
+                <th>Email</th>
+                <th>Kræw Nummer</th>
+                <th>Børn</th>
+                <th>Underskrift Billede</th>
+                <th>Download som PDF</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var app in applications)
+            {
+                <tr>
+                    <td>@app.Parent.ParentName</td>
+                    <td>@app.Parent.ParentMail</td>
+                    <td>@app.Parent.KræwNumber</td>
+                    <td>
+                        @foreach (var child in app.Parent.Children)
+                        {
+                            <p>@child.ChildName, Alder: @child.ChildAge</p>
+                        }
+                    </td>
+                    <td>
+                        @if (app.ImageData != null)
+                        {
+                            <img src="data:image/png;base64,@Convert.ToBase64String(app.ImageData)" alt="Signature Image" style="max-width: 100px; max-height: 100px;" />
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="(e) => GeneratePdf(app)">Download PDF</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Button to download all entries as a single PDF -->
+    <button class="btn btn-primary mt-3" @onclick="DownloadAllAsPdf">Download alle som PDF</button>
+}
+
+@code {
+    private List<Application> applications;
+
+    private async Task GeneratePdf(Application selectedApplication)
+    {
+        using (var stream = new MemoryStream())
+        {
+            using (var writer = new PdfWriter(stream))
+            {
+                using (var pdf = new PdfDocument(writer))
+                {
+                    var document = new iText.Layout.Document(pdf);
+
+                    // Add application details to the PDF for the selected application
+                    document.Add(new iText.Layout.Element.Paragraph($"Forældre Navn: {selectedApplication.Parent.ParentName}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Email: {selectedApplication.Parent.ParentMail}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Kræw Nummer: {selectedApplication.Parent.KræwNumber}"));
+
+                    // Add children details
+                    foreach (var child in selectedApplication.Parent.Children)
+                    {
+                        document.Add(new iText.Layout.Element.Paragraph($"Barn Navn: {child.ChildName}, Alder: {child.ChildAge}, T-Shirt Størrelse: {child.TshirtSize}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Kommentar: {child.Comment}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Allergier: {child.Allergies}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Interesser: {child.Interests}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Været her før: {(child.BeenHereBefore ? "Ja" : "Nej")}"));
+                    }
+
+                    // Add signature image to the PDF
+                    if (selectedApplication.ImageData != null)
+                    {
+                        var image = new iText.Layout.Element.Image(ImageDataFactory.Create(selectedApplication.ImageData));
+                        document.Add(image);
+                    }
+                }
+            }
+
+            // Save the PDF to a byte array
+            var pdfBytes = stream.ToArray();
+
+            // Invoke JavaScript to initiate the download
+            await js.InvokeVoidAsync("saveAsFile", $"{selectedApplication.Parent.ParentName}_Application.pdf", Convert.ToBase64String(pdfBytes));
+        }
+    }
+
+    private async Task DownloadAllAsPdf()
+    {
+        using (var stream = new MemoryStream())
+        {
+            using (var writer = new PdfWriter(stream))
+            {
+                using (var pdf = new PdfDocument(writer))
+                {
+                    var document = new iText.Layout.Document(pdf);
+
+                    foreach (var app in applications)
+                    {
+                        // Add application details to the PDF for each application
+                        document.Add(new iText.Layout.Element.Paragraph($"Forældre Navn: {app.Parent.ParentName}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Email: {app.Parent.ParentMail}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Kræw Nummer: {app.Parent.KræwNumber}"));
+
+                        // Add children details
+                        foreach (var child in app.Parent.Children)
+                        {
+                            document.Add(new iText.Layout.Element.Paragraph($"Barn Navn: {child.ChildName}, Alder: {child.ChildAge}, T-Shirt Størrelse: {child.TshirtSize}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"Kommentar: {child.Comment}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"Allergier: {child.Allergies}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"Interesser: {child.Interests}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"Været her før: {(child.BeenHereBefore ? "Ja" : "Nej")}"));
+                        }
+
+                        // Add signature image to the PDF if available
+                        if (app.ImageData != null)
+                        {
+                            var image = new iText.Layout.Element.Image(ImageDataFactory.Create(app.ImageData));
+                            document.Add(image);
+                        }
+
+                        // Add a new page for the next application
+                        document.Add(new AreaBreak());
+                    }
+                }
+            }
+
+            // Save the combined PDF to a byte array
+            var pdfBytes = stream.ToArray();
+
+            // Invoke JavaScript to initiate the download of the combined PDF
+            await js.InvokeVoidAsync("saveAsFile", "All_Applications.pdf", Convert.ToBase64String(pdfBytes));
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        applications = (await service.GetAllApplications()).ToList();
+    }
+}
+
