@@ -76,7 +76,7 @@
 
 
 
-<ModalDialog @ref="@addDialog1" Title="See more details">
+<ModalDialog @ref="@addDialog1" Title="@SelectedEvent?.WeekNumber.ToString() | @SelectedEvent.Location">
 	<h3>Venteliste</h3>
 	<div class="scrollable-div">
 		<table class="styled-table">
@@ -117,7 +117,7 @@
 
 		</table>
 	</div>
-	<h3>Uge @SelectedEvent?.WeekNumber | @SelectedEvent?.Location <button @onclick=" ()=> SavePlanning(events,applications)" class="btn btn-outline-primary" id="SaveButton"> Gem Plan </button> </h3>
+	<h3>Uge @SelectedEvent?.WeekNumber | @SelectedEvent?.Location <button @onclick=" ()=> SavePlanning(events,applications)" class="btn btn-outline-success" id="SaveButton"> Gem Plan </button> </h3>
 
 
 	@foreach (var workday in events)
@@ -159,18 +159,18 @@
 							<td>@item2.Parent.Children.Count</td>
 							<td>@item2.MailSent</td>
 							<td>
-								<button @onclick="()=>OpenModal(item2)" class="btn btn-info" id="modelfront">Se Mere</button>
+								<button @onclick="()=>OpenModal(item2)" class="btn btn-outline-secondary">Se Mere</button>
 							</td>
 							<td>
 								<button @onclick="()=>AddToWaitingList(workday.Applications, item2)" class="btn btn-outline-danger">Fortryd</button>
 							</td>
 							<td>
-								<button @onclick="()=>SaveToEmailClipboard(item2.Parent.ParentMail)" class="btn btn-outline-primary">
+								<button @onclick="()=>SaveToEmailClipboard(item2.Parent.ParentMail, workday, item2)" class="btn btn-outline-primary">
 									Kopier Email
 								</button>
 							</td>
 							<td>
-									<button @onclick="()=>SaveGeneratedMailToClipboard(item2.Parent, workday)" class="btn btn-outline-primary"> Generer mail</button>
+									<button @onclick="()=>SaveGeneratedMailToClipboard(item2.Parent, workday, item2)" class="btn btn-outline-primary"> Generer mail</button>
 							</td>
 
 						</tr>
@@ -247,8 +247,8 @@
 
 	private string GeneratedMail;
 
-	
-    private bool methodOneCalled = false;
+
+	private bool methodOneCalled = false;
 
 	private bool methodtwoCalled = false;
 
@@ -361,7 +361,7 @@
 
 	}
 
-	public async Task SaveGeneratedMailToClipboard(Parent parent, Event Event)
+	public async Task SaveGeneratedMailToClipboard(Parent parent, Event Event, Application application)
 	{
 		if (parent != null && Event != null)
 		{
@@ -372,7 +372,7 @@
 				await JS.InvokeVoidAsync("copyToClipboard", GeneratedMail);
 				Console.WriteLine("Mail content copied to clipboard");
 				methodOneCalled = true;
-				await UpdateMailSentStatus(SelectedApplication);
+				await UpdateMailSentStatus(Event, application);
 			}
 			else
 			{
@@ -429,26 +429,38 @@
 
 
 
-	public async Task SaveToEmailClipboard(string email)
+	public async Task SaveToEmailClipboard(string email, Event Event, Application application)
 	{
 		if (!string.IsNullOrWhiteSpace(email))
 		{
 			await JS.InvokeVoidAsync("copyToClipboard", email);
 			methodtwoCalled = true;
-			await UpdateMailSentStatus(SelectedApplication);
+			await UpdateMailSentStatus(Event, application);
 		}
 	}
 
 
-	public async Task UpdateMailSentStatus(Application application)
+	public async Task UpdateMailSentStatus(Event Event, Application application)
 	{
-	if (methodOneCalled == true && methodtwoCalled == true){
-			application.MailSent = true;
-			await mService.UpdateApplication(application); // Assuming mService has a method to update the application in the database
+		if (methodOneCalled == true && methodtwoCalled == true)
+		{
+			foreach(var App in Event.Applications)
+			{
+				if (App.ApplicationID == application.ApplicationID)
+				{
+					App.MailSent = true;
+				}
+			}
+			await mService.UpdateEvent(Event);
+			Console.WriteLine("Mail sent status updated");
 			methodOneCalled = false;
 			methodtwoCalled = false;
-	}
-		weekNumbers = new();
+			StateHasChanged();
+		}
+		else
+		{
+			Console.WriteLine("Mail sent status not updated");
+		}
     }
 
 

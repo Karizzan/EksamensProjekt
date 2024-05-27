@@ -93,12 +93,22 @@
 
 #button-addtoweek {
     border-radius: 4px;
-    background-color: white;
-    font-size: 13px;
+    background-color: #b36200;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
     border: 1px solid black;
     margin: 0px;
-    padding: 0px;
+    padding: 2px;
+    transition-timing-function:ease;
+    transition-duration: 0.1s;
 }
+    #button-addtoweek:hover {
+        background-color: saddlebrown;
+        color: white;
+        transition-timing-function: ease;
+        transition-duration: 0.2s;
+    }
 
 #SaveButton {
     margin-left: 10px;
@@ -106,8 +116,5 @@
     padding: 5px;
 }
 
-.btn-info {
-    background-color: darkorange;
-}
 
 
