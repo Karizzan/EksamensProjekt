@@ -1,4 +1,4 @@
-﻿@page "/Underskrifter"
+﻿@page "/signature"
 
 @inject NavigationManager navManager
 @inject IJSRuntime js
@@ -18,10 +18,10 @@
 
 
 
-<h1 class="mb-3 mt-3">Alle registeringer med underskrift</h1>
+<h1 class="mb-3 mt-3">Alle unge registeringer med underskrift</h1>
 
-@if (applications == null)
-{
+@if (applications == null )
+    {
     <p><em>Loading...</em></p>
 }
 else if (applications.Count == 0)
@@ -152,7 +152,9 @@ else
     }
 
     protected override async Task OnInitializedAsync()
+
     {
-        applications = (await service.GetAllYoungApplications()).ToList();
+       applications = (await service.GetAllYoungApplications()).ToList();
+
     }
 }

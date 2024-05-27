@@ -2,30 +2,26 @@
 .styled-table {
     border-collapse: collapse;
     width: 100%;
-    margin: 25px 0;
-    font-size: 18px;
+    margin: 0px 0px 15px;
+    font-size: 15px;
     font-family: 'Arial', sans-serif;
     text-align: left;
 }
 
     /* Table headers */
     .styled-table th {
-        background-color: #d72631; /* Red color from the logo */
+        background-color: #3c6b7c; /* Red color from the logo */
         color: #ffffff;
-        text-align: center;
-        padding: 12px 15px;
+        text-align: left;
+        padding: 4px 20px;
     }
 
     /* Table rows */
     .styled-table td {
-        padding: 12px 15px;
+        padding: 1px 20px;
         border: 1px solid #dddddd;
     }
 
-    /* Alternating row colors */
-    .styled-table tr:nth-of-type(even) {
-        background-color: #f9f3f3; /* Light pink color */
-    }
 
     /* Hover effect */
     .styled-table tr:hover {
@@ -37,9 +33,9 @@
     background-color: #d72631; /* Red color from the logo */
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 4px 16px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px;
     border-radius: 5px;
     transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.1s ease;
     margin: 5px 0;
@@ -74,3 +70,44 @@
     gap: 10px;
     padding: 10px;
 }
+
+#modelfront {
+    z-index: 500;
+    position: relative
+}
+
+#modelback {
+    z-index: 400;
+    position: relative
+}
+
+.scrollable-div {
+    overflow: auto;
+    max-height: 14vh;
+}
+
+.modal-dialog {
+    overflow: auto;
+    max-height: 94vh; /* Adjust this value as needed */
+}
+
+#button-addtoweek {
+    border-radius: 4px;
+    background-color: white;
+    font-size: 13px;
+    border: 1px solid black;
+    margin: 0px;
+    padding: 0px;
+}
+
+#SaveButton {
+    margin-left: 10px;
+    font-size: 15px;
+    padding: 5px;
+}
+
+.btn-info {
+    background-color: darkorange;
+}
+
+

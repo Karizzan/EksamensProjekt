@@ -19,7 +19,13 @@ namespace ServerAPI.Repositories
 
 		public void AddEvent(Event Event)
 		{
-			collection.InsertOne(Event);
+            var max = 0;
+            if (collection.Count(Builders<Event>.Filter.Empty) > 0)
+            {
+                max = collection.Find(Builders<Event>.Filter.Empty).SortByDescending(r => r.EventID).Limit(1).ToList()[0].EventID;
+            }
+            Event.EventID = max + 1;
+            collection.InsertOne(Event);
 		}
 
 		public void RemoveEventByWeekNumber(int weekNumber)

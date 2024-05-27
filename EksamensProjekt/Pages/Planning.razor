@@ -57,14 +57,12 @@
 			WeekdayWarningMessage = "Advarsel: Der er for mange børn tilmeldt";
 		}
 
-
+		
 		<h1>Uge @item.WeekNumber | @item.Location</h1>
 		<p>Hverdage: <p style="color: @WeekdaynoticeColor"> @weekdayChildren/20 </p></p>
 		<p style="color @WeekdaynoticeColor">@WeekdayWarningMessage</p>
-
 		<p>Weekend: <p style="color: @WeekendnoticeColor">@weekendChildren/20 </p></p>
 		<p style="color @WeekendnoticeColor">@WeekendWarningMessage</p>
-
 		<Button @onclick="()=>OpenDialog(item)" class="btn btn-primary" id="modelback">Åben</Button>
 		<br />
 		<br />
@@ -86,10 +84,9 @@
 				<tr>
 					<th>Prioritet1</th>
 					<th>Prioritet2</th>
-					<th>Forældre</th>
 					<th>Antal Børn</th>
 					<th></th>
-
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -104,13 +101,12 @@
 						<tr>
 							<td>Uge @item.Priority1.WeekNumber </td>
 							<td>Uge @item.Priority2.WeekNumber </td>
-							<td>@item.Parent.ParentName</td>
 							<td>@item.Parent.Children.Count</td>
 							<td>
 								<button @onclick="()=>OpenModal(item)" class="btn btn-info">Se Mere</button>
 							</td>
 							<td>
-								<button @onclick="()=>Select(item)" class="btn btn-primary">Select</button>
+								<button @onclick="()=>Select(item)" class="btn btn-outline-primary">Select</button>
 							</td>
 						</tr>
 					}
@@ -121,7 +117,7 @@
 
 		</table>
 	</div>
-	<h3>Uge @SelectedEvent?.WeekNumber | @SelectedEvent?.Location <button @onclick=" ()=> SavePlanning(events,applications)" class="btn btn-primary" id="SaveButton"> Gem Plan </button> </h3>
+	<h3>Uge @SelectedEvent?.WeekNumber | @SelectedEvent?.Location <button @onclick=" ()=> SavePlanning(events,applications)" class="btn btn-outline-primary" id="SaveButton"> Gem Plan </button> </h3>
 
 
 	@foreach (var workday in events)
@@ -141,11 +137,14 @@
 					<tr>
 						<th>Prioritet1</th>
 						<th>Prioritet2</th>
-						<th>Forældre</th>
 						<th>Antal Børn</th>
+						<th>Mail Sendt</th>
 						<th>
 							<button @onclick="() => AddToWeek(workday.Applications)" id="button-addtoweek">Tilføj til tidspunkt</button>
 						</th>
+						<th></th>
+						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				@foreach (var item2 in workday.Applications)
@@ -157,8 +156,8 @@
 						<tr>
 							<td>Uge @item2.Priority1.WeekNumber</td>
 							<td>Uge @item2.Priority2.WeekNumber</td>
-							<td>@item2.Parent.ParentName</td>
 							<td>@item2.Parent.Children.Count</td>
+							<td>@item2.MailSent</td>
 							<td>
 								<button @onclick="()=>OpenModal(item2)" class="btn btn-info" id="modelfront">Se Mere</button>
 							</td>
@@ -167,11 +166,11 @@
 							</td>
 							<td>
 								<button @onclick="()=>SaveToEmailClipboard(item2.Parent.ParentMail)" class="btn btn-outline-primary">
-									Kopier mailadresse
+									Kopier Email
 								</button>
 							</td>
 							<td>
-								<button @onclick="()=>SaveGeneratedMailToClipboard()">Kopier generet mail</button>
+									<button @onclick="()=>SaveGeneratedMailToClipboard(item2.Parent, workday)" class="btn btn-outline-primary"> Generer mail</button>
 							</td>
 
 						</tr>
@@ -229,136 +228,7 @@
 	}
 </script>
 
-<style>
-	/* General table styling */
-	.styled-table 
-	{
-		border-collapse: collapse;
-		width: 100%;
-		margin: 0px 0px 15px;
-		font-size: 15px;
-		font-family: 'Arial', sans-serif;
-		text-align: left;
-	}
 
-		/* Table headers */
-		.styled-table th 
-		{
-			background-color: #d72631; /* Red color from the logo */
-			color: #ffffff;
-			text-align: left;
-			padding: 4px 20px;
-		}
-
-		/* Table rows */
-		.styled-table td 
-		{
-			padding: 1px 20px;
-			border: 1px solid #dddddd;
-		}
-
-		/* Alternating row colors */
-		.styled-table tr:nth-of-type(even) 
-		{
-			background-color: #f9f3f3; /* Light pink color */
-		}
-
-		/* Hover effect */
-		.styled-table tr:hover 
-		{
-			background-color: #f1e1e1; /* Slightly darker pink */
-		}
-
-	/* Button styling */
-	.styled-button 
-	{
-		background-color: #d72631; /* Red color from the logo */
-		color: white;
-		border: none;
-		padding: 4px 16px;
-		cursor: pointer;
-		font-size: 12px;
-		border-radius: 5px;
-		transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.1s ease;
-		margin: 5px 0;
-	}
-
-		/* Button hover effect */
-		.styled-button:hover 
-		{
-			background-color: #e53958; /* Pink color from the logo */
-		}
-
-		/* Button active effect */
-		.styled-button:active 
-		{
-			background-color: #c01e28; /* Darker red to indicate active state */
-			transform: scale(0.95); /* More noticeable shrink to indicate press */
-			box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Inset shadow to create pressed effect */
-		}
-
-		/* Button focus effect */
-		.styled-button:focus 
-		{
-			outline: none;
-			box-shadow: 0 0 0 3px rgba(215, 38, 49, 0.5); /* Add a pink outline */
-		}
-
-	/* Ensure buttons in table cells fill the cell */
-	.styled-table td .styled-button 
-	{
-		width: 100%;
-		box-sizing: border-box;
-	}
-
-	.table-table 
-	{
-		display: grid;
-		gap: 10px;
-		padding: 10px;
-	}
-
-	#modelfront 
-	{
-		z-index: 500;
-		position: relative
-	}
-
-	#modelback 
-	{
-		z-index: 400;
-		position: relative
-	}
-
-	.scrollable-div 
-	{
-		overflow: auto;
-		max-height: 14vh;
-	}
-
-    .modal-dialog 
-	{
-        overflow: auto;
-        max-height: 94vh; /* Adjust this value as needed */
-    }
-
-	#button-addtoweek
-	{
-		border-radius: 4px;
-		background-color: white;
-		font-size: 13px;
-		border: 1px solid black;
-		margin: 0px;
-		padding: 0px;
-	}
-
-	#SaveButton
-	{
-		margin-left: 10px;
-		font-size: 15px;
-		padding: 5px;
-	}
-</style>
 @code {
 	private List<int> weekNumbers = new();
 	private List<Application>? applications = new();
@@ -376,6 +246,7 @@
 	private string Emails;
 
 	private string GeneratedMail;
+
 
 	//The event that is selected
 	private Event? SelectedEvent = new Event();
@@ -485,33 +356,92 @@
 
 	}
 
-	public async Task SaveGeneratedMailToClipboard()
+	public async Task SaveGeneratedMailToClipboard(Parent parent, Event Event)
 	{
-		if (SelectedApplication.Parent.Children.Count == 2)
+		if (parent != null && Event != null)
 		{
-			GeneratedMail = "Kære " + SelectedApplication.Parent.ParentName + "\n\n" +
-			"Dette er mailen som bekræfter at" + SelectedApplication.Parent.Children[0].ChildName + " og " + SelectedApplication.Parent.Children[1].ChildName + " er tilmeldt perioden " + SelectedEvent.Workdays + " i uge " + SelectedEvent.WeekNumber + ".\n\n" +
-			"Jeg håber I får en kanon-god oplevelse på Cirkus Summarum. Håber I har nogle børn der glæder sig rigtigt meget\n\n" +
-			"Der er lavet en facebookgruppe, så I kan starte snakken og se hvem jeres børn skal bruge tiden sammen med, mens I er ude på cirkuspladsen og være seje!\n\n" +
-			SelectedEvent.FacebookGroup + "\n\n" +
-			"(Husk at melde jer ind i gruppen, da videre kommunikationen kommer derigennem)\n\n" +
-			"Vi glæder os til at se jer på Cirkus Summarum\n\n" +
-			"Med venlig hilsen\n" +
-			"Team Cirkus Summarum";
+			var children = parent.Children;
+			if (children.Count > 0) // Ensure there is at least one child
+			{
+				string GeneratedMail = GenerateMailContent(parent, Event);
+				await JS.InvokeVoidAsync("copyToClipboard", GeneratedMail);
+				Console.WriteLine("Mail content copied to clipboard");
+				await UpdateMailSentStatus(SelectedApplication);
+			}
+			else
+			{
+				Console.WriteLine("No children found for the selected application.");
+			}
 		}
-		
-
+		else
+		{
+			Console.WriteLine("SelectedApplication or SelectedEvent is null");
+		}
+		weekNumbers = new();
 	}
+
+
+	private string GenerateMailContent(Parent parent, Event Event)
+	{
+
+		var children = parent.Children;
+
+		if (children.Count >= 2)
+		{
+			return $"Kære {parent.ParentName}\n\n" +
+							$"Dette er mailen som bekræfter at {children[0].ChildName} og {children[1].ChildName} er tilmeldt perioden {Event.Workdays} i uge {Event.WeekNumber}.\n\n" +
+							$"Jeg håber I får en kanon-god oplevelse på Cirkus Summarum. Håber I har nogle børn der glæder sig rigtigt meget\n\n" +
+							$"{Event.FacebookGroup}\n\n" +
+							$"(Husk at melde jer ind i gruppen, da videre kommunikationen kommer derigennem)\n\n" +
+							"Vi glæder os til at se jer på Cirkus Summarum\n\n" +
+							"Med venlig hilsen";
+		}
+		else if (children.Count >= 1)
+		{
+			return $"Kære {parent.ParentName}\n\n" +
+							$"Dette er mailen som bekræfter at {children[0].ChildName} er tilmeldt perioden {Event.Workdays} i uge {Event.WeekNumber}.\n\n" +
+							$"Jeg håber I får en kanon-god oplevelse på Cirkus Summarum. Håber I har nogle børn der glæder sig rigtigt meget\n\n" +
+							$"{Event.FacebookGroup}\n\n" +
+							$"(Husk at melde jer ind i gruppen, da videre kommunikationen kommer derigennem)\n\n" +
+							"Vi glæder os til at se jer på Cirkus Summarum\n\n" +
+							"Med venlig hilsen" +
+							"Team Cirkus Summarum";
+
+		}
+		else
+		{
+			// Handle cases where there are no children in the list
+			return $"Kære {parent.ParentName}\n\n" +
+							$"Dette er mailen som bekræfter at du er tilmeldt perioden {Event.Workdays} i uge {Event.WeekNumber}.\n\n" +
+							$"Jeg håber I får en kanon-god oplevelse på Cirkus Summarum. Håber I har nogle børn der glæder sig rigtigt meget\n\n" +
+							$"{Event.FacebookGroup}\n\n" +
+							$"(Husk at melde jer ind i gruppen, da videre kommunikationen kommer derigennem)\n\n" +
+							"Vi glæder os til at se jer på Cirkus Summarum\n\n" +
+							"Med venlig hilsen";
+		}
+	}
+
+
 
 	public async Task SaveToEmailClipboard(string email)
 	{
 		if (!string.IsNullOrWhiteSpace(email))
 		{
 			await JS.InvokeVoidAsync("copyToClipboard", email);
+			await UpdateMailSentStatus(SelectedApplication);
 		}
 	}
 
 
+	public async Task UpdateMailSentStatus(Application application)
+	{
+		if (application != null)
+		{
+			application.MailSent = true;
+			await mService.UpdateApplication(application); // Assuming mService has a method to update the application in the database
+		}
+		weekNumbers = new();
+    }
 
 
 	public void SavePlanning(List<Event> EventList, List<Application> applications)
