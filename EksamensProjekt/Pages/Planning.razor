@@ -70,15 +70,13 @@
 		<br />
 
 	}
+
 }
+@{ weekNumbers = new();}
 
 
 
-@foreach (var item in events)
-{
 
-	int weeknumbers = item.WeekNumber;
-}
 
 <ModalDialog @ref="@addDialog1" Title="See more details">
 	<h3>Venteliste</h3>
@@ -402,21 +400,18 @@
 
 	public void OpenModal(Application application)
 	{
-		weekNumbers = new();
 		addDialog.Open();
 		SetSelectedApplication(application);
 	}
 
 	public void OpenDialog(Event Event)
 	{
-		weekNumbers = new();
 		addDialog1.Open();
 		setSelectedEvent(Event);
 	}
 
 	public void Select(Application application)
 	{
-		weekNumbers = new();
 		SelectedApplication = application;
 		Console.WriteLine($"{application.Parent.ParentName} selected");
 	}
@@ -427,20 +422,19 @@
 		{
 			if (SelectedApplication.Parent.ParentMail != null)
 			{
-				weekNumbers = new();
+				//weekNumbers = new();
 				list.Add(SelectedApplication);
 				applications = applications.Where(app => app != SelectedApplication).ToList();
 				SelectedApplication = new();
 			}
 			else
 			{
-				weekNumbers = new();
+				return;
 			}
 
 		}
 		else
 		{
-			weekNumbers = new();
 			Console.WriteLine("You are not authorized to edit the page");
 		}
 
@@ -451,13 +445,11 @@
 	{
 		if (adminLevel == "Admin")
 		{
-			weekNumbers = new();
 			applications.Add(application);
 			weekList.Remove(application);
 		}
 		else
 		{
-			weekNumbers = new();
 			Console.WriteLine("You're not authorized to make changes");
 		}
 
@@ -491,7 +483,6 @@
 			copyButtonStatus[evt.Workdays] = "Få emails";
 		}
 
-		weekNumbers = new();
 	}
 
 	public async Task SaveGeneratedMailToClipboard()
@@ -518,7 +509,6 @@
 		{
 			await JS.InvokeVoidAsync("copyToClipboard", email);
 		}
-		weekNumbers = new();
 	}
 
 
@@ -530,7 +520,6 @@
 		SaveEvents(EventList);
 
 
-		weekNumbers = new();
 	}
 
 	public void SaveEvents(List<Event> EventList)
@@ -544,7 +533,6 @@
 			mService.UpdateEvent(item);
 		}
 
-		weekNumbers = new();
 	}
 
 	public async void SaveWaitingList(List<Application> applications)
@@ -560,7 +548,6 @@
 			}
 		}
 
-		weekNumbers = new();
 	}
 
 	public void DeleteAll(List<Application> listToRemove)
@@ -582,7 +569,5 @@
 		}
 		weekNumbers.Add(weekNumber);
 		return false;
-
 	}
-
 }

@@ -5,7 +5,7 @@
 
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
 	<DataAnnotationsValidator />
-	<Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+	<Microsoft.AspNetCore.Components.Forms.ValidationSummary/>
 
 
 
@@ -88,7 +88,8 @@
 				events.Add(Event);
 				Event.EventID = generateID();
 				Event.Workdays = workday;
-				mService.AddEvent(Event);			}
+				mService.AddEvent(Event);
+			}
 		}
 	}
 
@@ -127,7 +128,7 @@
 
 	public void RemoveEvent(int weekNumber)
 	{
-		List<Event> eventsToRemove = new();
+		List<Event> eventsToRemove = new();	
 		mService.RemoveEventByWeekNumber(weekNumber);
 		eventsToRemove = events.FindAll(x=> x.WeekNumber == weekNumber);
 

@@ -19,6 +19,7 @@ namespace Core.Models
         public int WeekNumber { get; set; }
         public string Location { get; set; }
         public string Workdays { get; set; }
+        public string FacebookGroup { get; set; } = "";
         public List<Application> Applications { get; set; } = new();
 
 

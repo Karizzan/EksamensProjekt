@@ -115,6 +115,11 @@ namespace EksamensProjekt.Services
             await http.DeleteAsync($"{serverUrl}/application/delete/{id}");
         }
 
+        public async Task<Application[]> GetAllLegacyApplication()
+        {
+            var applications = await http.GetFromJsonAsync<Application[]>($"{serverUrl}/application/getalllegacy");
+            return applications.ToArray();
+        }
     }
 
 }

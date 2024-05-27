@@ -5,7 +5,7 @@ using ServerAPI.Repositories.Interfaces;
 namespace ServerAPI
 {
 	public class Program
-	{/*
+	{
 		private static List<Child> children = new List<Child>()
 		{
             //Vi har fjernet alle Child.ID //Marcus og Hudayfa
@@ -114,12 +114,12 @@ namespace ServerAPI
 		private static List<Parent> parents = new List<Parent>()
 		{
             //Vi (Markus og Hudayfa) har fjernet ParentId
-        new Parent(){ParentName = "Lars", ParentMail = "Lars@gmail.com", Kr�wNumber = 123, Children = new List<Child>{children[0],children[1]} },
-		new Parent(){ParentName = "Mette", ParentMail = "Mette@gmail.com", Kr�wNumber = 145, Children = new List<Child>{children[2]} },
-		new Parent(){ParentName = "Hans", ParentMail = "Hans@gmail.com", Kr�wNumber = 345, Children = new List<Child>{children[3],children[4]} },
-		new Parent(){ParentName = "Dorte", ParentMail = "Dorte@gmail.com", Kr�wNumber = 112, Children = new List<Child>{children[5],children[6]} },
-		new Parent(){ParentName = "Hanne", ParentMail = "Hanne@gmail.com", Kr�wNumber = 993, Children = new List<Child>{children[7],children[8]} },
-		new Parent(){ParentName = "J�rgen", ParentMail = "J�rgen@gmail.com", Kr�wNumber = 333, Children = new List<Child>{children[9]} }
+        new Parent(){ParentName = "Lars", ParentMail = "Lars@gmail.com", KræwNumber = 123, Children = new List<Child>{children[0],children[1]} },
+		new Parent(){ParentName = "Mette", ParentMail = "Mette@gmail.com", KræwNumber = 145, Children = new List<Child>{children[2]} },
+		new Parent(){ParentName = "Hans", ParentMail = "Hans@gmail.com", KræwNumber = 345, Children = new List<Child>{children[3],children[4]} },
+		new Parent(){ParentName = "Dorte", ParentMail = "Dorte@gmail.com", KræwNumber = 112, Children = new List<Child>{children[5],children[6]} },
+		new Parent(){ParentName = "Hanne", ParentMail = "Hanne@gmail.com", KræwNumber = 993, Children = new List<Child>{children[7],children[8]} },
+		new Parent(){ParentName = "J�rgen", ParentMail = "J�rgen@gmail.com", KræwNumber = 333, Children = new List<Child>{children[9]} }
 
 		};
 		
@@ -148,7 +148,7 @@ namespace ServerAPI
 			new Application() {ApplicationID = 4, SubmitDate = DateTime.Now, Parent = parents[3], IsOnWaitingList = false, Priority1 = Events[1], Priority2 = Events[0]}
 
 		};
-		*/
+		
 		public static void Main(string[] args)
 		{
 
@@ -159,6 +159,8 @@ namespace ServerAPI
 			var b = new ApplicationRepository();
 			var c = new EventRepository();
 			var d = new ParentChildRepository();
+			int[] years = { 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030 };
+			var r = new Random();
 		
 			//Admin admin = new Admin();
 			//admin.AdminID = 1;
@@ -177,9 +179,12 @@ namespace ServerAPI
 				
 				foreach (var item in applications)
 				{
+				var application = new Application() { ApplicationID = r.Next(10), SubmitDate = DateTime.Now.AddYears(r.Next(10)), Parent = parents[0], IsOnWaitingList = true, Priority1 = Events[0], Priority2 = Events[2] };
 					b.AddApplication(item);
+				b.AddApplication(application);
 				}
-			/*
+			
+				
 				foreach (var item in Events)
 				{
 					c.AddEvent(item);
