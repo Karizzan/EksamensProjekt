@@ -1,0 +1,14 @@
+﻿body {
+}
+
+.background-video {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-40%); /* Move the video slightly to the right */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none; /* Ensures that the video does not interfere with any clickable elements on top of it */
+}
