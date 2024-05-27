@@ -22,6 +22,7 @@ namespace Core.Models
 		public bool IsOnWaitingList { get; set; } = true;
 		public bool Verified { get; set; } = false;
 		public bool MailSent { get; set; } = false;
+        public byte[] ImageData { get; set; }
 
-	}
+    }
 }

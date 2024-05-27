@@ -76,8 +76,13 @@ namespace ServerAPI.Controllers
 		{
 			mRepo.UpdateYoungApplication(application);
 		}
-
-       
-
+		
+		[HttpGet]
+		[Route("getalllegacy")]
+		public List<Application> GetAllLegacyApplication()
+		{
+			return mRepo.GetAllLegacyApplication();
+		}
+		
     }
 }

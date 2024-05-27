@@ -34,13 +34,13 @@ else
 
     </div>
 
-	<div class="col-md-12 mb-3">
-		<label for="Lokale">1. Prioritet</label>
-		<InputSelect id="Lokale" @bind-Value="prio1" class="form-control">
-			<option>Vælg</option>
-			@foreach (var Event in allEvents)
-			{
-				<option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
+    <div class="col-md-12 mb-3">
+        <label for="Lokale">1. Prioritet</label>
+        <InputSelect id="Lokale" @bind-Value="prio1" class="form-control">
+            <option>Vælg</option>
+            @foreach (var Event in allEvents)
+            {
+                <option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
 
             }
         </InputSelect>
@@ -48,13 +48,13 @@ else
     </div>
 
 
-	<div class="col-md-12 mb-3">
-		<label for="Lokale">2. Prioritet</label>
-		<InputSelect id="Lokale" @bind-Value="prio2" class="form-control">
-			<option>Vælg</option>
-			@foreach (var Event in allEvents)
-			{
-				<option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
+    <div class="col-md-12 mb-3">
+        <label for="Lokale">2. Prioritet</label>
+        <InputSelect id="Lokale" @bind-Value="prio2" class="form-control">
+            <option>Vælg</option>
+            @foreach (var Event in allEvents)
+            {
+                <option value="@Event.EventID">By: @Event.Location Uge: @Event.WeekNumber Arbejdsdage: @Event.Workdays</option>
 
             }
         </InputSelect>
@@ -152,6 +152,12 @@ else
             <InputCheckbox id="Titel" @bind-Value="child2.BeenHereBefore" class="form-checkbox" />
         </div>
     }
+
+    <div class="form-group">
+        <label for="ImageUpload">Upload billede af underskrift</label>
+        <InputFile OnChange="HandleSelectedImage" id="ImageUpload" />
+    </div>
+
     <div class="col-12 mb-3">
         <button @type="submit" class="btn btn-primary">Send</button>
     </div>
@@ -185,59 +191,70 @@ else
 
 
 
-	private Event getEventById(int id)
-	{
-		
-		Event foundEvent = new();
+    private Event getEventById(int id)
+    {
 
-		foreach (var Event in allEvents)
-		{
-			if (Event.EventID == id)
-			{
-				foundEvent = Event;
-				Console.WriteLine("Found event");
-			}
-		}
-		return foundEvent;
-	}
+        Event foundEvent = new();
 
-
+        foreach (var Event in allEvents)
+        {
+            if (Event.EventID == id)
+            {
+                foundEvent = Event;
+                Console.WriteLine("Found event");
+            }
+        }
+        return foundEvent;
+    }
 
 
-	public async Task handleSubmit()
-	{
-		if (aEditContext.Validate())
-		{
-	
-			application.ApplicationID = GenerateApplicationId(allApplications);
-			application.Priority1 = getEventById(prio1);
-			application.Priority2 = getEventById(prio2);
-			application.SubmitDate = DateTime.Now;
-			application.Parent = parent;
+    private async Task HandleSelectedImage(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            using (var stream = new MemoryStream())
+            {
+                await file.OpenReadStream().CopyToAsync(stream);
+                application.ImageData = stream.ToArray();
+            }
+        }
+    }
 
-			application.Parent.Children.Add(child);
+    public async Task handleSubmit()
+    {
+        if (aEditContext.Validate())
+        {
 
-			if (extraChild == true){
-				application.Parent.Children.Add(child2);
-			}
-			else
-			{
-				child2 = new();
-			}
-			Console.WriteLine($" NY APPLICTION: Parent Name: {parent.ParentName}, Barn 1 navn: {child.ChildName}, Barn 2 navn:{child2.ChildName}, ApplikationsID: {application.ApplicationID}");
-			Console.WriteLine(parent.ParentName);
-			Console.WriteLine(child.ChildName);
-			Console.WriteLine(child2.ChildName);
+            application.ApplicationID = GenerateApplicationId(allApplications);
+            application.Priority1 = getEventById(prio1);
+            application.Priority2 = getEventById(prio2);
+            application.SubmitDate = DateTime.Now;
+            application.Parent = parent;
 
-			//We add the application to the list
-			foreach (var application in allApplications)
-			{
-				Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
-			}
-			SetDefaults();
-			
-			//We add the application to the database
-			await mService.AddApplication(application);
+            application.Parent.Children.Add(child);
+
+            if (extraChild == true){
+                application.Parent.Children.Add(child2);
+            }
+            else
+            {
+                child2 = new();
+            }
+            Console.WriteLine($" NY APPLICTION: Parent Name: {parent.ParentName}, Barn 1 navn: {child.ChildName}, Barn 2 navn:{child2.ChildName}, ApplikationsID: {application.ApplicationID}");
+            Console.WriteLine(parent.ParentName);
+            Console.WriteLine(child.ChildName);
+            Console.WriteLine(child2.ChildName);
+
+            //We add the application to the list
+            foreach (var application in allApplications)
+            {
+                Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
+            }
+            SetDefaults();
+
+            //We add the application to the database
+            await mService.AddApplication(application);
 
             Console.Write("LISTEN EFTER AWAIT FUNKTIONEN");
             foreach (var application in allApplications)
@@ -274,7 +291,7 @@ else
         return highestNumber;
 
 
-	}
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -288,38 +305,38 @@ else
 
 
 
-	public void SetDefaults()
-	{
-		if (child.Interests == null)
-		{
-			child.Interests = "Ingen Interresser";
-		}
+    public void SetDefaults()
+    {
+        if (child.Interests == null)
+        {
+            child.Interests = "Ingen Interresser";
+        }
 
-		if (child.Comment == null)
-		{
-			child.Comment = "Ingen Kommentar";
-		}
+        if (child.Comment == null)
+        {
+            child.Comment = "Ingen Kommentar";
+        }
 
-		if (child.Allergies == null)
-		{
-			child.Allergies = "Ingen Allergier";
-		}
+        if (child.Allergies == null)
+        {
+            child.Allergies = "Ingen Allergier";
+        }
 
-		if (child2.Interests == null)
-		{
-			child2.Interests = "Ingen Interresser";
-		}
+        if (child2.Interests == null)
+        {
+            child2.Interests = "Ingen Interresser";
+        }
 
-		if (child2.Comment == null)
-		{
-			child2.Comment = "Ingen Kommentar";
-		}
+        if (child2.Comment == null)
+        {
+            child2.Comment = "Ingen Kommentar";
+        }
 
-		if (child2.Allergies == null)
-		{
-			child2.Allergies = "Ingen Allergier";
-		}
-	}
+        if (child2.Allergies == null)
+        {
+            child2.Allergies = "Ingen Allergier";
+        }
+    }
 
 
 

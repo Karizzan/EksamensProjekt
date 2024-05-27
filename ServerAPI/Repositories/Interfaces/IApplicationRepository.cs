@@ -14,7 +14,7 @@ namespace ServerAPI.Repositories.Interfaces
         
         public void UpdateApplication(Application application);
         public void UpdateYoungApplication(YoungApplication youngApplication);
-
+        public List<Application> GetAllLegacyApplication();
        
         
 	}

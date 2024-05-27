@@ -1,0 +1,105 @@
+﻿@using Core.Models
+@using Services
+@page "/alleansøgninger"
+
+<h3>Alle ansøgninger fra alle år:</h3>
+
+@foreach (var item in applications)
+{
+	if (IsAlreadyDisplayed(item.SubmitDate) != true)
+	{
+
+
+		<h3>@item.SubmitDate.Year</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Navn</th>
+					<th>Email</th>
+					<th>Antal Børn</th>
+					<th>Underskrift</th>
+					<th> </th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var app in applications.Where(e => e.SubmitDate.Year == item.SubmitDate.Year))
+				{
+					<tr>
+						<td>@app.Parent.ParentName</td>
+					<td>@app.Parent.ParentMail</td>
+					<td>@app.Parent.Children.Count</td>
+					<td>@app.Verified</td>
+					<button @onclick="()=>OpenDialog(item)" class="btn btn-info">Se Mere</button>
+				</tr>
+			}
+		</tbody>
+	</table>
+	}
+}
+@{Years = new();}
+
+<ModalDialog @ref="@addDialog" Title="See more details">
+	<h1>Ansøgning</h1>
+	<p>Forældre: @SelectedApplication.Parent.ParentName</p>
+	<p>Forældre Email: @SelectedApplication.Parent.ParentMail</p>
+	<p>Forældre Telefon: @SelectedApplication.Parent.ParentPhone</p>
+	<p>KræwNr.: @SelectedApplication.Parent.KræwNumber</p>
+	<p>Indsendelsesdato: @SelectedApplication.SubmitDate</p>
+	<p>1. Prioritet: Uge @SelectedApplication.Priority1.WeekNumber</p>
+	<p>2. Prioritet: Uge @SelectedApplication.Priority2.WeekNumber</p>
+	<p>På Venteliste: @SelectedApplication.IsOnWaitingList</p>
+	<p>Verified: @SelectedApplication.Verified</p>
+	@{
+		int i = 1;
+	}
+
+	@foreach (var child in SelectedApplication.Parent.Children)
+	{
+		<h1>@i. Barn</h1>
+		<p>Navn: @child.ChildName</p>
+		<p>Alder: @child.ChildAge</p>
+		<p>T-shirt str: @child.TshirtSize</p>
+		<p>Kommentar: @child.Comment</p>
+		<p>Allegener: @child.Allergies</p>
+		<p>Været her før?: @child.BeenHereBefore</p>
+		<p>Interesser: @child.Interests</p>
+		i++;
+	}
+
+	</ModalDialog>
+
+	@code {
+		private List<Application> applications = new();
+		private List<int> Years = new();
+		private ModalDialog? addDialog { get; set; }
+		private Application SelectedApplication = new();
+
+	[Inject]
+	private IServiceClass? mService { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		applications = (await mService.GetAllLegacyApplication()).ToList();
+		applications.Sort((x, y) => x.SubmitDate.Year.CompareTo(y.SubmitDate.Year));
+
+	}
+
+	public bool IsAlreadyDisplayed(DateTime date)
+	{
+		foreach (var item in Years)
+		{
+			if (item == date.Year)
+			{
+				return true;
+			}
+		}
+		Years.Add(date.Year);
+		return false;
+	}
+
+	public void OpenDialog(Application application)
+	{
+		addDialog.Open();
+		SelectedApplication = application;
+	}
+}

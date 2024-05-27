@@ -9,12 +9,15 @@ namespace ServerAPI.Repositories
 		private IMongoCollection<Application> AppCollection;
 
 		private IMongoCollection<YoungApplication> YAppCollection;
+
+		private IMongoCollection<Application> LAppCollection;
 		public ApplicationRepository()
 		{
 			var client = new MongoClient("mongodb+srv://marcushoumark:Marcus@cirkusdb.rxb1kpo.mongodb.net/");
 			var database = client.GetDatabase("CirkusDB");
 			AppCollection = database.GetCollection<Application>("Application");
 			YAppCollection = database.GetCollection<YoungApplication>("YoungApplication");
+			LAppCollection = database.GetCollection<Application>("LegacyApplication");
 		}
 
 		public List<Application> GetAllApplications()
@@ -33,6 +36,11 @@ namespace ServerAPI.Repositories
             application.ApplicationID= max + 1;
             AppCollection.InsertOne(application);
         }
+		public void AddApplication(Application application)
+		{
+			AppCollection.InsertOne(application);
+			LAppCollection.InsertOne(application);
+		}
 
 		public void RemoveApplicationByID(int id)
 		{
@@ -84,6 +92,11 @@ namespace ServerAPI.Repositories
             YAppCollection.UpdateOne(filter, update);
         }
         
+		public List<Application> GetAllLegacyApplication()
+		{
+			return LAppCollection.Find(Builders<Application>.Filter.Empty).ToList();
+		}
+		
 	}
 
 }
