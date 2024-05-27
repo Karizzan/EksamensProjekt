@@ -247,6 +247,11 @@
 
 	private string GeneratedMail;
 
+	
+    private bool methodOneCalled = false;
+
+	private bool methodtwoCalled = false;
+
 
 	//The event that is selected
 	private Event? SelectedEvent = new Event();
@@ -366,6 +371,7 @@
 				string GeneratedMail = GenerateMailContent(parent, Event);
 				await JS.InvokeVoidAsync("copyToClipboard", GeneratedMail);
 				Console.WriteLine("Mail content copied to clipboard");
+				methodOneCalled = true;
 				await UpdateMailSentStatus(SelectedApplication);
 			}
 			else
@@ -428,6 +434,7 @@
 		if (!string.IsNullOrWhiteSpace(email))
 		{
 			await JS.InvokeVoidAsync("copyToClipboard", email);
+			methodtwoCalled = true;
 			await UpdateMailSentStatus(SelectedApplication);
 		}
 	}
@@ -435,11 +442,12 @@
 
 	public async Task UpdateMailSentStatus(Application application)
 	{
-		if (application != null)
-		{
+	if (methodOneCalled == true && methodtwoCalled == true){
 			application.MailSent = true;
 			await mService.UpdateApplication(application); // Assuming mService has a method to update the application in the database
-		}
+			methodOneCalled = false;
+			methodtwoCalled = false;
+	}
 		weekNumbers = new();
     }
 
