@@ -28,13 +28,6 @@ jobs:
       - name: dotnet publish
         run: dotnet publish EksamensProjekt -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-
-      - name: Build with dotnet
-        run: dotnet build ServerAPI --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish ServerAPI -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
