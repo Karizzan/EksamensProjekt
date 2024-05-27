@@ -35,12 +35,9 @@ namespace ServerAPI.Repositories
             }
             application.ApplicationID= max + 1;
             AppCollection.InsertOne(application);
-        }
-		public void AddApplication(Application application)
-		{
-			AppCollection.InsertOne(application);
 			LAppCollection.InsertOne(application);
 		}
+		
 
 		public void RemoveApplicationByID(int id)
 		{
