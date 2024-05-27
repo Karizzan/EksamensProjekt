@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.Models
 {
@@ -14,6 +15,7 @@ namespace Core.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
         //public int ChildID { get; set; }
+        [Required(ErrorMessage = "Feltet skal være udfyldt")]
         public string ChildName { get; set; }
         public int ChildAge { get; set; }
         public string TshirtSize { get; set; }
