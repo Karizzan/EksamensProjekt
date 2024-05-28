@@ -31,7 +31,7 @@ namespace ServerAPI.Repositories
             var max = 0;
             if (AppCollection.Count(Builders<Application>.Filter.Empty) > 0)
             {
-                max = AppCollection.Find(Builders<Application>.Filter.Empty).SortByDescending(r => r.ApplicationID).Limit(1).ToList()[0].ApplicationID;
+                max = LAppCollection.Find(Builders<Application>.Filter.Empty).SortByDescending(r => r.ApplicationID).Limit(1).ToList()[0].ApplicationID;
             }
             application.ApplicationID= max + 1;
             AppCollection.InsertOne(application);

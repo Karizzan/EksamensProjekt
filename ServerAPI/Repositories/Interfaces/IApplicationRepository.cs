@@ -6,8 +6,6 @@ namespace ServerAPI.Repositories.Interfaces
        public List<Application> GetAllApplications();
        public void AddApplication(Application application);
        public void RemoveApplicationByID(int id);
-        
-        
 		public List<YoungApplication> GetAllYoungApplications();
 		public void AddYoungApplication(YoungApplication youngApplication);
 		public void RemoveYoungApplicationByID(int youngApplicationId);
