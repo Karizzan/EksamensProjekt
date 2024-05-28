@@ -1,6 +1,6 @@
 ﻿@using Core.Models
 @using Services
-@page "/alleansøgninger"
+@page "/allapplications"
 
 <h3>Alle ansøgninger fra alle år:</h3>
 
@@ -11,7 +11,7 @@
 
 
 		<h3>@item.SubmitDate.Year</h3>
-		<table>
+		<table class="styled-table">
 			<thead>
 				<tr>
 					<th>Navn</th>
@@ -29,7 +29,7 @@
 					<td>@app.Parent.ParentMail</td>
 					<td>@app.Parent.Children.Count</td>
 					<td>@app.Verified</td>
-					<button @onclick="()=>OpenDialog(item)" class="btn btn-info">Se Mere</button>
+					<td><button @onclick="()=>OpenDialog(item)" class="btn btn-outline-secondary">Se Mere</button></td>
 				</tr>
 			}
 		</tbody>

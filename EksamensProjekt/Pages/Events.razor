@@ -41,13 +41,14 @@
 
 </EditForm>
 
-<table>
+<table class="styled-table">
 	<thead>
 		<tr>
 			<th>Start Dato</th>
 			<th>Slut Dato</th>
 			<th>Uge</th>
 			<th>Lokation</th>
+			<th></th>
 		</tr>
 	</thead>
 	@if (events != null)
@@ -58,11 +59,11 @@
 			if (IsAlreadyDisplayed(item.WeekNumber, WeekNumbers) != true)
 			{
 				<tr>
-					<th>@item.StartDate.ToString("dd/MM/yyyy")</th>
-					<th>@item.EndDate.Date.ToString("dd/MM/yyyy")</th>
-					<th>@item.WeekNumber</th>
-					<th>@item.Location</th>
-					<button @onclick="()=>RemoveEvent(item.WeekNumber)"> Fjern event </button>
+					<td>@item.StartDate.ToString("dd/MM/yyyy")</td>
+					<td>@item.EndDate.Date.ToString("dd/MM/yyyy")</td>
+					<td>@item.WeekNumber</td>
+					<td>@item.Location</td>
+					<td><button @onclick="()=>RemoveEvent(item.WeekNumber)" class="btn btn-outline-danger"> Fjern event </button></td>
 				</tr>
 			}
 		}
