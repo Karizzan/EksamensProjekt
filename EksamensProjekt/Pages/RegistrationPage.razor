@@ -11,7 +11,7 @@
     Dette gør det nemmere for dig at bidrage som frivillig, mens dine børn er i trygge og sjove omgivelser.
 </p>
 
-@if (isSubmitted)
+@if (isSubmitted == true)
 {
     <h1>Ansøgning er sendt!</h1>
 }
@@ -22,22 +22,22 @@ else
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
     <DataAnnotationsValidator />
 
-
     <div class="col-md-12 mb-3">
         <label for="ParentName">Fulde navn på forælder</label>
         <InputText id="ParentName" @bind-Value="parent.ParentName" class="form-control" placeholder="f.eks. Gunnar eller Inge" />
-        <ValidationMessage For="@(() => parent.ParentName)" />
+            <ValidationMessage For="@(() => parent.ParentName)" />
     </div>
 
     <div class="col-md-12 mb-3">
         <label for="ParentMail">Forældre Email</label>
         <InputText id="ParentMail" @bind-Value="parent.ParentMail" class="form-control" placeholder="f.eks. gunnargunnarsen@gmail.com" />
+    <ValidationMessage For="@(() => parent.ParentMail)" />
     </div>
 
     <div class="col-md-12 mb-3">
         <label for="KræwNr">KræwNr.</label>
         <InputNumber id="KræwNr" @bind-Value="parent.KræwNumber" class="form-control" placeholder="Find KræwNr. på kræwet.dk ved at loggeind" />
-
+            <ValidationMessage For="@(() => parent.KræwNumber)" />
     </div>
 
     <div class="col-md-12 mb-3">
@@ -87,11 +87,13 @@ else
     <div class="col-md-12 mb-3">
         <label for="ChildName">Navn på barn</label>
         <InputText id="Titel" @bind-Value="child.ChildName" class="form-control" placeholder="f.eks. Alberte eller Robert" />
+            <ValidationMessage For="@(() => child.ChildName)" />
     </div>
 
     <div class="col-md-12 mb-3">
         <label for="ChildAge">Alder på barn</label>
         <InputNumber id="Titel" @bind-Value="child.ChildAge" class="form-control" placeholder="f.eks. 12" />
+            <ValidationMessage For="@(() => child.ChildAge)" />
     </div>
 
     <div class="col-md-12 mb-3">
@@ -157,7 +159,7 @@ else
         </div>
 
         <div class="col-md-12 mb-3">
-            <label for="Interests">Interreser</label>
+            <label for="Interests">Interesser</label>
             <InputText id="Titel" @bind-Value="child2.Interests" class="form-control" placeholder="f.eks. dyr, fodbold, musik osv..." />
         </div>
 
@@ -181,6 +183,7 @@ else
     private EditContext? aEditContext;
 
     private bool isSubmitted = false;
+
     Application application = new();
     Parent parent = new();
     Child child = new();
@@ -197,6 +200,7 @@ else
 
     private List<Event>? allEvents = new();
     private List<Application>? allApplications = new();
+    private List<Application>? legacyApplications = new();
 
 
 
@@ -235,7 +239,7 @@ else
         if (aEditContext.Validate())
         {
 
-            application.ApplicationID = GenerateApplicationId(allApplications);
+            //application.ApplicationID = GenerateApplicationId(allApplications);
             application.Priority1 = getEventById(prio1);
             application.Priority2 = getEventById(prio2);
             application.SubmitDate = DateTime.Now;
@@ -250,16 +254,6 @@ else
             {
                 child2 = new();
             }
-            Console.WriteLine($" NY APPLICTION: Parent Name: {parent.ParentName}, Barn 1 navn: {child.ChildName}, Barn 2 navn:{child2.ChildName}, ApplikationsID: {application.ApplicationID}");
-            Console.WriteLine(parent.ParentName);
-            Console.WriteLine(child.ChildName);
-            Console.WriteLine(child2.ChildName);
-
-            //We add the application to the list
-            foreach (var application in allApplications)
-            {
-                Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
-            }
             SetDefaults();
 
             //We add the application to the database
@@ -270,6 +264,9 @@ else
             {
                 Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
             }
+
+
+            ApplicationInDatabase(application); //If the application is in the database it will change the page
             isSubmitted = true;
 
 
@@ -282,24 +279,9 @@ else
         }
         else
         {
+
             errorMessage = "Error";
         }
-    }
-
-    private int GenerateApplicationId(List<Application> listOfApplications)
-    {
-        listOfApplications.Sort((x, y) => x.ApplicationID.CompareTo(y.ApplicationID));
-        int highestNumber = 0;
-        foreach (var app in listOfApplications)
-        {
-            Console.WriteLine(app.ApplicationID);
-            highestNumber = app.ApplicationID;
-            highestNumber++;
-
-        }
-        return highestNumber;
-
-
     }
 
     protected override async Task OnInitializedAsync()
@@ -309,16 +291,36 @@ else
         allEvents = (await mService.GetAllEvents())?.ToList();
 
         //allApplications = (await mService.GetAllApplications())?.ToList();
+        legacyApplications = (await mService.GetAllLegacyApplication())?.ToList();
+
 
     }
 
+    public async void ApplicationInDatabase(Application application)
+    {
+        legacyApplications = (await mService.GetAllLegacyApplication())?.ToList();
+        bool found = false;
+
+        foreach (var app in legacyApplications)
+        {
+            if (application.Parent.ParentMail == app.Parent.ParentMail)
+            {
+                found = true;
+            }
+        }
+
+        if (found == true)
+        {
+            isSubmitted = true;
+        }
+    }
 
 
     public void SetDefaults()
     {
         if (child.Interests == null)
         {
-            child.Interests = "Ingen Interresser";
+            child.Interests = "Ingen Interesser";
         }
 
         if (child.Comment == null)
