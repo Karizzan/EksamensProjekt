@@ -29,10 +29,8 @@ namespace ServerAPI.Controllers
 		{
 			mRepo.AddApplication(application);
 		}
-		
-		
 
-			[HttpDelete]
+        [HttpDelete]
 			[Route("delete/{id:int}")]
 			public void RemoveApplicationByID(int id)
 			{

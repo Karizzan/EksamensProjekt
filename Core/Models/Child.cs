@@ -17,6 +17,7 @@ namespace Core.Models
         //public int ChildID { get; set; }
         [Required(ErrorMessage = "Feltet skal være udfyldt")]
         public string ChildName { get; set; }
+        [Required(ErrorMessage = "Feltet skal være udfyldt")]
         public int ChildAge { get; set; }
         public string TshirtSize { get; set; }
         public string Comment { get; set; } 
