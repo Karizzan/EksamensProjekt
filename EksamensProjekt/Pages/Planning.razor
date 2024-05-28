@@ -7,11 +7,13 @@
 @using MongoDB.Bson;
 @page "/planning"
 
-
-<h1>Plan</h1>
+<div class="container3">
+<h1>Planlægning</h1>
 <button @onclick=" ()=> SavePlanning(events,applications)" class="btn btn-primary"> Gem Plan </button>
 <br/>
 <br />
+</div>
+<div class="container">
 @foreach (var item in events)
 {
 	string WeekdaynoticeColor = "";
@@ -57,7 +59,7 @@
 			WeekdayWarningMessage = "Advarsel: Der er for mange børn tilmeldt";
 		}
 
-		
+		<div class="container2">
 		<h1>Uge @item.WeekNumber | @item.Location</h1>
 		<p>Hverdage: <p style="color: @WeekdaynoticeColor"> @weekdayChildren/20 </p></p>
 		<p style="color @WeekdaynoticeColor">@WeekdayWarningMessage</p>
@@ -66,10 +68,12 @@
 		<Button @onclick="()=>OpenDialog(item)" class="btn btn-primary" id="modelback">Åben</Button>
 		<br />
 		<br />
+		</div>
 
 	}
 
 }
+</div>
 @{ weekNumbers = new();}
 
 
@@ -103,7 +107,7 @@
 							<td>Uge @item.Priority2.WeekNumber </td>
 							<td>@item.Parent.Children.Count</td>
 							<td>
-								<button @onclick="()=>OpenModal(item)" class="btn btn-outline-secoundary">Se Mere</button>
+								<button @onclick="()=>OpenModal(item)" class="btn btn-outline-secondary">Se Mere</button>
 							</td>
 							<td>
 								<button @onclick="()=>Select(item)" class="btn btn-outline-primary">Select</button>

@@ -100,9 +100,10 @@
     border: 1px solid black;
     margin: 0px;
     padding: 2px;
-    transition-timing-function:ease;
+    transition-timing-function: ease;
     transition-duration: 0.1s;
 }
+
     #button-addtoweek:hover {
         background-color: saddlebrown;
         color: white;
@@ -115,24 +116,3 @@
     font-size: 15px;
     padding: 5px;
 }
-
-.container {
-    display: flex;
-   flex-direction: row;
-   flex-wrap: wrap;
-   justify-content: space-between;
-   align-items: center;
-   margin: 0px 0px 200px;
-}
-
-.container2 {
-    flex-direction: column;
-    margin: 2vh 20vh 0vh 10vh;
-    min-width: 40vh;
-}
-
-.container3{
-    flex-direction: column;
-    margin: 2vh 20vh 0vh 60vh;
-}
-
