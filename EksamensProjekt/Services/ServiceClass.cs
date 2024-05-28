@@ -9,7 +9,7 @@ namespace EksamensProjekt.Services
 		HttpClient http;
 
 		// adresse på server
-		private string serverUrl = "racerbanenserver.azurewebsites.net";
+		private string serverUrl = "https://racerbanenserver.azurewebsites.net";
 
 
 		public ServiceClass(HttpClient http)
