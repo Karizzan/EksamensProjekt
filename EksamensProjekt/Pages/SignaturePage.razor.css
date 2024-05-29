@@ -2,7 +2,7 @@
 .styled-table {
     border-collapse: collapse;
     width: 100%;
-    margin: 0px 0px 15px;
+    margin: 0px 0px 2vh;
     font-size: 15px;
     font-family: 'Arial', sans-serif;
     text-align: left;
@@ -13,12 +13,12 @@
         background-color: #3c6b7c; /* Red color from the logo */
         color: #ffffff;
         text-align: left;
-        padding: 4px 20px;
+        padding: 0vh 1vw;
     }
 
     /* Table rows */
     .styled-table td {
-        padding: 1px 20px;
+        padding: 0vh 1vw;
         border: 1px solid #dddddd;
     }
 

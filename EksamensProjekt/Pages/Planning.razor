@@ -80,12 +80,13 @@
 
 
 
-<ModalDialog @ref="@addDialog1" Title="@SelectedEvent?.WeekNumber.ToString()">
+<ModalDialog @ref="@addDialog1" Title="Tildeling af Børneklub ansøgninger">
 	<h3>Venteliste</h3>
 	<div class="scrollable-div">
 		<table class="styled-table">
 			<thead>
 				<tr>
+					<th>Forælder</th>
 					<th>Prioritet1</th>
 					<th>Prioritet2</th>
 					<th>Antal Børn</th>
@@ -103,8 +104,9 @@
 					@foreach (var item in applications)
 					{
 						<tr>
-							<td>Uge @item.Priority1.WeekNumber </td>
-							<td>Uge @item.Priority2.WeekNumber </td>
+							<td>@item.Parent.ParentName</td>
+							<td>Uge @item.Priority1.WeekNumber | @item.Priority1.Workdays </td>
+							<td>Uge @item.Priority2.WeekNumber | @item.Priority2.Workdays</td>
 							<td>@item.Parent.Children.Count</td>
 							<td>
 								<button @onclick="()=>OpenModal(item)" class="btn btn-outline-secondary">Se Mere</button>
@@ -139,6 +141,7 @@
 			<table class="styled-table">
 				<thead>
 					<tr>
+						<th>Forælder</th>
 						<th>Prioritet1</th>
 						<th>Prioritet2</th>
 						<th>Antal Børn</th>
@@ -158,8 +161,9 @@
 					
 					<tbody>
 						<tr>
-							<td>Uge @item2.Priority1.WeekNumber</td>
-							<td>Uge @item2.Priority2.WeekNumber</td>
+							<td>@item2.Parent.ParentName</td>
+							<td>Uge @item2.Priority1.WeekNumber | @item2.Priority1.Workdays</td>
+							<td>Uge @item2.Priority2.WeekNumber | @item2.Priority2.Workdays</td>
 							<td>@item2.Parent.Children.Count</td>
 							<td>@item2.MailSent</td>
 							<td>

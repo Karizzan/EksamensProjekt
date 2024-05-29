@@ -127,8 +127,8 @@
 
 .container2 {
     flex-direction: column;
-    margin: 2vh 20vh 0vh 10vh;
-    min-width: 40vh;
+    margin: 2vh 10vh 0vh 5vh;
+    min-width: 25vw;
 }
 
 .container3{

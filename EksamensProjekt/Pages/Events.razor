@@ -31,6 +31,11 @@
 		<InputText id="Location" @bind-Value="Event.Location" class="form-control"/>
 	</div>
 
+	<div class="col-md-12 mb-3">
+		<label for="FacebookGroup">Facebook Gruppe</label>
+		<InputText id="FacebookGroup" @bind-Value="Event.FacebookGroup" class="form-control" />
+	</div>
+
 
 
 	<div class="col-12 mb-3">
@@ -48,6 +53,7 @@
 			<th>Slut Dato</th>
 			<th>Uge</th>
 			<th>Lokation</th>
+			<th>Facebook Gruppe</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -63,6 +69,7 @@
 					<td>@item.EndDate.Date.ToString("dd/MM/yyyy")</td>
 					<td>@item.WeekNumber</td>
 					<td>@item.Location</td>
+					<td>@item.FacebookGroup</td>
 					<td><button @onclick="()=>RemoveEvent(item.WeekNumber)" class="btn btn-outline-danger"> Fjern event </button></td>
 				</tr>
 			}
