@@ -2,9 +2,9 @@
 @page "/event"
 @using Services
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
-
 @inject NavigationManager navManager
 
+<h3>Opret og Slet Begivenhed</h3>
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
 	<DataAnnotationsValidator />
 	<Microsoft.AspNetCore.Components.Forms.ValidationSummary/>

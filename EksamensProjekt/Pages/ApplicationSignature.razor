@@ -164,7 +164,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        applications = (await service.GetAllApplications()).ToList();
+        applications = (await service.GetAllLegacyApplication()).ToList();
     }
 }
 
