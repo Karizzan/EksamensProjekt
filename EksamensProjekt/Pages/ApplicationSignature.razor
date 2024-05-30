@@ -177,8 +177,7 @@ else
     // This method gets all applications from the service
     protected override async Task OnInitializedAsync()
     {
-        // Get all applications from the service
-        applications = (await service.GetAllApplications()).ToList();
+        applications = (await service.GetAllLegacyApplication()).ToList();
     }
 }
 

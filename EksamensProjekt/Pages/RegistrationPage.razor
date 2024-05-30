@@ -4,12 +4,6 @@
 @using Core.Models
 @using Services
 
-<p>
-    <h2>Tilmelding til Børnklubben</h2>
-    For dig, der allerede er frivillig og har børn, tilbyder vi en fantastisk mulighed med vores Børnklub.
-    Som frivillig kan du få op til to børn passet i Børnklubben på de dage, hvor du arbejder hos os.
-    Dette gør det nemmere for dig at bidrage som frivillig, mens dine børn er i trygge og sjove omgivelser.
-</p>
 
 @if (isSubmitted == true)
 {
@@ -19,7 +13,13 @@ else
 {
 <h3 class="mb-3 mt-3">Ansøg om børnepasning</h3>
 
-//This is the form for the registration(the handlesubmit function is in the @code part)
+    <p>
+        <h2>Tilmelding til Børnklubben</h2>
+        For dig, der allerede er frivillig og har børn, tilbyder vi en fantastisk mulighed med vores Børnklub.
+        Som frivillig kan du få op til to børn passet i Børnklubben på de dage, hvor du arbejder hos os.
+        Dette gør det nemmere for dig at bidrage som frivillig, mens dine børn er i trygge og sjove omgivelser.
+    </p>
+
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
     <DataAnnotationsValidator />
 
