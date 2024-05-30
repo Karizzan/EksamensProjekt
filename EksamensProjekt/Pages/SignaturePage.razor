@@ -20,6 +20,7 @@
 
 <h1 class="mb-3 mt-3">Alle unge registeringer med underskrift</h1>
 
+@*As long as the site hasn't loaded it says Loading*@
 @if (applications == null )
     {
     <p><em>Loading...</em></p>
@@ -31,6 +32,7 @@ else if (applications.Count == 0)
 else
 {
     <table class="styled-table">
+        @*This is the header for the table*@
         <thead>
             <tr>
                 <th>Forældre navn</th>
@@ -43,6 +45,7 @@ else
                 <th>Download som pdf</th>
             </tr>
         </thead>
+        @*The body is where all the applications gets placed, so that its saved in one place*@
         <tbody>
             @foreach (var app in applications)
             {
@@ -56,10 +59,12 @@ else
                     <td>
                         @if (app.ImageData != null)
                         {
+                            // The signature image is displayed as an <img> element
                             <img src="data:image/png;base64,@Convert.ToBase64String(app.ImageData)" alt="Signature Image" style="max-width: 100px; max-height: 100px;" />
                         }
                     </td>
                     <td>
+                        @* The button to download the application as a PDF *@
                         <button class="btn btn-outline-primary" @onclick="(e) => GeneratePdf(app)">Download PDF</button>
                     </td>
                 </tr>
@@ -73,16 +78,22 @@ else
 
 
 @code {
+    // List to store all the applications
     private List<Core.Models.YoungApplication> applications;
-
+    
+    // Method to generate a PDF for a single youngapplication
     private async Task GeneratePdf(Core.Models.YoungApplication selectedApplication)
     {
+        // Create a new memory stream to store the PDF
         using (var stream = new MemoryStream())
         {
+            // Create a new PDF writer
             using (var writer = new PdfWriter(stream))
             {
+                // Create a new PDF document
                 using (var pdf = new PdfDocument(writer))
                 {
+                    // Create a new document
                     var document = new iText.Layout.Document(pdf);
 
                     // Add application details to the PDF for the selected application
@@ -96,6 +107,7 @@ else
                     // Add signature image to the PDF
                     if (selectedApplication.ImageData != null)
                     {
+                        // The signature image is added as an iText image element
                         var image = new iText.Layout.Element.Image(ImageDataFactory.Create(selectedApplication.ImageData));
                         document.Add(image);
                     }
@@ -110,6 +122,7 @@ else
         }
     }
 
+    // Method to download all youngapplications as a single PDF
     private async Task DownloadAllAsPdf()
     {
         using (var stream = new MemoryStream())
@@ -151,9 +164,12 @@ else
         }
     }
 
+    // Method to run when the page is initialized
+    // This method gets all applications from the service
     protected override async Task OnInitializedAsync()
 
     {
+        // Get all applications from the service
        applications = (await service.GetAllYoungApplications()).ToList();
 
     }

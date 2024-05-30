@@ -7,6 +7,7 @@
 @using MongoDB.Bson;
 @page "/planning"
 
+@* Header with save button for the planning page *@
 <div class="container3">
 <h1>Planlægning</h1>
 <button @onclick=" ()=> SavePlanning(events,applications)" class="btn btn-primary"> Gem Plan </button>
@@ -14,6 +15,7 @@
 <br />
 </div>
 <div class="container">
+	@*  Loop runs through incoming events and displays one of each week via if-statement *@
 @foreach (var item in events)
 {
 	string WeekdaynoticeColor = "";
@@ -24,8 +26,10 @@
 	{
 		int weekdayChildren = 0;
 		int weekendChildren = 0;
+			@*Checks the event list for items, that have the same week number as the displayed week*@
 		foreach (var workdays in events.Where(e => e.WeekNumber == item.WeekNumber))
 		{
+			@* Loop runds through the applications imbeded in the event and adds up the children for each application *@
 			foreach (var application in workdays.Applications)
 			{
 				if (workdays.Workdays == "Onsdag - Søndag (Hel Uge)" || workdays.Workdays == "Onsdag - Fredag (Halv Uge)")
@@ -38,6 +42,7 @@
 				}
 			}
 		}
+		@* If-statements checks how large the number of children is and colors the displayed text accordingly *@
 		if (weekdayChildren >= 15)
 		{
 			WeekdayWarningMessage = "";
@@ -59,6 +64,7 @@
 			WeekdayWarningMessage = "Advarsel: Der er for mange børn tilmeldt";
 		}
 
+		@* HTML for the dsiplayed work week *@
 		<div class="container2">
 		<h1>Uge @item.WeekNumber | @item.Location</h1>
 		<p>Hverdage: <p style="color: @WeekdaynoticeColor"> @weekdayChildren/20 </p></p>
@@ -79,7 +85,7 @@
 
 
 
-
+@* Modal Window displays the information about each week when the previous OpenDialog() button is pressed *@
 <ModalDialog @ref="@addDialog1" Title="Tildeling af Børneklub ansøgninger">
 	<h3>Venteliste</h3>
 	<div class="scrollable-div">
@@ -99,6 +105,7 @@
 					int i = 1;
 
 				}
+				@* Checks that there are applications to display and runs the list through a loop, to display each application seperately *@
 				@if (applications != null)
 				{
 					@foreach (var item in applications)
@@ -109,9 +116,11 @@
 							<td>Uge @item.Priority2.WeekNumber | @item.Priority2.Workdays</td>
 							<td>@item.Parent.Children.Count</td>
 							<td>
+								@* Button opens modal window that displays all information about the application *@
 								<button @onclick="()=>OpenModal(item)" class="btn btn-outline-secondary">Se Mere</button>
 							</td>
 							<td>
+								@* Button selects application for moving to events *@
 								<button @onclick="()=>Select(item)" class="btn btn-outline-primary">Select</button>
 							</td>
 						</tr>
@@ -125,7 +134,7 @@
 	</div>
 	<h3>Uge @SelectedEvent?.WeekNumber | @SelectedEvent?.Location <button @onclick=" ()=> SavePlanning(events,applications)" class="btn btn-outline-success" id="SaveButton"> Gem Plan </button> </h3>
 
-
+	@* Displays alle events that correspond to the week number of the week that has been clicked *@
 	@foreach (var workday in events)
 	{
 		if (workday.WeekNumber == SelectedEvent.WeekNumber)
@@ -147,6 +156,7 @@
 						<th>Antal Børn</th>
 						<th>Mail Sendt</th>
 						<th>
+								@* Button takes the selected application at adds it to this event *@
 							<button @onclick="() => AddToWeek(workday.Applications)" id="button-addtoweek">Tilføj til tidspunkt</button>
 						</th>
 						<th></th>
@@ -154,11 +164,9 @@
 						<th></th>
 					</tr>
 				</thead>
+				@* Displays the applications that are bound to this event *@
 				@foreach (var item2 in workday.Applications)
-				{
-
-
-					
+				{		
 					<tbody>
 						<tr>
 							<td>@item2.Parent.ParentName</td>
@@ -170,14 +178,17 @@
 								<button @onclick="()=>OpenModal(item2)" class="btn btn-outline-secondary">Se Mere</button>
 							</td>
 							<td>
+									@* Button adds the applcation back to the waitinglist *@
 								<button @onclick="()=>AddToWaitingList(workday.Applications, item2)" class="btn btn-outline-danger">Fortryd</button>
 							</td>
 							<td>
+									@* Button takes the parent email from the application and copies it to the users clipboard *@
 								<button @onclick="()=>SaveToEmailClipboard(item2.Parent.ParentMail, workday, item2)" class="btn btn-outline-primary">
 									Kopier Email
 								</button>
 							</td>
 							<td>
+									@* Button takes the information from the event and application and generates an email, that is then copied to the users clipboard *@
 									<button @onclick="()=>SaveGeneratedMailToClipboard(item2.Parent, workday, item2)" class="btn btn-outline-primary"> Generer mail</button>
 							</td>
 
@@ -194,6 +205,7 @@
 
 </ModalDialog>
 
+@* Modal window shows all the attributes for a specific application *@
 <ModalDialog @ref="@addDialog" Title="See more details">
 	<h1>Ansøgning</h1>
 	<p>Forældre: @SelectedApplication.Parent.ParentName</p>
@@ -225,7 +237,7 @@
 </ModalDialog>
 
 
-
+@* Script used in the process of copying to clipboard in various other functions *@
 <script>
 	function copyToClipboard(text) {
 		navigator.clipboard.writeText(text).then(function () {
@@ -233,23 +245,24 @@
 		}, function (err) {
 			console.error('Failed to copy text: ', err);
 		});
-	}
+	}																																															2
 </script>
 
 
 @code {
+	// List used to keep track of wich weeks have been displayed
 	private List<int> weekNumbers = new();
+
+	// Waiting list for applications
 	private List<Application>? applications = new();
+
 	private static List<Event>? events = new();
-	private Dictionary<string, string> copyButtonStatus = new();
 
+	// Used to check level of admin priviliges
 	private string adminLevel;
-	private List<Application>? applications1 = new List<Application>();
 
+	// Used in the selection and moving of applications from waitinglist to events
 	private Application? SelectedApplication = new Application();
-
-	private List<Application>[] AppArray = new List<Application>[12];
-	private List<List<Application>> AppList = new();
 
 	private string Emails;
 
@@ -261,39 +274,50 @@
 	private bool methodtwoCalled = false;
 
 
-	//The event that is selected
+	// The event that is selected
 	private Event? SelectedEvent = new Event();
 
+	// Injection of the serviceclass, makes it possible to call methods that get and post to the database
 	[Inject]
 	private IServiceClass? mService { get; set; }
 
+	// Adds the modal dialog functionallity to the page
 	private ModalDialog? addDialog { get; set; }
 	private ModalDialog? addDialog1 { get; set; }
 
 
-
+	/*
+	 * Function called when the modal window for a selected week is opened. 
+	 * It updates the selected event to the given event, so the correct week number is displayed in the modal window
+	 */ 
 	public void setSelectedEvent(Event Event)
 	{
 		SelectedEvent = Event;
 	}
 
+	
+    // Function used to update the selected application, so that it may be moved around to the desired event
+	 
 	public void SetSelectedApplication(Application application)
 	{
 		SelectedApplication = application;
 	}
 
+	// Function used to open the "se mere" modal window that displays all information about the given application
 	public void OpenModal(Application application)
 	{
 		addDialog.Open();
 		SetSelectedApplication(application);
 	}
 
+	// Function used to open the modal window for a specific week. Here the selected event is updated
 	public void OpenDialog(Event Event)
 	{
 		addDialog1.Open();
 		setSelectedEvent(Event);
 	}
 
+	// Assigns the give application to selected application
 	public void Select(Application application)
 	{
 		SelectedApplication = application;
@@ -356,16 +380,7 @@
 
 		events = (await mService.GetAllEvents()).ToList();
 
-		AppArray = new List<Application>[events.Count];
-
-		for (int i = 0; i < AppArray.Length; i++)
-		{
-			AppArray[i] = new();
-		}
-		foreach (var evt in events)
-		{
-			copyButtonStatus[evt.Workdays] = "Få emails";
-		}
+		
 
 	}
 

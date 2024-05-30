@@ -4,14 +4,17 @@
 
 <h3>Alle ansøgninger fra alle år:</h3>
 
+@*For each application in applications it check if its already displayed*@
 @foreach (var item in applications)
 {
+	//If its not displayed it will display the year and a table with all the applications from that year
 	if (IsAlreadyDisplayed(item.SubmitDate) != true)
 	{
 
-
+		
 		<h3>@item.SubmitDate.Year</h3>
 		<table class="styled-table">
+			@*This is the header for the table*@
 			<thead>
 				<tr>
 					<th>Navn</th>
@@ -21,7 +24,9 @@
 					<th> </th>
 				</tr>
 			</thead>
+			@*The body is where all the applications gets placed, so that its saved in one place under the year its submitted*@
 			<tbody>
+				@*Displays all the applications, but only where the year matches with the current application that is ran through the loop *@
 				@foreach (var app in applications.Where(e => e.SubmitDate.Year == item.SubmitDate.Year))
 				{
 					<tr>
@@ -29,6 +34,7 @@
 					<td>@app.Parent.ParentMail</td>
 					<td>@app.Parent.Children.Count</td>
 					<td>@app.Verified</td>
+					@*This is where you open the modaldialog, so you can see more information about the specific application*@
 					<td><button @onclick="()=>OpenDialog(item)" class="btn btn-outline-secondary">Se Mere</button></td>
 				</tr>
 			}
@@ -36,7 +42,10 @@
 	</table>
 	}
 }
-@{Years = new();}
+@{
+	//We reset the counter for the years, so we can display the years again
+//	Years = new();
+}
 
 <ModalDialog @ref="@addDialog" Title="See more details">
 	<h1>Ansøgning</h1>

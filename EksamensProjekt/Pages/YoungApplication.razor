@@ -19,12 +19,16 @@
 }
 else
 {
-    //YEAH
+    //We create a form for the user to fill out
+    //We use the EditForm component to create a form
+    //We bind the form to the application object
+    //We use the OnValidSubmit event to call the SubmitForm method when the form is submitted
+    //We use the DataAnnotationsValidator component to validate the form
 <EditForm Model="@application" OnValidSubmit="SubmitForm">
     <DataAnnotationsValidator />
     <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
 
-
+     @* This is one of the inputfield of the form. They all look a like, but some take string, int or a bool *@
     <div class="form-group">
         <label for="AParentName">Forældre navn</label>
         <input type="text" class="form-control" @bind="application.AParentName" id="AParentName" placeholder="f.eks. Gunnar eller Inge">
@@ -55,11 +59,13 @@ else
         <p>Ved at trykke "Tilkendegivelse" bekræfter jeg, at mit barn må være frivillig.</p>
     </div>
 
+     @* This is the inputfield for the image of the signature *@   
     <div class="form-group">
         <label for="ImageUpload">Upload billede af underskrift</label>
         <InputFile OnChange="HandleSelectedImage" id="ImageUpload" />
     </div>
 
+    @*This is the submit button*@
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
 }
@@ -69,20 +75,24 @@ else
 
 @code
 {
-
+    //We inject the service class
     [Inject]
     private IServiceClass mservice { get; set; }
     private Core.Models.YoungApplication application = new Core.Models.YoungApplication();
     private bool isSubmitted = false;
 
-
+    //This method is called when the user selects an image
     private async Task HandleSelectedImage(InputFileChangeEventArgs e)
     {
+        //We get the file from the event args
         var file = e.File;
+        //If the file is not null
         if (file != null)
         {
+            //We create a memory stream
             using (var stream = new MemoryStream())
             {
+                //We copy the file to the memory stream
                 await file.OpenReadStream().CopyToAsync(stream);
                 application.ImageData = stream.ToArray();
             }
@@ -91,7 +101,7 @@ else
 
 
 
-
+    //This method is called when the form is submitted
     private async Task SubmitForm()
     {
 

@@ -16,6 +16,7 @@
 @using MongoDB.Bson;
 
 
+@*As long as the site hasn't loaded it says Loading*@
 <h1 class="mb-3 mt-3">Alle almindelig Registreringer</h1>
 
 @if (applications == null)
@@ -29,6 +30,7 @@ else if (applications.Count == 0)
 else
 {
     <table class="styled-table">
+        @*This is the header for the table*@
         <thead>
             <tr>
                 <th>Forældre Navn</th>
@@ -39,6 +41,7 @@ else
                 <th>Download som PDF</th>
             </tr>
         </thead>
+        @*The body is where all the applications gets placed, so that its saved in one place*@
         <tbody>
             @foreach (var app in applications)
             {
@@ -55,10 +58,12 @@ else
                     <td>
                         @if (app.ImageData != null)
                         {
+                            // The signature image is displayed as an <img> element
                             <img src="data:image/png;base64,@Convert.ToBase64String(app.ImageData)" alt="Signature Image" style="max-width: 100px; max-height: 100px;" />
                         }
                     </td>
                     <td>
+                        @* The button to download the application as a PDF *@
                         <button class="btn btn-outline-primary" @onclick="(e) => GeneratePdf(app)">Download PDF</button>
                     </td>
                 </tr>
@@ -70,16 +75,22 @@ else
 }
 
 @code {
+    // List to store all the applications
     private List<Application> applications;
 
+    // Method to generate a PDF for a single application
     private async Task GeneratePdf(Application selectedApplication)
     {
+        // Create a new memory stream to store the PDF
         using (var stream = new MemoryStream())
         {
+            // Create a new PDF writer
             using (var writer = new PdfWriter(stream))
             {
+                // Create a new PDF document
                 using (var pdf = new PdfDocument(writer))
                 {
+                    // Create a new document
                     var document = new iText.Layout.Document(pdf);
 
                     // Add application details to the PDF for the selected application
@@ -162,8 +173,11 @@ else
         }
     }
 
+    // This method is called when the component is initialized
+    // This method gets all applications from the service
     protected override async Task OnInitializedAsync()
     {
+        // Get all applications from the service
         applications = (await service.GetAllApplications()).ToList();
     }
 }

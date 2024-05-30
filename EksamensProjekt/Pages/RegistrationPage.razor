@@ -19,9 +19,12 @@ else
 {
 <h3 class="mb-3 mt-3">Ansøg om børnepasning</h3>
 
+//This is the form for the registration(the handlesubmit function is in the @code part)
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
     <DataAnnotationsValidator />
 
+@* This is one of the inputfield of the form. They all look a like, but some take string, int or a bool *@
+@* The first 7 is about the parent and the next is about the child/children *@
     <div class="col-md-12 mb-3">
         <label for="ParentName">Fulde navn på forælder</label>
         <InputText id="ParentName" @bind-Value="parent.ParentName" class="form-control" placeholder="f.eks. Gunnar eller Inge" />
@@ -75,6 +78,7 @@ else
     <br />
     <br />
 
+    @* Where the parent can upload a signiture *@
     <div class="form-group">
     <label for="ImageUpload">Upload billede af underskrift</label>
     <InputFile OnChange="HandleSelectedImage" id="ImageUpload" />
@@ -169,6 +173,7 @@ else
         </div>
     }
 
+    @* The submitbutton *@
     <div class="col-12 mb-3">
         <button @type="submit" class="btn btn-primary">Send</button>
     </div>
@@ -180,8 +185,11 @@ else
 
 
 @code {
+    //This is the editcontext for the form
+    //It is used to validate the form
     private EditContext? aEditContext;
 
+    //This is a boolean to check if the form is submitted
     private bool isSubmitted = false;
 
     Application application = new();
@@ -193,7 +201,7 @@ else
     int prio1; //Importanta DO NOT DELETE
     int prio2; //Importanta DO NOT DELETE
 
-    string errorMessage = ""; //To check ´the status of the program
+    string errorMessage = ""; //To check the status of the program
 
     [Inject]
     private IServiceClass? mService { get; set; }
@@ -203,7 +211,7 @@ else
     private List<Application>? legacyApplications = new();
 
 
-
+    //This function is used to get the event by the id
     private Event getEventById(int id)
     {
 
@@ -220,7 +228,7 @@ else
         return foundEvent;
     }
 
-
+    //This function is used to check if the weeknumber is already displayed
     private async Task HandleSelectedImage(InputFileChangeEventArgs e)
     {
         var file = e.File;
@@ -234,6 +242,8 @@ else
         }
     }
 
+    //This function is used to submit the form
+    //It checks if the form is valid and then it adds the application to the database
     public async Task handleSubmit()
     {
         if (aEditContext.Validate())
@@ -247,6 +257,7 @@ else
 
             application.Parent.Children.Add(child);
 
+            //If the parent has an extra child we add it to the application
             if (extraChild == true){
                 application.Parent.Children.Add(child2);
             }
@@ -266,7 +277,7 @@ else
             }
 
 
-            ApplicationInDatabase(application); //If the application is in the database it will change the page
+
             isSubmitted = true;
 
 
@@ -284,38 +295,25 @@ else
         }
     }
 
+    //This function creates a new application form and gets all the events and applications from the database
+    //It also gets all the applications from LegacyApplication in the database
     protected override async Task OnInitializedAsync()
     {
+        //It creates a new application form
         aEditContext = new EditContext(application);
 
+        //It gets all the events and applications from the database
         allEvents = (await mService.GetAllEvents())?.ToList();
 
-        //allApplications = (await mService.GetAllApplications())?.ToList();
+        //It gets all the applications from LegacyApplication in the database
+        //This is all applications created
         legacyApplications = (await mService.GetAllLegacyApplication())?.ToList();
 
 
     }
 
-    public async void ApplicationInDatabase(Application application)
-    {
-        legacyApplications = (await mService.GetAllLegacyApplication())?.ToList();
-        bool found = false;
 
-        foreach (var app in legacyApplications)
-        {
-            if (application.Parent.ParentMail == app.Parent.ParentMail)
-            {
-                found = true;
-            }
-        }
-
-        if (found == true)
-        {
-            isSubmitted = true;
-        }
-    }
-
-
+    //This function sets the default values for the children if they are null
     public void SetDefaults()
     {
         if (child.Interests == null)
