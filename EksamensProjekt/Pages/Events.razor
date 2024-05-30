@@ -9,8 +9,7 @@
 	<DataAnnotationsValidator />
 	<Microsoft.AspNetCore.Components.Forms.ValidationSummary/>
 
-
-
+	@*This is one of the inputfield of the form. They all look alike, but some take string, int or a bool *@
 	<div class="col-md-12 mb-3">
 		<label for="StartDate"> Start Dato </label>
 		<InputDate id="StartDate" @bind-Value="Event.StartDate" class="form-control" />
@@ -47,6 +46,7 @@
 </EditForm>
 
 <table class="styled-table">
+	@*This is the header for the table*@
 	<thead>
 		<tr>
 			<th>Start Dato</th>
@@ -57,11 +57,16 @@
 			<th></th>
 		</tr>
 	</thead>
+	@*The body is where all the events gets placed, so that its saved in one place*@
+	@*It checks if events is not null*@
 	@if (events != null)
 	{
 		List<int> WeekNumbers= new();
+		
+			//The foreach loop goes through all the events in the eventlist
 		foreach (var item in events)
 		{
+			//It checks if the event is already displayed
 			if (IsAlreadyDisplayed(item.WeekNumber, WeekNumbers) != true)
 			{
 				<tr>
@@ -87,21 +92,26 @@
 	[Inject]
 	private IServiceClass? mService { get; set; }
 
+	//This method is used to submit the form
 	public async Task handleSubmit()
 	{
+		//It checks if the form is valid
 		if (aEditContext.Validate())
 		{
+			//It makes a new list of applications in the event
 			Event.Applications = new();
 
+			//It checks if the event is already in the list
 			foreach(var workday in WorkDays)
 			{
+				//If the event is not in the list, it adds the event to the list
 				events.Add(Event);
 				Event.EventID = generateID();
 				Event.Workdays = workday;
 				mService.AddEvent(Event);			}
 		}
 	}
-
+	//This method is used to get all the events on initialization
 	protected override async Task OnInitializedAsync()
 	{
 		aEditContext = new EditContext(Event);
@@ -109,41 +119,60 @@
 
 	}
 
+	//This method is used to generate an ID for the event
 	public int generateID()
 	{
 		int id;
 		List<int> ids = new();
+
+		//It goes through all the events in the list
 		foreach (var item in events)
 		{
+			//It adds the eventID to the list of ids
 			ids.Add(item.EventID);
 		}
+		//It finds the highest id and adds 1 to it
 		id = ids.Max() + 1;	
+		//It returns the id
 		return id;
 
 	}
+
+	//This method is used to check if the event is already displayed
 	public bool IsAlreadyDisplayed(int weekNumber, List<int> weekNumbers)
 	{
+		//It goes through all the weeknumbers in the list
 		foreach (var item in weekNumbers)
 		{
+			//It checks if the weeknumber is already displayed
 			if (item == weekNumber)
 			{
+				//If it is, it returns true
 				return true;
 			}
 		}
+		//If it is not, it adds the weeknumber to the list
 		weekNumbers.Add(weekNumber);
 		return false;
 
 	}
 
+	//This method is used to remove an event
 	public void RemoveEvent(int weekNumber)
 	{
+		//It makes a new list of events to remove
 		List<Event> eventsToRemove = new();	
+
+		//It removes the event from the database
 		mService.RemoveEventByWeekNumber(weekNumber);
+
+		//It finds all the events with the same weeknumber
 		eventsToRemove = events.FindAll(x=> x.WeekNumber == weekNumber);
 
+		//It goes through all the events in the list
 		foreach (var item in eventsToRemove)
 		{
-			Console.WriteLine("uge" + item.WeekNumber);
+			//It removes the event from the list
 			events.Remove(item);
 		}
 	}

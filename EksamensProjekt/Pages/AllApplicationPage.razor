@@ -1,5 +1,6 @@
 ﻿@using Core.Models
 @using Services
+
 @page "/allapplications"
 
 <h3>Alle ansøgninger fra alle år:</h3>
@@ -43,10 +44,11 @@
 	}
 }
 @{
-	//We reset the counter for the years, so we can display the years again
-//	Years = new();
+	//This is where the list is refreshed so it can be used again
+	Years = new();
 }
 
+@*This is the modaldialog you open to see more information about a specific application*@
 <ModalDialog @ref="@addDialog" Title="See more details">
 	<h1>Ansøgning</h1>
 	<p>Forældre: @SelectedApplication.Parent.ParentName</p>
@@ -58,10 +60,16 @@
 	<p>2. Prioritet: Uge @SelectedApplication.Priority2.WeekNumber</p>
 	<p>På Venteliste: @SelectedApplication.IsOnWaitingList</p>
 	<p>Verified: @SelectedApplication.Verified</p>
+	@if (SelectedApplication.ImageData != null)
+	{
+		<img src="data:image/png;base64,@Convert.ToBase64String(SelectedApplication.ImageData)" alt="Signature Image" style="max-width: 100px; max-height: 100px;" />
+	}
 	@{
+		//This is a counter to display the child number
 		int i = 1;
 	}
 
+	@*Here it display the child/children that is connected to the parent*@
 	@foreach (var child in SelectedApplication.Parent.Children)
 	{
 		<h1>@i. Barn</h1>
@@ -78,14 +86,22 @@
 	</ModalDialog>
 
 	@code {
+		//This is the list of all the applications
 		private List<Application> applications = new();
+
+		//This is the list of all the years that has been displayed
 		private List<int> Years = new();
+
+		//This is the modaldialog that is used to display more information about a specific application
 		private ModalDialog? addDialog { get; set; }
+
+		//This is the application that is selected when you open the modaldialog
 		private Application SelectedApplication = new();
 
 	[Inject]
 	private IServiceClass? mService { get; set; }
 
+	//This is the method that gets all the applications and sorts them by year on initialization and sort them by year
 	protected override async Task OnInitializedAsync()
 	{
 		applications = (await mService.GetAllLegacyApplication()).ToList();
@@ -93,6 +109,7 @@
 
 	}
 
+	//This is the method that checks if the year is already displayed
 	public bool IsAlreadyDisplayed(DateTime date)
 	{
 		foreach (var item in Years)
@@ -106,6 +123,7 @@
 		return false;
 	}
 
+	//This is the method that opens the modaldialog
 	public void OpenDialog(Application application)
 	{
 		addDialog.Open();

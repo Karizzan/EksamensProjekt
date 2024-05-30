@@ -30,8 +30,11 @@
     private string adminLevel;
     private string name;
     private bool login;
+
+    //It checks if the user is logged in, and if they are, it will show their name and admin level
     protected override async Task OnInitializedAsync()
     {
+        //It gets the value of the user being logged in, and the admin level and name of the user
         login = await localStorage.GetItemAsync<bool>("isLoggedIn");
         adminLevel = await localStorage.GetItemAsStringAsync("adminLevel");
         name = await localStorage.GetItemAsStringAsync("user");

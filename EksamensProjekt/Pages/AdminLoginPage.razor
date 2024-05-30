@@ -7,6 +7,7 @@
 
 <h1>Admin Login</h1>
 
+@*It checks if the user is loggedin and if its not, then it displays the login screen*@
 @if (isLoggedIn == false)
 {
     <form @onsubmit="Login">
@@ -21,11 +22,14 @@
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
 }
+@*If the user is logged in, then it displays the logout button*@
 @if (isLoggedIn == true)
 {
     <button @onclick="ClearStorage" class="col-12 mb-3">Log ud</button>
 
 }
+
+@*If the username and password is not matching in the database it displays the errormessage*@
 @if (!string.IsNullOrEmpty(errorMessage))
 {
     <p style="color: red">@errorMessage</p>
@@ -37,12 +41,24 @@
 @code {
     [Inject]
     private IServiceClass? mService { get; set; }
+
+    //The admin object
     private Admin admin = new Admin();
+
+    //The error message
     private string errorMessage;
+
+    //The list of all admins
     List<Admin> listOfAdmins = new();
+
+    //The boolean that checks if the user is logged in
     private bool isLoggedIn = false;
+
+
     private bool login;
     private string adminLevel;
+
+    //This is the method that gets all the admins and it also checks if the user is logged in and what adminlevel the user has
     protected override async Task OnInitializedAsync()
     {
         listOfAdmins = (await mService.GetAllAdmins()).ToList();
@@ -57,12 +73,14 @@
 
     }
 
+    //This is the method that saves the item in the local storage
     private async Task Save(string key, string item)
     {
         await localStorage.SetItemAsStringAsync(key, item);
 
     }
 
+    //This is the method that saves the logged in boolean in the local storage and the adminlevel aswell as the username
     private async Task saveloggedIn()
     {
         await localStorage.SetItemAsync<bool>("isLoggedIn", isLoggedIn);
@@ -72,11 +90,13 @@
 
     }
 
+    //This is the method that checks if the login is correct
     private bool checkLogin(Admin logInUser)
     {
-
+        //It goes through all the admins
         foreach (var admin in listOfAdmins)
         {
+            //It checks if the username and password is correct
             if (admin.Username == logInUser.Username && admin.Password == logInUser.Password)
             {
                 Console.WriteLine("Log In Successful");
@@ -93,12 +113,14 @@
         return false;
     }
 
+    //This is the method that refreshes the page
     private void RefreshPage()
     {
         navManager.NavigateTo(navManager.Uri, forceLoad: true);
     }
 
 
+    //This is the method that clears the local storage
     protected async Task ClearStorage()
     {
         await localStorage.ClearAsync();
@@ -106,6 +128,8 @@
         RefreshPage();
     }
 
+
+    //This is the method that logs the user in
     private async Task Login()
     {
 
@@ -116,6 +140,7 @@
             errorMessage = "Please enter username and password.";
             return;
         }
+        // Check if the login is correct
         if (checkLogin(admin) == true)
         {
             Console.WriteLine($"Brugeren er {admin.Username} og adgangniveau er {admin.AdminLevel}");

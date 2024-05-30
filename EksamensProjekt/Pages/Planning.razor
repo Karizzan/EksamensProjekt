@@ -268,7 +268,7 @@
 
 	private string GeneratedMail;
 
-
+	// Bools used to make sure that both the copy email and the genereate mail buttons have been pressed before updating the "MailSent" status for the application
 	private bool methodOneCalled = false;
 
 	private bool methodtwoCalled = false;
@@ -324,15 +324,16 @@
 		Console.WriteLine($"{application.Parent.ParentName} selected");
 	}
 
+	// Function takes an application list, from an event and adds the selected application to it
 	public void AddToWeek(List<Application> list)
 	{
 		if (adminLevel == "Admin")
 		{
 			if (SelectedApplication.Parent.ParentMail != null)
 			{
-				//weekNumbers = new();
 				list.Add(SelectedApplication);
 				applications = applications.Where(app => app != SelectedApplication).ToList();
+				// Selected application is wiped, to prevent it from being added to further events
 				SelectedApplication = new();
 			}
 			else
@@ -349,6 +350,7 @@
 
 	}
 
+	// Function adds the give application to the waiting list and removes it form the given list of applications
 	public void AddToWaitingList(List<Application> weekList, Application application)
 	{
 		if (adminLevel == "Admin")
@@ -364,57 +366,35 @@
 
 	}
 
+	// Task runs when the page is loaded, to set up various parameters that are necessary for the site to function
 	protected override async Task OnInitializedAsync()
 	{
-
+		// Two GetAll methods, take all events and applications from the database and stores them in theese variables
 		applications = (await mService.GetAllApplications()).ToList();
-
-		adminLevel = await localStorage.GetItemAsStringAsync("adminLevel");
-		Console.WriteLine(adminLevel);
-
-		foreach (var item in applications)
-		{
-			Console.WriteLine($"{item.ApplicationID}, {item.Id}");
-		}
-
-
 		events = (await mService.GetAllEvents()).ToList();
 
-		
-
+		// The adminlevel is taken from localstorage, so that some functionality is blocked for certain users
+		adminLevel = await localStorage.GetItemAsStringAsync("adminLevel");
 	}
 
+	// Function saves a generated mail to the users clipboard 
 	public async Task SaveGeneratedMailToClipboard(Parent parent, Event Event, Application application)
 	{
-		if (parent != null && Event != null)
-		{
-			var children = parent.Children;
-			if (children.Count > 0) // Ensure there is at least one child
-			{
-				string GeneratedMail = GenerateMailContent(parent, Event);
-				await JS.InvokeVoidAsync("copyToClipboard", GeneratedMail);
-				Console.WriteLine("Mail content copied to clipboard");
-				methodOneCalled = true;
-				await UpdateMailSentStatus(Event, application);
-			}
-			else
-			{
-				Console.WriteLine("No children found for the selected application.");
-			}
-		}
-		else
-		{
-			Console.WriteLine("SelectedApplication or SelectedEvent is null");
-		}
-		weekNumbers = new();
+		// A string is instantiated and set to the value of "GenerateMailContent". Afterwards the string is saved to the users clipboard via JS Runtime
+		string GeneratedMail = GenerateMailContent(parent, Event);
+		await JS.InvokeVoidAsync("copyToClipboard", GeneratedMail);
+
+		// MethodOneCalled is updated and the "UpdateMailSentStatus" function is called, to check if the "MailSent" status for the give application should be updated
+		methodOneCalled = true;
+		await UpdateMailSentStatus(Event, application);
 	}
 
-
+	// Function generates an email based on the given parent and event ovject
 	private string GenerateMailContent(Parent parent, Event Event)
 	{
-
+		
 		var children = parent.Children;
-
+		// A check, where it is determined how many children are present on the parent object and an email is generated and returned acordingly
 		if (children.Count >= 2)
 		{
 			return $"Kære {parent.ParentName}\n\n" +
@@ -440,18 +420,12 @@
 		else
 		{
 			// Handle cases where there are no children in the list
-			return $"Kære {parent.ParentName}\n\n" +
-							$"Dette er mailen som bekræfter at du er tilmeldt perioden {Event.Workdays} i uge {Event.WeekNumber}.\n\n" +
-							$"Jeg håber I får en kanon-god oplevelse på Cirkus Summarum. Håber I har nogle børn der glæder sig rigtigt meget\n\n" +
-							$"{Event.FacebookGroup}\n\n" +
-							$"(Husk at melde jer ind i gruppen, da videre kommunikationen kommer derigennem)\n\n" +
-							"Vi glæder os til at se jer på Cirkus Summarum\n\n" +
-							"Med venlig hilsen";
+			return "Ingen børn tilknyttet ansøgning";
 		}
 	}
 
 
-
+	// Function takes an email and copies it to the users clipboard and updates the mail status for the given application
 	public async Task SaveToEmailClipboard(string email, Event Event, Application application)
 	{
 		if (!string.IsNullOrWhiteSpace(email))
@@ -463,6 +437,8 @@
 	}
 
 
+	// Function checks if both the "SaveToEmailClipboard" and "SaveGeneratedMailToClipboard" methods have been called
+	// and updates the mail status for the given application accordingly
 	public async Task UpdateMailSentStatus(Event Event, Application application)
 	{
 		if (methodOneCalled == true && methodtwoCalled == true)
@@ -486,7 +462,7 @@
 		}
     }
 
-
+	// Function saves both the waiting list as well as all the events
 	public void SavePlanning(List<Event> EventList, List<Application> applications)
 	{
 		SaveWaitingList(applications);
@@ -495,10 +471,9 @@
 
 	}
 
+	// The application list for each event is updated
 	public void SaveEvents(List<Event> EventList)
 	{
-
-
 		foreach (var item in EventList)
 		{
 
@@ -508,6 +483,7 @@
 
 	}
 
+	// Function wipes the waiting list from the database and replaces it with the list as it is on the page
 	public async void SaveWaitingList(List<Application> applications)
 	{
 		List<Application> templist = new();
@@ -530,7 +506,8 @@
 			mService.DeleteApplicationByID(item.ApplicationID);
 		}
 	}
-
+	
+	// Function used to check if a given week is already on the page, so that it only appears once
 	public bool IsAlreadyDisplayed(int weekNumber)
 	{
 		foreach (var item in weekNumbers)

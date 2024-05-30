@@ -8,7 +8,7 @@
 <h3>Adminstrator Overblik</h3>
 
 <table class="styled-table">
-	@**@
+	@*This is the header of the table*@
 	<thead>
 		<tr>
 			<th>Admin Navn (Brugernavn)</th>
@@ -17,6 +17,7 @@
 		</tr>
 	</thead>
 
+	@*The foreach loop is displaying every admin in the list of admins*@
 	@foreach (var admin in listOfAdmins)
 	{
 		<tr>
@@ -26,6 +27,7 @@
 			@if (loggedInAdminLevel == "Admin")
 			{
 				<td>
+					@*This is where you can delete a specific admin*@
 					<button @onclick="()=>DeleteAdmin(admin)" class="btn btn-outline-danger">Slet Admin</button>
 				</td>
 				
@@ -37,6 +39,7 @@
 @if (loggedInAdminLevel == "Admin") //Only admin has access to this feature
 {
 	<h3>Tilføj Adminstrator</h3>
+	//This is the form for adding a new admin
 	<EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
 		<DataAnnotationsValidator />
 		<Microsoft.AspNetCore.Components.Forms.ValidationSummary />
@@ -112,12 +115,16 @@
 
 
 @code {
+	//The edit context for the form
 	private EditContext? aEditContext;
 
+	//The logged in admin
 	private string loggedInAdminLevel;
+
+	//The logged in username
 	private string loggedInUsername;
 
-	//THe list of all admins
+	//The list of all admins
 	List<Admin> listOfAdmins = new();
 	Admin newAdmin = new();
 	string errorMessage = "";
@@ -138,7 +145,7 @@
 	private string[] adminCategories = { "Admin", "ReadOnly"};
 
 
-
+	//This is the method that gets all the admins on initialization
 	protected override async Task OnInitializedAsync()
 	{
 		aEditContext = new EditContext(newAdmin);
@@ -158,25 +165,29 @@
 	/// - listOfAdmins
 	/// </summary>
 	/// <returns></returns>
+
 	public async Task UpdateLists()
 	{
 		listOfAdmins.Clear();
 		listOfAdmins = (await mService.GetAllAdmins()).ToList();
 	}
 
-
+	//Deletes a specific admin
 	public async Task DeleteAdmin(Admin admin)
 	{
+		//We show a message to the user. That the admin has been deleted
 		errorMessage = $"{admin.AdminName}({admin.Username}) er blevet slettet";
 		await mService.DeleteAdminByID(admin.AdminID);
 		await UpdateLists();
 	}
 
+	//This is the method that is called when the form is submitted
 	public async Task handleSubmit()
 	{
+		//We validate the form
 		if (aEditContext.Validate())
 		{
-
+			//We check if the password is the same
 			if (doubleCheckPassword == newAdmin.Password)
 			{
 				//temporary admin

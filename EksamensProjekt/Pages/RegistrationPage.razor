@@ -20,10 +20,11 @@ else
         Dette gør det nemmere for dig at bidrage som frivillig, mens dine børn er i trygge og sjove omgivelser.
     </p>
 
+    //This is the form for the application
 <EditForm EditContext="@aEditContext" OnSubmit="@handleSubmit" class="row p-3">
     <DataAnnotationsValidator />
 
-@* This is one of the inputfield of the form. They all look a like, but some take string, int or a bool *@
+@* This is one of the inputfield of the form. They all look alike, but some take string, int or a bool *@
 @* The first 7 is about the parent and the next is about the child/children *@
     <div class="col-md-12 mb-3">
         <label for="ParentName">Fulde navn på forælder</label>
@@ -248,7 +249,6 @@ else
     {
         if (aEditContext.Validate())
         {
-
             //application.ApplicationID = GenerateApplicationId(allApplications);
             application.Priority1 = getEventById(prio1);
             application.Priority2 = getEventById(prio2);
@@ -270,27 +270,19 @@ else
             //We add the application to the database
             await mService.AddApplication(application);
 
-            Console.Write("LISTEN EFTER AWAIT FUNKTIONEN");
-            foreach (var application in allApplications)
-            {
-                Console.WriteLine($"Parent name: {application.Parent.ParentName}, application id: {application.ApplicationID}");
-            }
-
-
+            //We add the parent to the database
+            await mService.AddParentChild(application.Parent);
 
             isSubmitted = true;
-
 
             //We reset the form
             child = new();
             child2 = new();
             parent = new();
             application = new();
-
         }
         else
         {
-
             errorMessage = "Error";
         }
     }

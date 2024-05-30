@@ -73,7 +73,7 @@
     </div>
 }
     
-@if (login == false)
+@if (login == false) //If a person is not logged in, they will only have access to the home page and registration page, youngapplication page and the adminlogin page
 {
     <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
         <nav class="flex-column">
@@ -107,11 +107,13 @@
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
 
+    //It checks if the user is logged in, and if they are, it will show their name and admin level
     protected override async Task OnInitializedAsync()
     {
         login = await localStorage.GetItemAsync<bool>("isLoggedIn");
